@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NexaFlow Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg-app:#0b0d14;--bg-card:#111520;--bg-card2:#181d2c;--bg-glass:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);--border-hi:rgba(99,102,241,0.5);
+  --text-1:#eef2ff;--text-2:#7c8898;--text-3:#3d4659;
+  --indigo:#6366f1;--indigo-hi:#a5b4fc;--indigo-lo:rgba(99,102,241,0.14);
+  --font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+  --r1:7px;--r2:13px;--trans:0.17s cubic-bezier(.4,0,.2,1);--sidebar-w:215px;
+}
+[data-theme="light"]{--bg-app:#f0f4ff;--bg-card:#ffffff;--bg-card2:#f6f8ff;--bg-glass:rgba(0,0,0,0.025);--border:rgba(0,0,0,0.09);--border-hi:rgba(99,102,241,0.4);--text-1:#0f172a;--text-2:#475569;--text-3:#94a3b8;--indigo-lo:rgba(99,102,241,0.09);}
+html,body{height:100%;font-family:var(--font);background:var(--bg-app);color:var(--text-1);}
+.app{display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:width var(--trans);overflow:hidden;}
+.sidebar.collapsed{width:58px;}
+.sb-logo{display:flex;align-items:center;gap:11px;padding:19px 15px;border-bottom:1px solid var(--border);min-height:64px;}
+.logo-mark{width:32px;height:32px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+.logo-text{overflow:hidden;white-space:nowrap;transition:opacity var(--trans);}
+.logo-name{font-size:14.5px;font-weight:600;color:var(--text-1);}
+.logo-sub{font-size:10px;color:var(--text-2);}
+.sidebar.collapsed .logo-text,.sidebar.collapsed .nav-lbl,.sidebar.collapsed .user-info{opacity:0;width:0;pointer-events:none;overflow:hidden;}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 8px;display:flex;flex-direction:column;gap:3px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r1);cursor:pointer;color:var(--text-2);font-size:13.5px;font-weight:500;white-space:nowrap;border:none;background:none;width:100%;text-align:left;font-family:var(--font);transition:background var(--trans),color var(--trans);}
+.nav-item:hover{background:var(--bg-glass);color:var(--text-1);}
+.nav-item.active{background:var(--indigo-lo);color:var(--indigo-hi);}
+.nav-icon{font-size:16px;flex-shrink:0;width:20px;text-align:center;}
+.sb-bottom{padding:10px 8px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:3px;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r1);}
+.avatar{display:flex;align-items:center;justify-content:center;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:600;flex-shrink:0;}
+.av-sm{width:28px;height:28px;font-size:11px;}.av-md{width:38px;height:38px;font-size:14px;}
+.user-name{font-size:13px;font-weight:500;color:var(--text-1);white-space:nowrap;}
+.user-role-lbl{font-size:10.5px;color:var(--text-2);}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{height:64px;border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:12px;padding:0 24px;flex-shrink:0;}
+.tb-title{font-size:16px;font-weight:600;}.tb-sub{font-size:11px;color:var(--text-2);margin-top:1px;}
+.icon-btn{width:36px;height:36px;border-radius:var(--r1);border:1px solid var(--border);background:var(--bg-card2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:16px;transition:all var(--trans);font-family:var(--font);flex-shrink:0;}
+.icon-btn:hover{color:var(--text-1);border-color:var(--border-hi);background:var(--indigo-lo);}
+.content{flex:1;overflow-y:auto;padding:24px;}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r2);padding:20px;}
+.card-sm{padding:16px;}.card-lbl{font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:5px;}
+.card-val{font-size:26px;font-weight:600;line-height:1.1;}.card-sub{font-size:11.5px;color:var(--text-2);margin-top:4px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.grid-main{display:grid;grid-template-columns:1fr 320px;gap:18px;}
+.col-stack{display:flex;flex-direction:column;gap:18px;}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:100px;font-size:12px;font-weight:500;}
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:10.5px;font-weight:500;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--r1);font-size:13.5px;font-weight:500;cursor:pointer;transition:all var(--trans);border:none;font-family:var(--font);}
+.btn-primary{background:#6366f1;color:#fff;}.btn-primary:hover{background:#4f46e5;}
+.btn-outline{background:transparent;color:var(--text-2);border:1px solid var(--border);}.btn-outline:hover{color:var(--text-1);border-color:var(--border-hi);background:var(--indigo-lo);}
+.btn-danger{background:rgba(244,63,94,.12);color:#fb7185;border:1px solid rgba(244,63,94,.25);}.btn-danger:hover{background:rgba(244,63,94,.2);}
+.btn-success{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.25);}.btn-success:hover{background:rgba(16,185,129,.2);}
+.btn-sm{padding:6px 12px;font-size:12.5px;}.btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none;}
+.sa-row{display:flex;flex-wrap:wrap;gap:9px;}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}.sec-title{font-size:13.5px;font-weight:600;}
+.tl{display:flex;flex-direction:column;}
+.tl-item{display:flex;gap:12px;padding:9px 0;position:relative;}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:16px;top:34px;width:1px;height:calc(100% - 12px);background:var(--border);}
+.tl-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid;}
+.donut-wrap{display:flex;justify-content:center;margin:12px 0;}
+.ql-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:var(--r1);border:1px solid var(--border);background:var(--bg-card2);cursor:pointer;transition:all var(--trans);text-decoration:none;color:var(--text-1);margin-bottom:8px;}
+.ql-item:hover{border-color:var(--border-hi);background:var(--indigo-lo);}
+.ql-icon{width:34px;height:34px;border-radius:var(--r1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.prog{height:5px;border-radius:100px;background:var(--border);overflow:hidden;margin-top:4px;}
+.prog-fill{height:100%;border-radius:100px;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:11px;color:var(--text-2);font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+.tbl tr:last-child td{border-bottom:none;}
+.input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r1);padding:9px 13px;font-size:13.5px;color:var(--text-1);font-family:var(--font);width:100%;outline:none;transition:border var(--trans);}
+.input:focus{border-color:#6366f1;}.input::placeholder{color:var(--text-3);}
+.field-lbl{font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:6px;display:block;}.field-grp{margin-bottom:15px;}
+.pie-row{display:flex;align-items:center;margin-bottom:9px;font-size:12.5px;}
+.pie-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:8px;}.pie-name{color:var(--text-2);flex:1;}.pie-val{font-weight:500;font-family:var(--mono);font-size:12px;}
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg-app);}
+.auth-card{width:100%;max-width:420px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r2);padding:32px;}
+.err-msg{font-size:12px;color:#fb7185;margin-top:8px;min-height:18px;}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--indigo);border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:14px;background:var(--bg-app);}
+.loading-screen .spinner{width:32px;height:32px;border-width:3px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r2);padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--indigo);color:#fff;font-size:11px;font-weight:700;margin-right:8px;flex-shrink:0;}
+.sql-block{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r1);padding:12px;font-family:var(--mono);font-size:11px;color:var(--indigo-hi);white-space:pre;overflow-x:auto;margin-top:6px;line-height:1.6;}
+.saved-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;font-size:11px;background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2);opacity:0;transition:opacity .3s;}
+.saved-pill.show{opacity:1;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}.pulse{animation:pulse 2s infinite;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}.fade-up{animation:fadeUp .3s ease both;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+@media(max-width:960px){.grid4{grid-template-columns:repeat(2,1fr);}.grid-main{grid-template-columns:1fr;}.sidebar{width:58px;}.sidebar .logo-text,.sidebar .nav-lbl,.sidebar .user-info{opacity:0;width:0;pointer-events:none;}}
+@media(max-width:600px){.content{padding:14px;}.grid4{grid-template-columns:1fr 1fr;}.topbar{padding:0 14px;gap:8px;}}
+</style>
+</head>
+<body data-theme="dark">
+<div id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <div id="load-msg" style="color:var(--text-2);font-size:13px;">Loading NexaFlow…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ══════════════════════════════════════════
+// WAIT FOR SUPABASE SDK THEN BOOT
+// ══════════════════════════════════════════
+function waitForSDK(cb) {
+  var attempts = 0;
+  function check() {
+    if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+      cb(null);
+    } else if (attempts++ > 150) { // 7.5 seconds max
+      cb(new Error('Supabase SDK failed to load'));
+    } else {
+      setTimeout(check, 50);
+    }
+  }
+  check();
+}
+
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+var SB_URL = "https://aocugthsqjhhszpzydmb.supabase.co";
+var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvY3VndGhzcWpoaHN6cHp5ZG1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMDQxNTAsImV4cCI6MjA5MTU4MDE1MH0.1pzaPoTn4PZwz_U06_TaJ_FKMZMq6zvoWRP7JDnE_fI";
+var sb = null;
+
+// ══════════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════════
+var APP = {
+  ready: false, authUser: null, profile: null,
+  theme: localStorage.getItem('nf_theme') || 'dark',
+  page: 'dashboard', collapsed: window.innerWidth < 960,
+  status: 'checked-out', currentSession: null, timeline: [],
+  historyDate: null, saving: false, showSetup: false
+};
+
+// ══════════════════════════════════════════
+// DOM HELPERS
+// ══════════════════════════════════════════
+function mk(tag, cls, style) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (style) Object.assign(e.style, style);
+  return e;
+}
+function dv(cls, style) { return mk('div', cls || '', style); }
+function sp(cls) { return mk('span', cls || ''); }
+function txt(s) { return document.createTextNode(String(s)); }
+function app(parent) {
+  for (var i = 1; i < arguments.length; i++) {
+    var c = arguments[i];
+    if (!c && c !== 0) continue;
+    if (typeof c === 'string' || typeof c === 'number') parent.appendChild(txt(c));
+    else if (c instanceof Node) parent.appendChild(c);
+  }
+  return parent;
+}
+function btn(cls, label, fn, disabled) {
+  var b = mk('button', 'btn ' + cls);
+  b.textContent = label;
+  if (fn) b.addEventListener('click', fn);
+  if (disabled) b.disabled = true;
+  return b;
+}
+function inp(cls, type, placeholder, val) {
+  var i = mk('input', cls);
+  i.type = type || 'text';
+  if (placeholder) i.placeholder = placeholder;
+  if (val != null) i.value = val;
+  return i;
+}
+function Av(init, sz) {
+  return app(dv('avatar av-' + (sz || 'sm')), init || '?');
+}
+function SBadge(status) {
+  var c = SC[status] || SC['checked-out'];
+  var b = dv('badge');
+  b.style.background = c.bg; b.style.color = c.color;
+  var dot = sp(); dot.textContent = c.icon;
+  if (status !== 'checked-out') dot.classList.add('pulse');
+  return app(b, dot, ' ' + c.label);
+}
+function StatCard(label, val, sub) {
+  var c = dv('card card-sm fade-up');
+  var l = dv('card-lbl'); l.textContent = label;
+  var v = dv('card-val'); v.textContent = String(val);
+  app(c, l, v);
+  if (sub) { var s = dv('card-sub'); s.textContent = sub; c.appendChild(s); }
+  return c;
+}
+
+// ══════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════
+var SC = {
+  'checked-in':  { label: 'Checked In',  color: '#10b981', bg: 'rgba(16,185,129,.14)', icon: '●' },
+  'checked-out': { label: 'Checked Out', color: '#64748b', bg: 'rgba(100,116,139,.12)', icon: '○' },
+  'break':       { label: 'On Break',    color: '#f59e0b', bg: 'rgba(245,158,11,.14)',  icon: '◐' },
+  'meeting':     { label: 'In Meeting',  color: '#0ea5e9', bg: 'rgba(14,165,233,.14)',  icon: '◈' },
+  'call':        { label: 'On a Call',   color: '#8b5cf6', bg: 'rgba(139,92,246,.14)',  icon: '◉' },
+  'focus':       { label: 'Focus Mode',  color: '#d946ef', bg: 'rgba(217,70,239,.14)',  icon: '◎' }
+};
+var QL = [
+  { icon: '💬', label: 'WhatsApp Web',    sub: 'Open messaging',   href: 'https://web.whatsapp.com',    bg: 'rgba(37,211,102,.12)' },
+  { icon: '🧩', label: 'Zoho CRM',        sub: 'Customer portal',  href: 'https://crm.zoho.in',        bg: 'rgba(99,102,241,.12)' },
+  { icon: '📅', label: 'Google Calendar', sub: 'View schedule',    href: 'https://calendar.google.com', bg: 'rgba(234,67,53,.12)' },
+  { icon: '📊', label: 'Google Sheets',   sub: 'Spreadsheets',     href: 'https://sheets.google.com',   bg: 'rgba(14,165,233,.12)' },
+  { icon: '🗂️', label: 'Notion',          sub: 'Docs & tasks',     href: 'https://notion.so',           bg: 'rgba(255,255,255,.08)' },
+  { icon: '📧', label: 'Gmail',           sub: 'Check inbox',      href: 'https://mail.google.com',     bg: 'rgba(234,67,53,.08)' }
+];
+
+// ══════════════════════════════════════════
+// TIME HELPERS
+// ══════════════════════════════════════════
+function nowISO() { return new Date().toISOString(); }
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function fmt(m) {
+  if (!m || m <= 0) return '0m';
+  var h = Math.floor(m / 60), mn = Math.round(m % 60);
+  return h > 0 ? h + 'h ' + mn + 'm' : mn + 'm';
+}
+function minBetween(a, b) {
+  if (!a) return 0;
+  return Math.max(0, Math.round(((b ? new Date(b) : new Date()) - new Date(a)) / 60000));
+}
+function fmtT(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+function nowFull() {
+  return new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function now5() {
+  return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+// ══════════════════════════════════════════
+// DATABASE
+// ══════════════════════════════════════════
+async function loadToday() {
+  if (!sb || !APP.profile) return;
+  var r = await sb.from('sessions').select('*')
+    .eq('user_id', APP.profile.id).eq('work_date', todayStr())
+    .order('started_at', { ascending: true });
+  if (r.error) { console.error('loadToday:', r.error); return; }
+  APP.timeline = r.data || [];
+  APP.currentSession = APP.timeline.find(function(s) { return !s.ended_at; }) || null;
+  APP.status = APP.currentSession ? APP.currentSession.type : 'checked-out';
+}
+async function loadDate(date, uid) {
+  if (!sb) return [];
+  var r = await sb.from('sessions').select('*')
+    .eq('user_id', uid || APP.profile.id).eq('work_date', date)
+    .order('started_at', { ascending: true });
+  return r.error ? [] : r.data || [];
+}
+async function loadRange(uid, from, to) {
+  if (!sb) return [];
+  var r = await sb.from('sessions').select('*')
+    .eq('user_id', uid).gte('work_date', from).lte('work_date', to)
+    .order('started_at', { ascending: true });
+  return r.error ? [] : r.data || [];
+}
+async function startSess(type) {
+  if (!sb || !APP.profile) return null;
+  var r = await sb.from('sessions').insert({
+    user_id: APP.profile.id, type: type, work_date: todayStr(),
+    started_at: nowISO(), ended_at: null, duration_minutes: null
+  }).select().single();
+  if (r.error) { console.error('startSess:', r.error); return null; }
+  return r.data;
+}
+async function endSess(sess) {
+  if (!sb || !sess) return;
+  var end = nowISO(), dur = minBetween(sess.started_at, end);
+  var r = await sb.from('sessions').update({ ended_at: end, duration_minutes: dur }).eq('id', sess.id);
+  if (r.error) console.error('endSess:', r.error);
+}
+async function loadProfile(uid) {
+  if (!sb) return null;
+  var r = await sb.from('profiles').select('*').eq('id', uid).single();
+  if (r.error) { console.error('loadProfile:', r.error); return null; }
+  return r.data;
+}
+async function loadTeam() {
+  if (!sb) return [];
+  var r = await sb.from('profiles').select('*');
+  if (r.error) return [];
+  var today = todayStr(), result = [];
+  for (var i = 0; i < r.data.length; i++) {
+    var p = r.data[i];
+    var sr = await sb.from('sessions').select('*').eq('user_id', p.id).eq('work_date', today).order('started_at', { ascending: true });
+    var tl = sr.data || [];
+    var open = tl.find(function(s) { return !s.ended_at; });
+    var wm = tl.filter(function(s) { return s.ended_at && s.type === 'checked-in'; })
+      .reduce(function(a, s) { return a + (s.duration_minutes || 0); }, 0)
+      + (open && open.type === 'checked-in' ? minBetween(open.started_at) : 0);
+    result.push({ id: p.id, name: p.full_name, avatar: p.avatar_initials, role: p.role, status: open ? open.type : 'checked-out', workMin: wm, sessions: tl.length });
+  }
+  return result;
+}
+
+// ══════════════════════════════════════════
+// ACTIONS
+// ══════════════════════════════════════════
+async function changeStatus(ns) {
+  if (APP.saving) return;
+  APP.saving = true; render();
+  if (APP.currentSession) await endSess(APP.currentSession);
+  if (ns !== 'checked-out') await startSess(ns);
+  await loadToday();
+  APP.saving = false; render();
+}
+async function doSignIn(email, pass) {
+  if (!sb) return { error: { message: 'Database not connected' } };
+  var r = await sb.auth.signInWithPassword({ email: email, password: pass });
+  return r.error ? { error: r.error } : { user: r.data.user };
+}
+async function doSignOut() {
+  if (!sb) return;
+  if (APP.currentSession) await endSess(APP.currentSession);
+  await sb.auth.signOut();
+  APP.authUser = null; APP.profile = null; APP.status = 'checked-out';
+  APP.timeline = []; APP.currentSession = null; APP.page = 'dashboard';
+  render();
+}
+
+// ══════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════
+async function boot() {
+  document.body.setAttribute('data-theme', APP.theme);
+  var msgEl = document.getElementById('load-msg');
+
+  // Create Supabase client
+  try {
+    sb = window.supabase.createClient(SB_URL, SB_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+    });
+    console.log('Supabase client created OK');
+  } catch (e) {
+    console.error('createClient failed:', e);
+    APP.ready = true; APP.showSetup = true; render(); return;
+  }
+
+  if (msgEl) msgEl.textContent = 'Checking session…';
+
+  // Check existing session
+  try {
+    var gs = await sb.auth.getSession();
+    console.log('getSession result:', gs);
+    var session = gs && gs.data && gs.data.session;
+    if (session && session.user) {
+      APP.authUser = session.user;
+      if (msgEl) msgEl.textContent = 'Loading profile…';
+      APP.profile = await loadProfile(session.user.id);
+      if (APP.profile) {
+        if (msgEl) msgEl.textContent = 'Loading today\'s data…';
+        await loadToday();
+      }
+    }
+  } catch (e) {
+    console.error('getSession error:', e);
+  }
+
+  APP.ready = true;
+  render();
+
+  // Listen for auth changes
+  sb.auth.onAuthStateChange(async function(event, session) {
+    console.log('Auth event:', event);
+    if (event === 'SIGNED_IN' && session && session.user) {
+      APP.authUser = session.user;
+      APP.profile = await loadProfile(session.user.id);
+      if (APP.profile) await loadToday();
+      render();
+    } else if (event === 'SIGNED_OUT') {
+      APP.authUser = null; APP.profile = null; APP.status = 'checked-out';
+      APP.timeline = []; APP.currentSession = null;
+      render();
+    }
+  });
+}
+
+// ══════════════════════════════════════════
+// TOTALS
+// ══════════════════════════════════════════
+function totals(sessions) {
+  var w = 0, b = 0, m = 0, c = 0, f = 0;
+  sessions.filter(function(s) { return s.ended_at; }).forEach(function(s) {
+    var d = s.duration_minutes || 0;
+    if (s.type === 'checked-in') w += d;
+    if (s.type === 'break') b += d;
+    if (s.type === 'meeting') m += d;
+    if (s.type === 'call') c += d;
+    if (s.type === 'focus') f += d;
+  });
+  var open = sessions.find(function(s) { return !s.ended_at; });
+  if (open) {
+    var cur = minBetween(open.started_at);
+    if (open.type === 'checked-in') w += cur;
+    if (open.type === 'break') b += cur;
+    if (open.type === 'meeting') m += cur;
+    if (open.type === 'call') c += cur;
+    if (open.type === 'focus') f += cur;
+  }
+  return { work: w, brk: b, meet: m, call: c, focus: f, total: w + b + m + c + f };
+}
+
+// ══════════════════════════════════════════
+// DONUT
+// ══════════════════════════════════════════
+function Donut(segs) {
+  var r = 40, cx = 50, cy = 50, sw = 14, circ = 2 * Math.PI * r;
+  var total = segs.reduce(function(a, s) { return a + s.v; }, 0) || 1;
+  var ns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('width', '110'); svg.setAttribute('height', '110');
+  function circ_el(attrs) {
+    var c = document.createElementNS(ns, 'circle');
+    Object.keys(attrs).forEach(function(k) { c.setAttribute(k, attrs[k]); });
+    return c;
+  }
+  svg.appendChild(circ_el({ cx: cx, cy: cy, r: r, fill: 'none', stroke: 'var(--border)', 'stroke-width': sw }));
+  svg.appendChild(circ_el({ cx: cx, cy: cy, r: r - sw / 2 - 3, fill: 'var(--bg-card2)' }));
+  var off = 0;
+  segs.forEach(function(s) {
+    if (s.v <= 0) return;
+    var dash = (s.v / total) * circ;
+    svg.appendChild(circ_el({ cx: cx, cy: cy, r: r, fill: 'none', stroke: s.color, 'stroke-width': sw, 'stroke-dasharray': dash + ' ' + (circ - dash), 'stroke-dashoffset': circ * 0.25 - off, 'stroke-linecap': 'round' }));
+    off += dash;
+  });
+  return svg;
+}
+
+// ══════════════════════════════════════════
+// SETUP MODAL
+// ══════════════════════════════════════════
+var SQL = `create table profiles (
+  id uuid references auth.users primary key,
+  full_name text not null,
+  avatar_initials text default 'U',
+  role text default 'Staff',
+  created_at timestamptz default now()
+);
+alter table profiles enable row level security;
+create policy "read" on profiles for select using (auth.role() = 'authenticated');
+create policy "update" on profiles for update using (auth.uid() = id);
+create policy "insert" on profiles for insert with check (auth.uid() = id);
+
+create table sessions (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references profiles(id) not null,
+  type text not null, work_date date not null,
+  started_at timestamptz not null, ended_at timestamptz,
+  duration_minutes integer, created_at timestamptz default now()
+);
+alter table sessions enable row level security;
+create policy "read" on sessions for select using (auth.role() = 'authenticated');
+create policy "insert" on sessions for insert with check (auth.uid() = user_id);
+create policy "update" on sessions for update using (auth.uid() = user_id);
+create policy "delete" on sessions for delete using (auth.uid() = user_id);`;
+
+function SetupModal(canClose) {
+  var overlay = dv('modal-overlay'), box = dv('modal-box');
+  if (canClose) {
+    var cb = btn('btn-outline btn-sm', '✕ Close', function() { APP.showSetup = false; render(); });
+    cb.style.marginBottom = '14px'; box.appendChild(cb);
+  }
+  var title = dv(); title.style.cssText = 'font-size:16px;font-weight:700;margin-bottom:6px;'; title.textContent = '⚙️ Database Setup';
+  var sub = dv(); sub.style.cssText = 'font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;';
+  sub.textContent = 'Run the SQL below once in your Supabase SQL Editor to create required tables. Then create users under Authentication → Users.';
+
+  var s1hdr = dv(); s1hdr.style.cssText = 'display:flex;align-items:center;margin-bottom:8px;';
+  var n1 = sp('step-num'); n1.textContent = '1';
+  var t1 = sp(); t1.style.cssText = 'font-size:13px;font-weight:600;'; t1.textContent = 'Run this SQL in Supabase → SQL Editor';
+  app(s1hdr, n1, t1);
+  var sqlEl = dv('sql-block'); sqlEl.textContent = SQL;
+  var cpBtn = btn('btn-outline btn-sm', '📋 Copy SQL', function() {
+    navigator.clipboard.writeText(SQL).catch(function() {});
+    cpBtn.textContent = '✓ Copied!'; setTimeout(function() { cpBtn.textContent = '📋 Copy SQL'; }, 2000);
+  });
+  cpBtn.style.margin = '8px 0 16px';
+
+  var s2hdr = dv(); s2hdr.style.cssText = 'display:flex;align-items:center;margin-bottom:8px;';
+  var n2 = sp('step-num'); n2.textContent = '2';
+  var t2 = sp(); t2.style.cssText = 'font-size:13px;font-weight:600;'; t2.textContent = 'Create user + profile';
+  app(s2hdr, n2, t2);
+  var profSQL = dv('sql-block'); profSQL.style.marginLeft = '30px';
+  profSQL.textContent = "-- After creating user in Auth → Users:\ninsert into profiles (id, full_name, avatar_initials, role)\nvalues ('USER_UUID_HERE', 'Your Name', 'YN', 'Admin');";
+
+  app(box, title, sub, s1hdr, sqlEl, cpBtn, s2hdr, profSQL);
+  overlay.appendChild(box);
+  return overlay;
+}
+
+// ══════════════════════════════════════════
+// AUTH VIEW
+// ══════════════════════════════════════════
+function AuthView() {
+  var emailVal = '', passVal = '', loading = false;
+  var card = dv('auth-card fade-up');
+  var logoRow = dv(); logoRow.style.cssText = 'display:flex;align-items:center;gap:12px;margin-bottom:28px;';
+  var lm = dv('logo-mark'); lm.textContent = 'N';
+  var lt = dv();
+  var ln = dv(); ln.style.cssText = 'font-size:18px;font-weight:700;'; ln.textContent = 'NexaFlow';
+  var ls = dv(); ls.style.cssText = 'font-size:11px;color:var(--text-2);'; ls.textContent = 'Command Centre';
+  app(lt, ln, ls); app(logoRow, lm, lt);
+
+  var title = dv(); title.style.cssText = 'font-size:22px;font-weight:700;margin-bottom:6px;'; title.textContent = 'Welcome back';
+  var sub = dv(); sub.style.cssText = 'font-size:14px;color:var(--text-2);margin-bottom:28px;'; sub.textContent = 'Sign in to your NexaFlow workspace';
+
+  var fE = dv('field-grp'), lE = mk('label', 'field-lbl'); lE.textContent = 'Email address';
+  var iE = inp('input', 'email', 'you@company.com');
+  iE.addEventListener('input', function(e) { emailVal = e.target.value; });
+  iE.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+  app(fE, lE, iE);
+
+  var fP = dv('field-grp'), lP = mk('label', 'field-lbl'); lP.textContent = 'Password';
+  var iP = inp('input', 'password', '••••••••');
+  iP.addEventListener('input', function(e) { passVal = e.target.value; });
+  iP.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+  app(fP, lP, iP);
+
+  var errEl = dv('err-msg');
+  var loginBtn = mk('button', 'btn btn-primary');
+  loginBtn.style.cssText = 'width:100%;margin-top:18px;justify-content:center;font-size:14px;padding:11px;';
+  loginBtn.textContent = 'Sign in →';
+
+  async function doLogin() {
+    if (loading) return;
+    errEl.textContent = '';
+    if (!emailVal || !passVal) { errEl.textContent = 'Please enter email and password.'; return; }
+    loading = true; loginBtn.innerHTML = ''; loginBtn.appendChild(dv('spinner')); loginBtn.disabled = true;
+    var res = await doSignIn(emailVal, passVal);
+    if (res.error) {
+      errEl.textContent = res.error.message || 'Login failed.';
+      loginBtn.textContent = 'Sign in →'; loginBtn.disabled = false; loading = false;
+    }
+    // success → onAuthStateChange fires
+  }
+  loginBtn.addEventListener('click', doLogin);
+
+  var setupLink = dv(); setupLink.style.cssText = 'text-align:center;margin-top:18px;font-size:12px;color:var(--text-2);';
+  var sl = sp(); sl.style.cssText = 'color:var(--indigo-hi);cursor:pointer;text-decoration:underline;'; sl.textContent = 'View database setup guide';
+  sl.addEventListener('click', function() { APP.showSetup = true; render(); });
+  setupLink.appendChild(sl);
+
+  app(card, logoRow, title, sub, fE, fP, errEl, loginBtn, setupLink);
+  setTimeout(function() { iE.focus(); }, 80);
+  return app(dv('auth-wrap'), card);
+}
+
+// ══════════════════════════════════════════
+// SIDEBAR
+// ══════════════════════════════════════════
+function Sidebar() {
+  var NAV = [
+    { id: 'dashboard', icon: '◈', label: 'Dashboard' },
+    { id: 'analytics', icon: '◉', label: 'Analytics' },
+    { id: 'history',   icon: '◎', label: 'History' },
+    { id: 'team',      icon: '◐', label: 'Team' },
+    { id: 'settings',  icon: '⊙', label: 'Settings' }
+  ];
+  var sb2 = dv('sidebar' + (APP.collapsed ? ' collapsed' : ''));
+  var logo = dv('sb-logo'), lm = dv('logo-mark'); lm.textContent = 'N';
+  var lt = dv('logo-text'), ln = dv('logo-name'); ln.textContent = 'NexaFlow';
+  var ls = dv('logo-sub'); ls.textContent = 'Command Centre';
+  app(lt, ln, ls); app(logo, lm, lt);
+  var nav = dv('sb-nav');
+  NAV.forEach(function(n) {
+    var item = mk('button', 'nav-item' + (APP.page === n.id ? ' active' : ''));
+    item.addEventListener('click', function() { APP.page = n.id; render(); });
+    var icon = sp('nav-icon'); icon.textContent = n.icon;
+    var lbl = sp('nav-lbl'); lbl.textContent = n.label;
+    app(item, icon, lbl); nav.appendChild(item);
+  });
+  var bottom = dv('sb-bottom');
+  var soBtn = mk('button', 'nav-item'); soBtn.addEventListener('click', doSignOut);
+  app(soBtn, app(sp('nav-icon'), '↩'), app(sp('nav-lbl'), 'Sign Out'));
+  var chip = dv('user-chip'); chip.appendChild(Av(APP.profile && APP.profile.avatar_initials, 'sm'));
+  var ui = dv('user-info');
+  var un = dv('user-name'); un.textContent = (APP.profile && APP.profile.full_name) || 'User';
+  var ur = dv('user-role-lbl'); ur.textContent = (APP.profile && APP.profile.role) || '';
+  app(ui, un, ur); app(chip, ui);
+  app(bottom, soBtn, chip);
+  app(sb2, logo, nav, bottom);
+  return sb2;
+}
+
+// ══════════════════════════════════════════
+// TOPBAR
+// ══════════════════════════════════════════
+function Topbar() {
+  var titles = { dashboard: 'Dashboard', analytics: 'Analytics', history: 'History', team: 'Team', settings: 'Settings' };
+  var cfg = SC[APP.status] || SC['checked-out'];
+  var bar = dv('topbar');
+  var menu = dv('icon-btn'); menu.textContent = '☰';
+  menu.addEventListener('click', function() { APP.collapsed = !APP.collapsed; render(); });
+  var tb = dv(); tb.style.flex = '1';
+  var tit = dv('tb-title'); tit.textContent = titles[APP.page] || 'Dashboard';
+  var sub2 = dv('tb-sub'); sub2.textContent = nowFull();
+  app(tb, tit, sub2);
+  var sbadge = dv('badge'); sbadge.style.background = cfg.bg; sbadge.style.color = cfg.color; sbadge.style.fontSize = '12px';
+  var si = sp(); si.textContent = cfg.icon; if (APP.status !== 'checked-out') si.classList.add('pulse');
+  app(sbadge, si, ' ' + cfg.label);
+  var clk = sp(); clk.id = 'live-clock';
+  clk.style.cssText = 'font-family:var(--mono);font-size:13px;color:var(--text-2);min-width:44px;';
+  clk.textContent = now5();
+  var themeBtn = dv('icon-btn'); themeBtn.textContent = APP.theme === 'dark' ? '☀' : '🌙';
+  themeBtn.addEventListener('click', function() {
+    var t = APP.theme === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', t); localStorage.setItem('nf_theme', t); APP.theme = t; render();
+  });
+  var setupBtn = dv('icon-btn'); setupBtn.textContent = '⚙'; setupBtn.title = 'Setup guide';
+  setupBtn.addEventListener('click', function() { APP.showSetup = true; render(); });
+  if (APP.saving) {
+    var sp2 = dv('spinner'); sp2.style.cssText = 'width:20px;height:20px;';
+    app(bar, menu, tb, sp2, themeBtn);
+  } else {
+    app(bar, menu, tb, sbadge, clk, themeBtn, setupBtn);
+  }
+  return bar;
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function Dashboard() {
+  var tl = APP.timeline, t = totals(tl), wrap = dv('fade-up');
+  var sr = dv('grid4');
+  [StatCard('Active Work', fmt(t.work), 'Productive time today'),
+   StatCard('Break Time', fmt(t.brk), 'Rest taken today'),
+   StatCard('Meetings', fmt(t.meet), 'Time in meetings'),
+   StatCard('Total Logged', fmt(t.total), 'All sessions combined')
+  ].forEach(function(c) { sr.appendChild(c); });
+
+  // Status actions
+  var sc = dv('card'), shdr = dv('sec-hdr'), sttl = dv('sec-title'); sttl.textContent = 'Your Status';
+  app(shdr, sttl, SBadge(APP.status)); sc.appendChild(shdr);
+  var saRow = dv('sa-row');
+  [{ key: 'checked-in',  label: 'Check In',  cls: 'btn-success', dis: APP.status !== 'checked-out' },
+   { key: 'checked-out', label: 'Check Out', cls: 'btn-danger',  dis: APP.status === 'checked-out' },
+   { key: 'break',   label: 'Break',   cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'break' },
+   { key: 'meeting', label: 'Meeting', cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'meeting' },
+   { key: 'call',    label: 'Call',    cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'call' },
+   { key: 'focus',   label: 'Focus',   cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'focus' }
+  ].forEach(function(a) {
+    saRow.appendChild(btn(a.cls + ' btn-sm', a.label, function() { changeStatus(a.key); }, a.dis || APP.saving));
+  });
+  sc.appendChild(saRow);
+  var sn = dv(); sn.style.cssText = 'font-size:11px;color:var(--text-2);margin-top:10px;';
+  sn.textContent = '✓ All changes saved to database in real-time'; sc.appendChild(sn);
+
+  // Timeline
+  var tlCard = dv('card'), thdr = dv('sec-hdr'), tttl = dv('sec-title'); tttl.textContent = "Today's Timeline";
+  var tcount = sp(); tcount.style.cssText = 'font-size:11px;color:var(--text-2);font-family:var(--mono);';
+  tcount.textContent = tl.length + ' sessions';
+  app(thdr, tttl, tcount); tlCard.appendChild(thdr);
+  var tlWrap = dv('tl');
+  if (!tl.length) {
+    var em = dv(); em.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:20px 0;';
+    em.textContent = 'No activity yet. Click Check In to start.'; tlWrap.appendChild(em);
+  } else {
+    tl.slice().reverse().forEach(function(s) {
+      var c2 = SC[s.type] || SC['checked-in'], item = dv('tl-item'), dot = dv('tl-dot');
+      dot.style.borderColor = c2.color; dot.style.color = c2.color; dot.style.background = c2.bg; dot.textContent = c2.icon;
+      var body = dv(), lbl2 = dv(); lbl2.style.cssText = 'font-size:13px;font-weight:500;'; lbl2.textContent = c2.label;
+      var time = dv(); time.style.cssText = 'font-size:11.5px;color:var(--text-2);font-family:var(--mono);margin-top:2px;';
+      var ts = fmtT(s.started_at);
+      if (s.ended_at) ts += ' → ' + fmtT(s.ended_at) + ' · ' + fmt(s.duration_minutes);
+      else ts += ' → now (live)';
+      time.textContent = ts; app(body, lbl2, time); app(item, dot, body);
+      if (!s.ended_at) { var tag = sp('tag'); tag.textContent = 'live'; tag.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);margin-left:auto;'; item.appendChild(tag); }
+      tlWrap.appendChild(item);
+    });
+  }
+  tlCard.appendChild(tlWrap);
+
+  // Donut
+  var dc = dv('card'), dttl = dv('sec-title'); dttl.textContent = 'Time Distribution'; dc.appendChild(dttl);
+  var dd = [{ l: 'Active Work', color: '#6366f1', v: t.work }, { l: 'Breaks', color: '#f59e0b', v: t.brk },
+            { l: 'Meetings', color: '#0ea5e9', v: t.meet }, { l: 'Calls', color: '#8b5cf6', v: t.call }, { l: 'Focus', color: '#d946ef', v: t.focus }].filter(function(d) { return d.v > 0; });
+  if (dd.length) {
+    var dw = dv('donut-wrap'); dw.appendChild(Donut(dd)); dc.appendChild(dw);
+    var dtot = dd.reduce(function(a, d) { return a + d.v; }, 0) || 1;
+    dd.forEach(function(d) {
+      var row = dv('pie-row'), dot2 = sp('pie-dot'); dot2.style.background = d.color;
+      var nm = sp('pie-name'); nm.textContent = d.l;
+      var pv = sp('pie-val'); pv.textContent = Math.round(d.v / dtot * 100) + '%';
+      app(row, dot2, nm, pv); dc.appendChild(row);
+    });
+  } else {
+    var de = dv(); de.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:24px 0;';
+    de.textContent = 'Log time to see breakdown'; dc.appendChild(de);
+  }
+
+  // Quick links
+  var qc = dv('card'), qttl = dv('sec-title'); qttl.style.marginBottom = '12px'; qttl.textContent = 'Quick Access'; qc.appendChild(qttl);
+  QL.forEach(function(lk) {
+    var a = mk('a', 'ql-item'); a.href = lk.href; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    var icon2 = dv('ql-icon'); icon2.textContent = lk.icon; icon2.style.background = lk.bg;
+    var info = dv(), iN = dv(); iN.style.cssText = 'font-size:13px;font-weight:500;'; iN.textContent = lk.label;
+    var iS = dv(); iS.style.cssText = 'font-size:11px;color:var(--text-2);'; iS.textContent = lk.sub;
+    app(info, iN, iS);
+    var arrow = sp(); arrow.style.cssText = 'margin-left:auto;color:var(--text-3);font-size:12px;'; arrow.textContent = '↗';
+    app(a, icon2, info, arrow); qc.appendChild(a);
+  });
+
+  var right = dv('col-stack'); app(right, sc, dc, qc);
+  var left = dv('col-stack'); left.appendChild(tlCard);
+  var main = dv('grid-main'); app(main, left, right);
+  app(wrap, sr, main);
+  return wrap;
+}
+
+// ══════════════════════════════════════════
+// ANALYTICS
+// ══════════════════════════════════════════
+function Analytics() {
+  var wrap = dv('fade-up'), t = totals(APP.timeline), pp = t.total > 0 ? Math.round(t.work / t.total * 100) : 0;
+  var sr = dv('grid4');
+  [StatCard('Today Total', fmt(t.total), 'All logged time'), StatCard('Active Work', fmt(t.work), 'Productive time'),
+   StatCard('Productivity', pp + '%', 'Active vs total'), StatCard('Sessions', String(APP.timeline.length), 'Check-ins today')
+  ].forEach(function(c) { sr.appendChild(c); });
+
+  var bc = dv('card'), bttl = dv('sec-title'); bttl.style.marginBottom = '16px'; bttl.textContent = "Today's Breakdown"; bc.appendChild(bttl);
+  var rows2 = [{ l: 'Active Work', v: t.work, c: '#6366f1' }, { l: 'Breaks', v: t.brk, c: '#f59e0b' },
+               { l: 'Meetings', v: t.meet, c: '#0ea5e9' }, { l: 'Calls', v: t.call, c: '#8b5cf6' }, { l: 'Focus Mode', v: t.focus, c: '#d946ef' }];
+  var mx = Math.max.apply(null, rows2.map(function(r) { return r.v; }).concat([1]));
+  rows2.forEach(function(r) {
+    var row = dv(); row.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:10px;';
+    var lbl3 = sp(); lbl3.style.cssText = 'width:90px;color:var(--text-2);flex-shrink:0;'; lbl3.textContent = r.l;
+    var pb = dv('prog'); pb.style.flex = '1';
+    var pf = dv('prog-fill'); pf.style.width = (r.v / mx * 100) + '%'; pf.style.background = r.c; pb.appendChild(pf);
+    var vs = sp(); vs.style.cssText = 'font-family:var(--mono);color:var(--text-2);width:50px;text-align:right;flex-shrink:0;'; vs.textContent = fmt(r.v);
+    app(row, lbl3, pb, vs); bc.appendChild(row);
+  });
+
+  var hc = dv('card'), hHdr = dv('sec-hdr'), hTtl = dv('sec-title'); hTtl.textContent = 'Last 30 Days';
+  var hSub = sp(); hSub.style.cssText = 'font-size:11px;color:var(--text-2);'; hSub.textContent = 'Loading…';
+  app(hHdr, hTtl, hSub); hc.appendChild(hHdr);
+  var hBody = dv(); hc.appendChild(hBody);
+  (async function() {
+    var from = new Date(); from.setDate(from.getDate() - 30);
+    var s30 = await loadRange(APP.profile.id, from.toISOString().slice(0, 10), todayStr());
+    var byDate = {};
+    s30.forEach(function(s) {
+      if (!byDate[s.work_date]) byDate[s.work_date] = { work: 0, brk: 0, sessions: 0 };
+      var d = s.duration_minutes || 0;
+      if (s.type === 'checked-in') byDate[s.work_date].work += d;
+      if (s.type === 'break') byDate[s.work_date].brk += d;
+      byDate[s.work_date].sessions++;
+    });
+    var dates = Object.keys(byDate).sort();
+    hSub.textContent = dates.length + ' days with activity';
+    if (!dates.length) {
+      var em2 = dv(); em2.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:20px 0;';
+      em2.textContent = 'No data yet.'; hBody.appendChild(em2); return;
+    }
+    var tw = 0; dates.forEach(function(d) { tw += byDate[d].work; });
+    var avg = dates.length ? Math.round(tw / dates.length) : 0;
+    var sRow2 = dv(); sRow2.style.cssText = 'display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;';
+    [{ l: 'Days Tracked', v: String(dates.length) }, { l: 'Total Work', v: fmt(tw) }, { l: 'Daily Avg', v: fmt(avg) }].forEach(function(s) {
+      var cc = dv(); cc.style.cssText = 'background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r1);padding:10px 14px;flex:1;min-width:80px;';
+      var ll = dv(); ll.style.cssText = 'font-size:11px;color:var(--text-2);margin-bottom:4px;'; ll.textContent = s.l;
+      var vv = dv(); vv.style.cssText = 'font-size:16px;font-weight:600;'; vv.textContent = s.v;
+      app(cc, ll, vv); sRow2.appendChild(cc);
+    });
+    hBody.appendChild(sRow2);
+    var recent = dates.slice(-14).reverse();
+    var tbl = mk('table', 'tbl'), thead = mk('thead'), htr2 = mk('tr');
+    ['Date', 'Work', 'Breaks', 'Sessions'].forEach(function(h) { var th = mk('th'); th.textContent = h; htr2.appendChild(th); });
+    thead.appendChild(htr2); var tbody = mk('tbody');
+    recent.forEach(function(d) {
+      var row2 = byDate[d], iT = d === todayStr(), tr = mk('tr');
+      var dL = new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+      var tdD = mk('td'); tdD.style.fontWeight = iT ? '600' : '400';
+      if (iT) { var tag2 = sp('tag'); tag2.textContent = 'today'; tag2.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);margin-right:6px;'; tdD.appendChild(tag2); }
+      tdD.appendChild(txt(dL));
+      var tdW = mk('td'); tdW.style.cssText = 'font-family:var(--mono);font-size:12px;'; tdW.textContent = fmt(row2.work);
+      var tdB = mk('td'); tdB.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdB.textContent = fmt(row2.brk);
+      var tdS = mk('td'); tdS.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdS.textContent = String(row2.sessions);
+      app(tr, tdD, tdW, tdB, tdS); tbody.appendChild(tr);
+    });
+    tbl.appendChild(thead); tbl.appendChild(tbody); hBody.appendChild(tbl);
+  })();
+  app(wrap, sr, bc, mk('div'), hc);
+  return wrap;
+}
+
+// ══════════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════════
+function History() {
+  if (!APP.historyDate) APP.historyDate = todayStr();
+  var wrap = dv('fade-up'), header = dv('card'); header.style.marginBottom = '16px';
+  var hHdr2 = dv('sec-hdr'), hTtl2 = dv('sec-title'); hTtl2.textContent = 'Session History';
+  header.appendChild(app(hHdr2, hTtl2));
+  var nav2 = dv(); nav2.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;';
+  var prevBtn = btn('btn-outline btn-sm', '‹ Prev', function() {
+    var d = new Date(APP.historyDate + 'T12:00:00'); d.setDate(d.getDate() - 1);
+    APP.historyDate = d.toISOString().slice(0, 10); render();
+  });
+  var nextBtn = btn('btn-outline btn-sm', 'Next ›', function() {
+    var d = new Date(APP.historyDate + 'T12:00:00'); d.setDate(d.getDate() + 1);
+    var nd = d.toISOString().slice(0, 10); if (nd > todayStr()) return;
+    APP.historyDate = nd; render();
+  });
+  nextBtn.disabled = APP.historyDate === todayStr();
+  var dLabel2 = dv(); dLabel2.style.cssText = 'font-family:var(--mono);font-size:13px;padding:0 8px;';
+  dLabel2.textContent = new Date(APP.historyDate + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  var todayBtn2 = btn('btn-outline btn-sm', 'Today', function() { APP.historyDate = todayStr(); render(); });
+  app(nav2, prevBtn, dLabel2, nextBtn, todayBtn2);
+  header.appendChild(nav2); app(wrap, header);
+  var results = dv(); wrap.appendChild(results);
+
+  (async function() {
+    var loading2 = dv(); loading2.style.cssText = 'display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:13px;padding:20px;';
+    loading2.appendChild(dv('spinner')); loading2.appendChild(txt(' Loading…')); results.appendChild(loading2);
+    var sessions2 = await loadDate(APP.historyDate, APP.profile.id);
+    results.innerHTML = '';
+    var t2 = totals(sessions2);
+    var sr2 = dv('grid4'); sr2.style.marginBottom = '16px';
+    [StatCard('Work', fmt(t2.work), ''), StatCard('Break', fmt(t2.brk), ''), StatCard('Meetings', fmt(t2.meet), ''), StatCard('Total', fmt(t2.total), '')].forEach(function(c) { sr2.appendChild(c); });
+    results.appendChild(sr2);
+    var sc2 = dv('card'), sHdr2 = dv('sec-hdr'), sTtl2 = dv('sec-title'); sTtl2.textContent = 'Sessions';
+    var sCnt2 = sp(); sCnt2.style.cssText = 'font-size:11px;color:var(--text-2);font-family:var(--mono);'; sCnt2.textContent = sessions2.length + ' entries';
+    app(sHdr2, sTtl2, sCnt2); sc2.appendChild(sHdr2);
+    if (!sessions2.length) {
+      var em3 = dv(); em3.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:28px 0;';
+      em3.textContent = APP.historyDate === todayStr() ? 'No sessions yet today.' : 'No sessions on this date.'; sc2.appendChild(em3);
+    } else {
+      var tbl2 = mk('table', 'tbl'), thead2 = mk('thead'), htr3 = mk('tr');
+      ['#', 'Status', 'Start', 'End', 'Duration'].forEach(function(h) { var th = mk('th'); th.textContent = h; htr3.appendChild(th); });
+      thead2.appendChild(htr3); var tbody2 = mk('tbody');
+      sessions2.forEach(function(s, i) {
+        var c3 = SC[s.type] || SC['checked-in'], tr2 = mk('tr');
+        var td1 = mk('td'); td1.style.cssText = 'font-family:var(--mono);font-size:11px;color:var(--text-3);'; td1.textContent = String(i + 1);
+        var td2 = mk('td'), bdg = sp('tag'); bdg.textContent = c3.label; bdg.style.cssText = 'background:' + c3.bg + ';color:' + c3.color + ';'; td2.appendChild(bdg);
+        var td3 = mk('td'); td3.style.cssText = 'font-family:var(--mono);font-size:12px;'; td3.textContent = fmtT(s.started_at);
+        var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td4.textContent = s.ended_at ? fmtT(s.ended_at) : 'ongoing';
+        var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;'; td5.textContent = s.duration_minutes != null ? fmt(s.duration_minutes) : '—';
+        app(tr2, td1, td2, td3, td4, td5); tbody2.appendChild(tr2);
+      });
+      tbl2.appendChild(thead2); tbl2.appendChild(tbody2); sc2.appendChild(tbl2);
+    }
+    results.appendChild(sc2);
+  })();
+  return wrap;
+}
+
+// ══════════════════════════════════════════
+// TEAM
+// ══════════════════════════════════════════
+function Team() {
+  var wrap = dv('fade-up');
+  if (!APP.profile || APP.profile.role !== 'Admin') {
+    var c = dv('card'); c.style.cssText = 'text-align:center;padding:40px;color:var(--text-2);';
+    c.textContent = '🔒 Admin access required.'; wrap.appendChild(c); return wrap;
+  }
+  var loading3 = dv(); loading3.style.cssText = 'display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:13px;padding:32px;';
+  app(loading3, dv('spinner'), ' Loading team…'); wrap.appendChild(loading3);
+  (async function() {
+    var team = await loadTeam(); wrap.innerHTML = '';
+    var ac = team.filter(function(m) { return ['checked-in', 'focus', 'call'].includes(m.status); }).length;
+    var sc3 = team.filter(function(m) { return ['break', 'meeting'].includes(m.status); }).length;
+    var aw = team.filter(function(m) { return m.status === 'checked-out'; }).length;
+    var sr3 = dv('grid4');
+    [StatCard('Team', String(team.length), 'Users'), StatCard('Working', String(ac), 'Checked in'),
+     StatCard('In Session', String(sc3), 'Break/meeting'), StatCard('Away', String(aw), 'Checked out')
+    ].forEach(function(c2) { sr3.appendChild(c2); });
+    var tc2 = dv('card'), tHdr2 = dv('sec-hdr'), tTtl2 = dv('sec-title'); tTtl2.textContent = 'Live Team Status';
+    var tSub2 = sp(); tSub2.style.cssText = 'font-size:11px;color:var(--text-2);'; tSub2.textContent = 'Real-time';
+    app(tHdr2, tTtl2, tSub2); tc2.appendChild(tHdr2);
+    var tbl3 = mk('table', 'tbl'), thead3 = mk('thead'), htr4 = mk('tr');
+    ['Member', 'Role', 'Status', "Today's Work", 'Sessions'].forEach(function(h) { var th = mk('th'); th.textContent = h; htr4.appendChild(th); });
+    thead3.appendChild(htr4); var tbody3 = mk('tbody');
+    team.forEach(function(m) {
+      var tr3 = mk('tr');
+      var td1 = mk('td'), nr = dv(); nr.style.cssText = 'display:flex;align-items:center;gap:9px;';
+      app(nr, Av(m.avatar, 'sm'), app(sp(), m.name)); td1.appendChild(nr);
+      var td2 = mk('td'), rt = sp('tag'); rt.textContent = m.role;
+      rt.style.cssText = m.role === 'Admin' ? 'background:var(--indigo-lo);color:var(--indigo-hi);' : 'background:rgba(16,185,129,.1);color:#34d399;';
+      td2.appendChild(rt);
+      var td3 = mk('td'); td3.appendChild(SBadge(m.status));
+      var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;'; td4.textContent = fmt(m.workMin);
+      var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td5.textContent = String(m.sessions);
+      app(tr3, td1, td2, td3, td4, td5); tbody3.appendChild(tr3);
+    });
+    tbl3.appendChild(thead3); tbl3.appendChild(tbody3); tc2.appendChild(tbl3);
+    var rb = btn('btn-outline btn-sm', '↺ Refresh', function() { wrap.innerHTML = ''; app(wrap, loading3.cloneNode(true)); });
+    rb.style.marginTop = '14px'; tc2.appendChild(rb);
+    app(wrap, sr3, tc2);
+  })();
+  return wrap;
+}
+
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+function Settings() {
+  var u = APP.profile, wrap = dv('fade-up'); wrap.style.maxWidth = '600px';
+  var pc = dv('card'); pc.style.marginBottom = '16px';
+  var pttl = dv('sec-title'); pttl.style.marginBottom = '16px'; pttl.textContent = 'Profile'; pc.appendChild(pttl);
+  var pRow2 = dv(); pRow2.style.cssText = 'display:flex;align-items:center;gap:14px;margin-bottom:18px;'; pRow2.appendChild(Av(u && u.avatar_initials, 'md'));
+  var pI = dv(), pN = dv(); pN.style.cssText = 'font-weight:600;font-size:15px;'; pN.textContent = (u && u.full_name) || '';
+  var pE2 = dv(); pE2.style.cssText = 'font-size:12.5px;color:var(--text-2);'; pE2.textContent = (APP.authUser && APP.authUser.email) || '';
+  var pR = sp('tag'); pR.textContent = (u && u.role) || 'Staff'; pR.style.cssText = 'margin-top:5px;background:var(--indigo-lo);color:var(--indigo-hi);display:inline-flex;';
+  app(pI, pN, pE2, pR); app(pRow2, pI); pc.appendChild(pRow2);
+  var fN2 = dv('field-grp'), lN2 = mk('label', 'field-lbl'); lN2.textContent = 'Display Name';
+  var iN2 = inp('input', 'text', '', (u && u.full_name) || ''); app(fN2, lN2, iN2);
+  var saved2 = sp('saved-pill'); saved2.textContent = '✓ Saved'; saved2.style.marginLeft = '8px';
+  var sbRow2 = dv(); sbRow2.style.cssText = 'display:flex;align-items:center;';
+  var saveBtn2 = btn('btn-primary btn-sm', 'Save Changes', async function() {
+    var nn = iN2.value.trim(); if (!nn || !sb) return;
+    var init = nn.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+    await sb.from('profiles').update({ full_name: nn, avatar_initials: init }).eq('id', APP.profile.id);
+    APP.profile.full_name = nn; APP.profile.avatar_initials = init;
+    saved2.classList.add('show'); setTimeout(function() { saved2.classList.remove('show'); }, 2500);
+  });
+  app(sbRow2, saveBtn2, saved2); app(pc, fN2, sbRow2);
+
+  var tc3 = dv('card'); tc3.style.marginBottom = '16px';
+  var tttl2 = dv('sec-title'); tttl2.style.marginBottom = '14px'; tttl2.textContent = 'Appearance'; tc3.appendChild(tttl2);
+  var tRow2 = dv(); tRow2.style.cssText = 'display:flex;gap:9px;';
+  ['dark', 'light'].forEach(function(t) {
+    var b = btn('btn-sm ' + (APP.theme === t ? 'btn-primary' : 'btn-outline'), t === 'dark' ? '🌙 Dark' : '☀️ Light', function() {
+      document.body.setAttribute('data-theme', t); localStorage.setItem('nf_theme', t); APP.theme = t; render();
+    });
+    tRow2.appendChild(b);
+  });
+  tc3.appendChild(tRow2);
+
+  var dc2 = dv('card'); dc2.style.marginBottom = '16px';
+  var dttl2 = dv('sec-title'); dttl2.style.marginBottom = '8px'; dttl2.textContent = 'Database';
+  var dsub2 = dv(); dsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:12px;'; dsub2.textContent = 'Connected to Supabase project.';
+  var dBtn2 = btn('btn-outline btn-sm', '⚙ View Setup Guide', function() { APP.showSetup = true; render(); });
+  app(dc2, dttl2, dsub2, dBtn2);
+
+  var rc2 = dv('card'); rc2.style.marginBottom = '16px';
+  var rttl2 = dv('sec-title'); rttl2.style.marginBottom = '8px'; rttl2.textContent = 'Session Management';
+  var rsub2 = dv(); rsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:14px;'; rsub2.textContent = 'Force end your open session.';
+  var rBtn2 = btn('btn-danger btn-sm', 'Force Check Out', async function() {
+    if (!confirm('End current session and check out?')) return; await changeStatus('checked-out');
+  });
+  app(rc2, rttl2, rsub2, rBtn2);
+
+  var ic2 = dv('card'), ittl2 = dv('sec-title'); ittl2.style.marginBottom = '12px'; ittl2.textContent = 'Workspace Info'; ic2.appendChild(ittl2);
+  [['Version', '2.1.0'], ['Your Role', (u && u.role) || '—'], ['User ID', (APP.authUser && APP.authUser.id) ? APP.authUser.id.slice(0, 8) + '…' : '—'], ['DB', sb ? '✓ Connected' : '✗ Not connected']].forEach(function(kv) {
+    var row3 = dv(); row3.style.cssText = 'display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;';
+    var k2 = sp(); k2.style.color = 'var(--text-2)'; k2.textContent = kv[0];
+    var v2 = sp(); v2.style.cssText = 'font-family:var(--mono);font-size:12px;'; v2.textContent = kv[1];
+    app(row3, k2, v2); ic2.appendChild(row3);
+  });
+  [pc, tc3, dc2, rc2, ic2].forEach(function(c3) { wrap.appendChild(c3); });
+  return wrap;
+}
+
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
+function render() {
+  document.body.setAttribute('data-theme', APP.theme);
+  var root = document.getElementById('app');
+  root.innerHTML = '';
+
+  if (APP.showSetup) {
+    root.appendChild(SetupModal(!!APP.authUser));
+    return;
+  }
+  if (!APP.ready) {
+    var ls = dv('loading-screen'); app(ls, dv('spinner'));
+    var lm2 = mk('div'); lm2.style.cssText = 'color:var(--text-2);font-size:13px;'; lm2.textContent = 'Connecting…';
+    ls.appendChild(lm2); root.appendChild(ls); return;
+  }
+  if (!APP.authUser || !APP.profile) {
+    root.appendChild(AuthView()); return;
+  }
+  var views = { dashboard: Dashboard, analytics: Analytics, history: History, team: Team, settings: Settings };
+  var View = views[APP.page] || Dashboard;
+  var appEl = dv('app'); appEl.appendChild(Sidebar());
+  var mainEl = dv('main'); mainEl.appendChild(Topbar());
+  var content = dv('content'); content.appendChild(View());
+  mainEl.appendChild(content); appEl.appendChild(mainEl); root.appendChild(appEl);
+}
+
+// ══════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════
+setInterval(function() { var c = document.getElementById('live-clock'); if (c) c.textContent = now5(); }, 30000);
+
+// ══════════════════════════════════════════
+// START — wait for SDK then boot
+// ══════════════════════════════════════════
+waitForSDK(function(err) {
+  if (err) {
+    document.getElementById('app').innerHTML =
+      '<div class="loading-screen"><div style="color:#fb7185;font-size:14px;text-align:center;max-width:300px;">' +
+      '⚠️ Could not load Supabase SDK.<br><br>Check your internet connection and refresh the page.</div></div>';
+    return;
+  }
+  boot();
+});
+</script>
+</body>
+</html>
