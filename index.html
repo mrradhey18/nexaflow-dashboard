@@ -244,7 +244,7 @@ var SC={
   'break':      {label:'On Break',    color:'#f59e0b',bg:'rgba(245,158,11,.14)', icon:'\u2615'},
   'meeting':    {label:'In Meeting',  color:'#0ea5e9',bg:'rgba(14,165,233,.14)', icon:'\u25c8'},
   'call':       {label:'On a Call',   color:'#8b5cf6',bg:'rgba(139,92,246,.14)', icon:'\u25c9'},
-  'focus':      {label:'Focus Mode',  color:'#d946ef',bg:'rgba(217,70,239,.14)', icon:'\u25ce'}
+  'Focus':      {label:'Focus Mode',  color:'#d946ef',bg:'rgba(217,70,239,.14)', icon:'\u25ce'}
 };
 var QL=[
   {icon:'\ud83d\udcac',label:'WhatsApp Web',   sub:'Messaging',        href:'https://web.whatsapp.com',    bg:'rgba(37,211,102,.12)'},
@@ -778,7 +778,7 @@ function Dashboard(){
    {key:'break',label:'\u2615 Break',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='break'},
    {key:'meeting',label:'Meeting',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='meeting'},
    {key:'call',label:'Call',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='call'},
-   {key:'focus',label:'Focus',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='Payment'}
+   {key:'focus',label:'Focus',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='Focus'}
   ].forEach(function(a){saRow.appendChild(btn(a.cls+' btn-sm',a.label,function(){changeStatus(a.key);},a.dis||APP.saving));});
   sc.appendChild(saRow);
   var sn=dv();sn.style.cssText='font-size:11px;color:var(--text-2);margin-top:10px;';sn.textContent='\u2713 All data synced to database';sc.appendChild(sn);
