@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GBP Analyzer — Google Business Profile Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   RESET & TOKENS
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:        #08090d;
+  --bg2:       #0e1018;
+  --bg3:       #13161f;
+  --surface:   #181c28;
+  --surface2:  #1e2333;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+  --text-1:    #f0f2ff;
+  --text-2:    #8a92b2;
+  --text-3:    #4a5070;
+  --blue:      #4f8ef7;
+  --blue-lo:   rgba(79,142,247,0.12);
+  --blue-hi:   #7aabff;
+  --green:     #22c55e;
+  --green-lo:  rgba(34,197,94,0.1);
+  --amber:     #f59e0b;
+  --amber-lo:  rgba(245,158,11,0.1);
+  --red:       #f43f5e;
+  --red-lo:    rgba(244,63,94,0.1);
+  --teal:      #2dd4bf;
+  --font:      'Syne', sans-serif;
+  --mono:      'Geist Mono', monospace;
+  --r1:        8px;
+  --r2:        14px;
+  --r3:        20px;
+  --trans:     0.2s cubic-bezier(.4,0,.2,1);
+  --shadow:    0 24px 64px rgba(0,0,0,0.6);
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text-1);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  overflow-x:hidden;
+}
+
+/* ═══════════════════════════════════════
+   BACKGROUND GLOW
+═══════════════════════════════════════ */
+.bg-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  overflow:hidden;
+}
+.bg-glow::before{
+  content:'';
+  position:absolute;
+  top:-30%;left:20%;
+  width:600px;height:600px;
+  background:radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%);
+  border-radius:50%;
+}
+.bg-glow::after{
+  content:'';
+  position:absolute;
+  bottom:-20%;right:10%;
+  width:500px;height:500px;
+  background:radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%);
+  border-radius:50%;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT WRAPPER
+═══════════════════════════════════════ */
+.page{
+  position:relative;z-index:1;
+  width:100%;max-width:680px;
+  padding:60px 24px 80px;
+  display:flex;flex-direction:column;align-items:center;gap:40px;
+}
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.header{text-align:center;}
+.header-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 14px;border-radius:100px;
+  background:var(--blue-lo);border:1px solid rgba(79,142,247,0.25);
+  font-size:11.5px;font-weight:600;color:var(--blue-hi);
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:20px;
+}
+.badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--blue);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+.header h1{
+  font-size:clamp(32px,6vw,52px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg, #f0f2ff 0%, #8a92b2 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+}
+.header h1 span{
+  background:linear-gradient(135deg, var(--blue-hi) 0%, var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header p{
+  font-size:15px;color:var(--text-2);line-height:1.6;
+  font-weight:400;
+}
+
+/* ═══════════════════════════════════════
+   INPUT CARD
+═══════════════════════════════════════ */
+.input-card{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r3);
+  padding:28px;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.input-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(79,142,247,0.4), transparent);
+}
+
+.input-label{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.input-row{display:flex;gap:10px;align-items:stretch;}
+
+.url-input{
+  flex:1;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:13px 16px;
+  font-size:14px;font-family:var(--font);
+  color:var(--text-1);
+  outline:none;
+  transition:border var(--trans),background var(--trans);
+}
+.url-input::placeholder{color:var(--text-3);}
+.url-input:focus{
+  border-color:rgba(79,142,247,0.5);
+  background:var(--bg2);
+  box-shadow:0 0 0 3px rgba(79,142,247,0.08);
+}
+
+.analyze-btn{
+  padding:13px 22px;
+  background:linear-gradient(135deg, #4f8ef7 0%, #3b6fd4 100%);
+  border:none;border-radius:var(--r2);
+  font-family:var(--font);font-size:14px;font-weight:700;
+  color:#fff;cursor:pointer;
+  white-space:nowrap;
+  transition:all var(--trans);
+  position:relative;overflow:hidden;
+}
+.analyze-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);
+  opacity:0;transition:opacity var(--trans);
+}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,142,247,0.35);}
+.analyze-btn:hover::before{opacity:1;}
+.analyze-btn:active{transform:translateY(0);}
+.analyze-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+.hint{
+  margin-top:10px;font-size:11.5px;color:var(--text-3);
+  display:flex;align-items:center;gap:6px;
+}
+.hint-icon{font-size:13px;}
+
+/* ═══════════════════════════════════════
+   SUPPORTED FORMATS
+═══════════════════════════════════════ */
+.formats{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.format-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:6px;
+  background:var(--bg3);border:1px solid var(--border);
+  font-size:11px;font-family:var(--mono);color:var(--text-2);
+}
+.fc-dot{width:5px;height:5px;border-radius:50%;background:var(--green);}
+
+/* ═══════════════════════════════════════
+   LOADING STATE
+═══════════════════════════════════════ */
+.loader{
+  display:none;flex-direction:column;align-items:center;gap:16px;
+  padding:40px 0;text-align:center;
+}
+.loader.show{display:flex;}
+.loader-ring{
+  width:44px;height:44px;border-radius:50%;
+  border:3px solid var(--border2);
+  border-top-color:var(--blue);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-size:14px;color:var(--text-2);}
+.loader-step{font-size:12px;color:var(--text-3);font-family:var(--mono);}
+
+/* ═══════════════════════════════════════
+   ERROR STATE
+═══════════════════════════════════════ */
+.error-box{
+  display:none;
+  width:100%;
+  background:var(--red-lo);
+  border:1px solid rgba(244,63,94,0.25);
+  border-radius:var(--r2);
+  padding:16px 20px;
+  font-size:14px;color:var(--red);
+  display:none;align-items:center;gap:12px;
+}
+.error-box.show{display:flex;}
+.error-icon{font-size:20px;flex-shrink:0;}
+
+/* ═══════════════════════════════════════
+   RESULT CARD
+═══════════════════════════════════════ */
+.result-card{
+  width:100%;display:none;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r3);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  animation:slideUp 0.4s cubic-bezier(.4,0,.2,1) both;
+}
+.result-card.show{display:block;}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Result header */
+.result-header{
+  padding:24px 28px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  background:var(--surface2);
+  position:relative;
+}
+.result-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(79,142,247,0.4), transparent);
+}
+.biz-name-area{}
+.biz-category{
+  font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--blue-hi);margin-bottom:6px;
+}
+.biz-name{font-size:22px;font-weight:800;letter-spacing:-0.02em;line-height:1.2;}
+
+.rating-block{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--amber-lo);border:1px solid rgba(245,158,11,0.2);
+  border-radius:var(--r2);padding:10px 16px;flex-shrink:0;text-align:center;
+}
+.rating-stars{font-size:11px;color:var(--amber);}
+.rating-num{font-size:24px;font-weight:800;color:var(--amber);line-height:1;}
+.rating-count{font-size:10.5px;color:var(--text-2);white-space:nowrap;}
+
+/* Result body */
+.result-body{padding:24px 28px;display:flex;flex-direction:column;gap:0;}
+
+.data-row{
+  display:flex;align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+  gap:14px;
+  transition:background var(--trans);
+}
+.data-row:last-child{border-bottom:none;}
+.data-row:hover{background:rgba(255,255,255,0.01);}
+
+.row-icon{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  background:var(--bg3);border:1px solid var(--border);
+}
+.row-label{
+  font-size:11px;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-3);margin-bottom:3px;
+}
+.row-value{
+  font-size:14px;font-weight:500;color:var(--text-1);
+  word-break:break-all;
+}
+.row-value a{
+  color:var(--blue-hi);text-decoration:none;
+  transition:color var(--trans);
+}
+.row-value a:hover{color:var(--teal);}
+.row-value .wa-link{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--green);font-weight:600;
+}
+.wa-link:hover{color:#4ade80!important;}
+.wa-icon{font-size:16px;}
+
+.row-info{flex:1;min-width:0;}
+.row-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+
+/* Copy button */
+.copy-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:7px;
+  border:1px solid var(--border);background:var(--bg3);
+  cursor:pointer;color:var(--text-2);font-size:13px;
+  transition:all var(--trans);position:relative;
+  user-select:none;
+}
+.copy-btn:hover{border-color:var(--border2);color:var(--text-1);background:var(--surface2);}
+.copy-btn.copied{border-color:rgba(34,197,94,0.4);color:var(--green);background:var(--green-lo);}
+.copy-tooltip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#1a1e2e;border:1px solid var(--border2);border-radius:5px;
+  padding:3px 8px;font-size:10.5px;color:var(--green);white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity 0.15s;
+}
+.copy-btn.copied .copy-tooltip{opacity:1;}
+
+/* Status pill */
+.status-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;
+}
+.pill-yes{background:var(--green-lo);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+.pill-no{background:var(--red-lo);color:var(--red);border:1px solid rgba(244,63,94,0.2);}
+
+/* Result footer */
+.result-footer{
+  padding:14px 28px;
+  background:var(--bg3);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.footer-note{font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:6px;}
+.footer-actions{display:flex;gap:8px;}
+.action-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--r1);
+  font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all var(--trans);border:none;
+}
+.btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--text-1);border-color:var(--border2);}
+.btn-copy-all{background:var(--blue-lo);color:var(--blue-hi);border:1px solid rgba(79,142,247,0.2);}
+.btn-copy-all:hover{background:rgba(79,142,247,0.2);}
+
+/* ═══════════════════════════════════════
+   HOW IT WORKS NOTE
+═══════════════════════════════════════ */
+.info-note{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:20px 22px;
+}
+.info-note-title{
+  font-size:12px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-2);margin-bottom:12px;
+  display:flex;align-items:center;gap:7px;
+}
+.info-note-title::before{content:'';width:20px;height:1px;background:var(--border2);}
+.info-note-title::after{content:'';flex:1;height:1px;background:var(--border2);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.info-item{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--text-2);}
+.info-bullet{color:var(--blue);font-size:16px;line-height:1.1;flex-shrink:0;}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer{
+  font-size:11.5px;color:var(--text-3);text-align:center;
+  padding:20px;border-top:1px solid var(--border);width:100%;
+  position:relative;z-index:1;margin-top:auto;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:600px){
+  .page{padding:40px 16px 60px;}
+  .input-row{flex-direction:column;}
+  .analyze-btn{width:100%;justify-content:center;}
+  .result-header{flex-direction:column;}
+  .rating-block{flex-direction:row;align-items:center;gap:10px;padding:10px 14px;width:100%;}
+  .result-body,.result-header,.result-footer{padding-left:18px;padding-right:18px;}
+  .info-grid{grid-template-columns:1fr;}
+}
+</style>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">
+      <div class="badge-dot"></div>
+      GBP Intelligence Tool
+    </div>
+    <h1>Analyze Any<br><span>Business Profile</span></h1>
+    <p>Paste a Google Business Profile URL to instantly extract<br>key business data and generate a direct WhatsApp link.</p>
+  </div>
+
+  <!-- INPUT CARD -->
+  <div class="input-card">
+    <label class="input-label" for="gbp-url">Google Business Profile URL</label>
+    <div class="input-row">
+      <input class="url-input" id="gbp-url" type="url"
+        placeholder="https://maps.google.com/maps?cid=... or g.co/kgs/... or maps.app.goo.gl/..."
+        autocomplete="off" autocorrect="off" spellcheck="false"/>
+      <button class="analyze-btn" id="analyze-btn" onclick="analyzeProfile()">
+        Analyze Profile
+      </button>
+    </div>
+    <div class="hint">
+      <span class="hint-icon">💡</span>
+      <span>Copy the URL from your browser address bar or Google Maps share button</span>
+    </div>
+    <div class="formats">
+      <div class="format-chip"><div class="fc-dot"></div>maps.google.com</div>
+      <div class="format-chip"><div class="fc-dot"></div>google.com/maps/place/</div>
+      <div class="format-chip"><div class="fc-dot"></div>maps.app.goo.gl</div>
+      <div class="format-chip"><div class="fc-dot"></div>g.co/kgs/</div>
+      <div class="format-chip"><div class="fc-dot"></div>goo.gl/maps</div>
+    </div>
+  </div>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Analyzing profile…</div>
+    <div class="loader-step" id="loader-step">Fetching business data</div>
+  </div>
+
+  <!-- ERROR BOX -->
+  <div class="error-box" id="error-box">
+    <div class="error-icon">⚠</div>
+    <div id="error-msg">Invalid Google Business Profile link. Please check the URL and try again.</div>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div class="result-card" id="result-card">
+    <div class="result-header">
+      <div class="biz-name-area">
+        <div class="biz-category" id="res-category">— Category —</div>
+        <div class="biz-name" id="res-name">Business Name</div>
+      </div>
+      <div class="rating-block">
+        <div class="rating-stars" id="res-stars">★★★★★</div>
+        <div class="rating-num" id="res-rating">—</div>
+        <div class="rating-count" id="res-reviews">— reviews</div>
+      </div>
+    </div>
+
+    <div class="result-body" id="result-body">
+      <!-- rows injected by JS -->
+    </div>
+
+    <div class="result-footer">
+      <div class="footer-note">⚡ Extracted from Google Business Profile</div>
+      <div class="footer-actions">
+        <button class="action-btn btn-ghost" onclick="resetTool()">↺ New Search</button>
+        <button class="action-btn btn-copy-all" onclick="copyAllData()">⎘ Copy All Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO NOTE -->
+  <div class="info-note">
+    <div class="info-note-title">What this tool extracts</div>
+    <div class="info-grid">
+      <div class="info-item"><span class="info-bullet">▸</span>Business name & category</div>
+      <div class="info-item"><span class="info-bullet">▸</span>Star rating & review count</div>
+      <div class="info-item"><span class="info-bullet">▸</span>Phone number (with WhatsApp link)</div>
+      <div class="info-item"><span class="info-bullet">▸</span>Full address & city extraction</div>
+      <div class="info-item"><span class="info-bullet">▸</span>Website availability</div>
+      <div class="info-item"><span class="info-bullet">▸</span>Direct Google Maps link</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="site-footer">
+  GBP Analyzer &nbsp;·&nbsp; Paste any Google Maps / Business Profile link to get started
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// GBP ANALYZER — PRODUCTION LOGIC
+// 
+// Architecture:
+// 1. Validate & normalise the URL client-side
+// 2. Attempt fetch via CORS proxy to read GBP HTML
+// 3. Parse structured data (ld+json, meta tags, og tags)
+// 4. Fall back to URL-embedded data (CID, place ID, name slug)
+// 5. Render results with copy-to-clipboard on every field
+// ═══════════════════════════════════════════════════════════
+
+var EXTRACTED = {};
+
+// ── CORS PROXIES (tried in order) ──────────────────────────
+var PROXIES = [
+  function(url){ return 'https://api.allorigins.win/get?url=' + encodeURIComponent(url); },
+  function(url){ return 'https://corsproxy.io/?' + encodeURIComponent(url); },
+  function(url){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url); }
+];
+
+// ── URL VALIDATION ─────────────────────────────────────────
+function isGBPUrl(url) {
+  try {
+    var u = new URL(url);
+    var h = u.hostname.toLowerCase();
+    var p = u.pathname.toLowerCase();
+    // google maps / business domains
+    if (h.includes('google.com') && (p.includes('/maps') || p.includes('/business'))) return true;
+    if (h === 'maps.app.goo.gl') return true;
+    if (h === 'goo.gl') return true;
+    if (h === 'g.co') return true;
+    if (h.includes('maps.google')) return true;
+    if (u.href.includes('place_id') || u.href.includes('cid=') || u.href.includes('/maps/place/')) return true;
+    return false;
+  } catch(e) { return false; }
+}
+
+// ── NORMALIZE SHORT URLS ───────────────────────────────────
+async function resolveUrl(url) {
+  var short = ['maps.app.goo.gl','goo.gl','g.co'];
+  try {
+    var host = new URL(url).hostname;
+    if (short.some(function(s){ return host.includes(s); })) {
+      // Use allorigins to resolve redirect
+      var r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(url));
+      var j = await r.json();
+      // Extract final URL from response headers or content
+      if (j && j.status && j.status.url) return j.status.url;
+    }
+  } catch(e){}
+  return url;
+}
+
+// ── EXTRACT FROM URL ───────────────────────────────────────
+function extractFromUrl(url) {
+  var data = {};
+  try {
+    var u = new URL(url);
+    var full = decodeURIComponent(url);
+
+    // Business name from /maps/place/NAME/
+    var placeMatch = full.match(/\/maps\/place\/([^\/\?@]+)/);
+    if (placeMatch) {
+      data.name = placeMatch[1].replace(/\+/g,' ').replace(/%20/g,' ').replace(/\+/g,' ');
+      // Clean up URL encoding
+      try { data.name = decodeURIComponent(data.name.replace(/\+/g,' ')); } catch(e){}
+      // Remove trailing punctuation
+      data.name = data.name.replace(/[_+]/g,' ').trim();
+    }
+
+    // CID
+    var cidMatch = full.match(/[?&]cid=(\d+)/);
+    if (cidMatch) data.cid = cidMatch[1];
+
+    // Place ID
+    var pidMatch = full.match(/place_id[:=]([A-Za-z0-9_-]+)/);
+    if (pidMatch) data.placeId = pidMatch[1];
+
+    // Coordinates
+    var coordMatch = full.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (coordMatch) { data.lat = coordMatch[1]; data.lng = coordMatch[2]; }
+
+    // Query (q= parameter)
+    var q = u.searchParams.get('q');
+    if (q) { data.query = q; if (!data.name) data.name = q.split(',')[0].trim(); }
+
+  } catch(e){}
+  return data;
+}
+
+// ── PARSE HTML FROM PROXY ──────────────────────────────────
+function parseGBPHtml(html, urlData) {
+  var result = Object.assign({}, urlData);
+
+  // ld+json structured data
+  var ldMatches = html.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi) || [];
+  ldMatches.forEach(function(block) {
+    try {
+      var json = block.replace(/<script[^>]*>/i,'').replace(/<\/script>/i,'');
+      var obj = JSON.parse(json);
+      var items = Array.isArray(obj) ? obj : [obj];
+      items.forEach(function(item) {
+        if (!item) return;
+        if (item.name && !result.name) result.name = item.name;
+        if (item.telephone && !result.phone) result.phone = item.telephone;
+        if (item.aggregateRating) {
+          if (!result.rating) result.rating = item.aggregateRating.ratingValue;
+          if (!result.reviews) result.reviews = item.aggregateRating.reviewCount || item.aggregateRating.ratingCount;
+        }
+        if (item.address && !result.address) {
+          var a = item.address;
+          result.address = [a.streetAddress, a.addressLocality, a.addressRegion, a.postalCode].filter(Boolean).join(', ');
+          result.city = a.addressLocality || a.addressRegion;
+        }
+        if (item['@type'] && !result.category) {
+          var t = Array.isArray(item['@type']) ? item['@type'][0] : item['@type'];
+          result.category = t.replace(/([A-Z])/g,' $1').trim();
+        }
+        if (item.url && !result.website) result.website = item.url;
+      });
+    } catch(e){}
+  });
+
+  // og/meta tags
+  function getMeta(html2, prop) {
+    var m = html2.match(new RegExp('<meta[^>]+(?:property|name)=["\']' + prop + '["\'][^>]+content=["\']([^"\']+)["\']','i'))
+           || html2.match(new RegExp('<meta[^>]+content=["\']([^"\']+)["\'][^>]+(?:property|name)=["\']' + prop + '["\']','i'));
+    return m ? m[1] : null;
+  }
+
+  if (!result.name)    result.name    = getMeta(html,'og:title') || getMeta(html,'title');
+  if (!result.address) result.address = getMeta(html,'og:description');
+
+  // title tag fallback
+  if (!result.name) {
+    var titleM = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+    if (titleM) {
+      result.name = titleM[1].replace(' - Google Maps','').replace(' — Google Maps','').replace(' | Google Maps','').trim();
+    }
+  }
+
+  // Scan for phone patterns in HTML
+  if (!result.phone) {
+    // Look for common phone patterns in India
+    var phonePatterns = [
+      /(?:tel|phone|mobile|mob|ph|call)[:\s'"]+([+\d\s\-().]{10,16})/gi,
+      /\+91[\s\-]?[6-9]\d{9}/g,
+      /\b[6-9]\d{9}\b/g,
+      /\b0\d{10}\b/g,
+    ];
+    phonePatterns.some(function(pat) {
+      var m = html.match(pat);
+      if (m && m[0]) { result.phone = m[0].replace(/[^\d+]/g,'').replace(/^0/,'+91'); return true; }
+      return false;
+    });
+  }
+
+  // Rating from HTML
+  if (!result.rating) {
+    var rateM = html.match(/(\d+\.?\d*)\s*(?:out of|\/)\s*5/i)
+              || html.match(/"ratingValue"\s*:\s*"?(\d+\.?\d*)"?/i)
+              || html.match(/aria-label="(\d+\.?\d*) stars"/i);
+    if (rateM) result.rating = rateM[1];
+  }
+
+  // Reviews from HTML
+  if (!result.reviews) {
+    var revM = html.match(/(\d[\d,]*)\s+(?:Google\s+)?(?:reviews?|ratings?)/i)
+             || html.match(/"reviewCount"\s*:\s*"?(\d+)"?/i);
+    if (revM) result.reviews = revM[1].replace(/,/g,'');
+  }
+
+  // Website detection
+  if (!result.website) {
+    result.hasWebsite = html.includes('href="http') &&
+      (html.includes('website') || html.includes('Visit website') || html.includes('business.site'));
+  }
+
+  // City extraction from address
+  if (result.address && !result.city) {
+    // Common patterns: "Street, Area, City, State PIN"
+    var parts = result.address.split(',');
+    if (parts.length >= 2) {
+      // Usually city is 2nd-to-last or 3rd-to-last part
+      var cityIdx = Math.max(0, parts.length - 3);
+      result.city = parts[cityIdx].trim().replace(/\d+/g,'').trim() || parts[1].trim();
+    }
+  }
+
+  return result;
+}
+
+// ── FETCH WITH PROXY ───────────────────────────────────────
+async function fetchWithProxy(targetUrl, proxyIdx) {
+  proxyIdx = proxyIdx || 0;
+  if (proxyIdx >= PROXIES.length) return null;
+  try {
+    var proxyUrl = PROXIES[proxyIdx](targetUrl);
+    var resp = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var json = await resp.json();
+    // allorigins wraps in {contents:'...'}
+    if (json && json.contents) return json.contents;
+    // codetabs/corsproxy returns raw text
+    if (typeof json === 'string') return json;
+    return null;
+  } catch(e) {
+    // Try next proxy
+    if (proxyIdx + 1 < PROXIES.length) return fetchWithProxy(targetUrl, proxyIdx + 1);
+    return null;
+  }
+}
+
+// ── BUILD WHATSAPP LINK ────────────────────────────────────
+function buildWhatsApp(phone) {
+  if (!phone) return null;
+  var digits = phone.replace(/[^\d]/g,'');
+  // Remove leading 0, add India country code if needed
+  if (digits.startsWith('0')) digits = '91' + digits.slice(1);
+  if (digits.length === 10 && /^[6-9]/.test(digits)) digits = '91' + digits;
+  if (digits.length < 10) return null;
+  return 'https://wa.me/' + digits;
+}
+
+// ── RENDER STARS ───────────────────────────────────────────
+function renderStars(rating) {
+  var r = parseFloat(rating) || 0;
+  var full = Math.floor(r);
+  var half = r - full >= 0.5;
+  var s = '';
+  for (var i = 0; i < full; i++) s += '★';
+  if (half) s += '☆';
+  for (var j = full + (half ? 1 : 0); j < 5; j++) s += '☆';
+  return s;
+}
+
+// ── COPY HELPER ────────────────────────────────────────────
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(function() {
+    btn.classList.add('copied');
+    btn.innerHTML = '✓<span class="copy-tooltip">Copied!</span>';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.innerHTML = '⎘<span class="copy-tooltip">Copied!</span>';
+    }, 1800);
+  }).catch(function() {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  });
+}
+
+// ── MAKE COPY BUTTON ───────────────────────────────────────
+function makeCopyBtn(value) {
+  var b = document.createElement('button');
+  b.className = 'copy-btn';
+  b.title = 'Copy to clipboard';
+  b.innerHTML = '⎘<span class="copy-tooltip">Copied!</span>';
+  b.addEventListener('click', function() { copyText(value, b); });
+  return b;
+}
+
+// ── MAKE DATA ROW ──────────────────────────────────────────
+function makeRow(icon, label, value, extra) {
+  if (!value || value === '—' || value === 'undefined') return null;
+  var row = document.createElement('div');
+  row.className = 'data-row';
+
+  var iconEl = document.createElement('div');
+  iconEl.className = 'row-icon';
+  iconEl.textContent = icon;
+
+  var info = document.createElement('div');
+  info.className = 'row-info';
+
+  var lbl = document.createElement('div');
+  lbl.className = 'row-label';
+  lbl.textContent = label;
+
+  var val = document.createElement('div');
+  val.className = 'row-value';
+
+  if (extra && extra.type === 'link') {
+    var a = document.createElement('a');
+    a.href = extra.href; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = value; val.appendChild(a);
+  } else if (extra && extra.type === 'wa') {
+    var wa = document.createElement('a');
+    wa.href = extra.href; wa.target = '_blank'; wa.rel = 'noopener';
+    wa.className = 'wa-link';
+    wa.innerHTML = '<span class="wa-icon">💬</span>' + value;
+    val.appendChild(wa);
+  } else if (extra && extra.type === 'pill') {
+    val.innerHTML = '<span class="status-pill ' + extra.cls + '">' + value + '</span>';
+  } else {
+    val.textContent = value;
+  }
+
+  info.appendChild(lbl); info.appendChild(val);
+
+  var actions = document.createElement('div');
+  actions.className = 'row-actions';
+  actions.appendChild(makeCopyBtn(extra && extra.copyVal ? extra.copyVal : value));
+
+  row.appendChild(iconEl); row.appendChild(info); row.appendChild(actions);
+  return row;
+}
+
+// ── RENDER RESULTS ─────────────────────────────────────────
+function renderResults(data) {
+  EXTRACTED = data;
+
+  // Header
+  document.getElementById('res-name').textContent = data.name || 'Unknown Business';
+  document.getElementById('res-category').textContent = data.category || 'Google Business Profile';
+
+  var ratingNum = parseFloat(data.rating);
+  if (ratingNum) {
+    document.getElementById('res-rating').textContent = ratingNum.toFixed(1);
+    document.getElementById('res-stars').textContent = renderStars(ratingNum);
+    document.getElementById('res-reviews').textContent = (data.reviews || '—') + ' reviews';
+  } else {
+    document.getElementById('res-rating').textContent = '—';
+    document.getElementById('res-stars').textContent = '☆☆☆☆☆';
+    document.getElementById('res-reviews').textContent = 'No rating found';
+  }
+
+  // Body rows
+  var body = document.getElementById('result-body');
+  body.innerHTML = '';
+
+  var waLink = data.phone ? buildWhatsApp(data.phone) : null;
+  var rows = [
+    makeRow('📞', 'Phone Number', data.phone || null),
+    waLink ? makeRow('💬', 'WhatsApp Link', waLink, {type:'wa', href:waLink, copyVal:waLink}) : null,
+    makeRow('📍', 'Address', data.address || null),
+    makeRow('🏙', 'City', data.city || null),
+    makeRow('🏷', 'Category', data.category || null),
+    data.website
+      ? makeRow('🌐', 'Website', data.website, {type:'link', href:data.website.startsWith('http')?data.website:'https://'+data.website})
+      : makeRow('🌐', 'Website', data.hasWebsite ? 'Yes — visit Google Maps for link' : 'Not listed', {type:'pill', cls: data.hasWebsite ? 'pill-yes' : 'pill-no', copyVal: data.hasWebsite ? 'Yes' : 'No'}),
+    makeRow('🔗', 'Google Maps', 'Open in Google Maps', {type:'link', href: data.originalUrl || '#', copyVal: data.originalUrl}),
+  ];
+
+  rows.forEach(function(r) { if (r) body.appendChild(r); });
+
+  // Show card
+  hide('loader'); hide('error-box');
+  document.getElementById('result-card').classList.add('show');
+  document.getElementById('result-card').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// ── SHOW ERROR ─────────────────────────────────────────────
+function showError(msg) {
+  hide('loader'); hide('result-card');
+  document.getElementById('error-msg').textContent = msg;
+  document.getElementById('error-box').classList.add('show');
+  document.getElementById('analyze-btn').disabled = false;
+  document.getElementById('analyze-btn').textContent = 'Analyze Profile';
+}
+
+function hide(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('show');
+  if (el.style) el.style.display = '';
+}
+
+function setStep(msg) {
+  var el = document.getElementById('loader-step');
+  if (el) el.textContent = msg;
+}
+
+// ── COPY ALL DATA ──────────────────────────────────────────
+function copyAllData() {
+  var d = EXTRACTED;
+  var waLink = d.phone ? buildWhatsApp(d.phone) : null;
+  var text = [
+    'Business Name: '  + (d.name     || '—'),
+    'Category: '       + (d.category || '—'),
+    'Rating: '         + (d.rating   || '—') + ' ⭐',
+    'Reviews: '        + (d.reviews  || '—'),
+    'Phone: '          + (d.phone    || '—'),
+    'WhatsApp: '       + (waLink     || '—'),
+    'Address: '        + (d.address  || '—'),
+    'City: '           + (d.city     || '—'),
+    'Website: '        + (d.website  || (d.hasWebsite ? 'Yes (check Google Maps)' : 'Not listed')),
+    'Maps URL: '       + (d.originalUrl || '—'),
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    var b = document.querySelector('.btn-copy-all');
+    var orig = b.textContent;
+    b.textContent = '✓ Copied!'; b.style.background = 'var(--green-lo)'; b.style.color = 'var(--green)';
+    setTimeout(function() { b.textContent = orig; b.style.background = ''; b.style.color = ''; }, 2000);
+  });
+}
+
+// ── RESET ──────────────────────────────────────────────────
+function resetTool() {
+  hide('result-card'); hide('error-box'); hide('loader');
+  document.getElementById('gbp-url').value = '';
+  document.getElementById('analyze-btn').disabled = false;
+  document.getElementById('analyze-btn').textContent = 'Analyze Profile';
+  document.getElementById('gbp-url').focus();
+  EXTRACTED = {};
+}
+
+// ── MAIN ANALYZE FLOW ──────────────────────────────────────
+async function analyzeProfile() {
+  var raw = document.getElementById('gbp-url').value.trim();
+
+  // Hide previous states
+  hide('error-box'); hide('result-card');
+  EXTRACTED = {};
+
+  // Validate
+  if (!raw) { showError('Please paste a Google Business Profile URL first.'); return; }
+
+  // Check for valid URL structure
+  var isValid = false;
+  try { var u = new URL(raw); isValid = true; } catch(e) {}
+  if (!isValid) { showError('Invalid URL format. Please paste the full URL including https://'); return; }
+
+  if (!isGBPUrl(raw)) {
+    showError('This doesn\'t look like a Google Business Profile link. Please paste a Google Maps or business URL.');
+    return;
+  }
+
+  // Show loader
+  document.getElementById('loader').classList.add('show');
+  document.getElementById('analyze-btn').disabled = true;
+  document.getElementById('analyze-btn').textContent = 'Analyzing…';
+
+  try {
+    // Step 1: Resolve short URL if needed
+    setStep('Resolving URL…');
+    var resolvedUrl = await resolveUrl(raw);
+
+    // Step 2: Extract data from URL itself
+    setStep('Parsing URL structure…');
+    var urlData = extractFromUrl(resolvedUrl);
+    urlData.originalUrl = raw;
+
+    // Step 3: Fetch full page HTML via proxy
+    setStep('Fetching business data…');
+    var html = await fetchWithProxy(resolvedUrl, 0);
+
+    var finalData;
+
+    if (html && html.length > 500) {
+      // Step 4: Parse HTML
+      setStep('Extracting business details…');
+      finalData = parseGBPHtml(html, urlData);
+    } else {
+      // Step 5: Use URL-extracted data only
+      setStep('Using URL-embedded data…');
+      finalData = urlData;
+    }
+
+    // Clean up name
+    if (finalData.name) {
+      finalData.name = finalData.name
+        .replace(' - Google Maps','').replace(' — Google Maps','')
+        .replace('+', ' ').replace(/%20/g,' ')
+        .replace(/\s+/g,' ').trim();
+    }
+
+    // Validate we got something useful
+    if (!finalData.name && !finalData.phone && !finalData.address && !finalData.rating) {
+      // Last resort — try Google's embed API
+      setStep('Trying alternate data source…');
+      try {
+        var embedUrl = 'https://www.google.com/maps/embed/v1/place?q=' + encodeURIComponent(urlData.query || urlData.name || raw) + '&key=';
+        // Try fetching place info from search
+        var searchHtml = await fetchWithProxy('https://www.google.com/search?q=' + encodeURIComponent((urlData.name || urlData.query || '') + ' google business profile'), 0);
+        if (searchHtml) {
+          var searchData = parseGBPHtml(searchHtml, urlData);
+          if (searchData.name || searchData.phone) {
+            finalData = Object.assign(finalData, searchData);
+          }
+        }
+      } catch(e2){}
+    }
+
+    if (!finalData.name) {
+      // Build best-effort name from URL
+      finalData.name = urlData.query || urlData.name || 'Business Profile';
+    }
+
+    finalData.originalUrl = raw;
+    hide('loader');
+    renderResults(finalData);
+
+  } catch(err) {
+    console.error('GBP Analyzer error:', err);
+    showError('Failed to fetch business data. This may be due to Google\'s access restrictions. Try a direct maps.google.com URL.');
+  }
+
+  document.getElementById('analyze-btn').disabled = false;
+  document.getElementById('analyze-btn').textContent = 'Analyze Profile';
+}
+
+// ── ENTER KEY ──────────────────────────────────────────────
+document.getElementById('gbp-url').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') analyzeProfile();
+});
+
+// ── PASTE HANDLER — auto-analyze on paste ─────────────────
+document.getElementById('gbp-url').addEventListener('paste', function() {
+  setTimeout(function() {
+    var val = document.getElementById('gbp-url').value.trim();
+    if (val && isGBPUrl(val)) analyzeProfile();
+  }, 100);
+});
+</script>
+
+</body>
+</html>
