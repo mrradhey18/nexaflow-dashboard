@@ -778,7 +778,7 @@ function Dashboard(){
    {key:'break',label:'\u2615 Break',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='break'},
    {key:'meeting',label:'Meeting',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='meeting'},
    {key:'call',label:'Call',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='call'},
-   {key:'focus',label:'Focus',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='focus'}
+   {key:'focus',label:'Focus',cls:'btn-outline',dis:APP.status==='checked-out'||APP.status==='Payment'}
   ].forEach(function(a){saRow.appendChild(btn(a.cls+' btn-sm',a.label,function(){changeStatus(a.key);},a.dis||APP.saving));});
   sc.appendChild(saRow);
   var sn=dv();sn.style.cssText='font-size:11px;color:var(--text-2);margin-top:10px;';sn.textContent='\u2713 All data synced to database';sc.appendChild(sn);
