@@ -1394,7 +1394,7 @@
       'meeting': { label: 'In Meeting', color: '#0ea5e9', bg: 'rgba(14,165,233,.14)', icon: '\u25c8' },
       'call': { label: 'On a Call', color: '#8b5cf6', bg: 'rgba(139,92,246,.14)', icon: '\u25c9' },
       // ✅ FIX: 'focus' lowercase key - renamed label to Payment Mode
-      'focus': { label: 'Payment Mode', color: '#d946ef', bg: 'rgba(217,70,239,.14)', icon: '\u25ce' }
+      'focus': { label: 'Payment', color: '#d946ef', bg: 'rgba(217,70,239,.14)', icon: '\u25ce' }
     };
     var QL = [
       { icon: '\ud83d\udcac', label: 'WhatsApp Web', sub: 'Messaging', href: 'https://wa.me/919369699864', bg: 'rgba(37,211,102,.12)' },
@@ -2144,7 +2144,7 @@ insert into holidays (holiday_date, name, type) values
       // Time distribution
       var dc = dv('card'), dttl = dv('sec-title'); dttl.textContent = 'Time Distribution'; dc.appendChild(dttl);
       var dd = [{ l: 'Active Work', color: '#6366f1', v: t.work }, { l: 'Breaks', color: '#f59e0b', v: t.brk },
-      { l: 'Meetings', color: '#0ea5e9', v: t.meet }, { l: 'Calls', color: '#8b5cf6', v: t.call }, { l: 'Payment Mode', color: '#d946ef', v: t.focus }].filter(function (d) { return d.v > 0; });
+      { l: 'Meetings', color: '#0ea5e9', v: t.meet }, { l: 'Calls', color: '#8b5cf6', v: t.call }, { l: 'Payment', color: '#d946ef', v: t.focus }].filter(function (d) { return d.v > 0; });
       if (dd.length) {
         var dw = dv('donut-wrap'); dw.appendChild(Donut(dd)); dc.appendChild(dw);
         var dtot = dd.reduce(function (a, d) { return a + d.v; }, 0) || 1;
@@ -2171,7 +2171,7 @@ insert into holidays (holiday_date, name, type) values
       var bc = dv('card'); bc.style.marginBottom = '18px';
       var bttl = dv('sec-title'); bttl.style.marginBottom = '16px'; bttl.textContent = "Today's Breakdown"; bc.appendChild(bttl);
       var rows2 = [{ l: 'Active Work', v: t.work, c: '#6366f1' }, { l: 'Breaks', v: t.brk, c: '#f59e0b' },
-      { l: 'Meetings', v: t.meet, c: '#0ea5e9' }, { l: 'Calls', v: t.call, c: '#8b5cf6' }, { l: 'Payment Mode', v: t.focus, c: '#d946ef' }];
+      { l: 'Meetings', v: t.meet, c: '#0ea5e9' }, { l: 'Calls', v: t.call, c: '#8b5cf6' }, { l: 'Payment', v: t.focus, c: '#d946ef' }];
       var mx = Math.max.apply(null, rows2.map(function (r) { return r.v; }).concat([1]));
       rows2.forEach(function (r) {
         var row = dv(); row.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:10px;';
@@ -2517,7 +2517,7 @@ insert into holidays (holiday_date, name, type) values
         app(syncNote, snTitle, snText);
         var ic2 = dv('card'); ic2.style.marginBottom = '16px';
         var ittl2 = dv('sec-title'); ittl2.style.marginBottom = '12px'; ittl2.textContent = 'Workspace Info'; ic2.appendChild(ittl2);
-        [['Version', '4.2.0 (FA Icons + Payment Mode)'], ['Your Role', (u && u.role) || '\u2014'], ['User ID', (APP.authUser && APP.authUser.id) ? APP.authUser.id.slice(0, 8) + '\u2026' : '\u2014'], ['Database', sb ? '\u2713 Supabase Connected' : '\u2715 Not connected'], ['Today (local)', todayStr()], ['Tasks (today)', String(APP.tasks.length)], ['Calls (today)', String(APP.calls.length)]].forEach(function (kv) {
+        [['Version', '4.2.0 (FA Icons + Payment)'], ['Your Role', (u && u.role) || '\u2014'], ['User ID', (APP.authUser && APP.authUser.id) ? APP.authUser.id.slice(0, 8) + '\u2026' : '\u2014'], ['Database', sb ? '\u2713 Supabase Connected' : '\u2715 Not connected'], ['Today (local)', todayStr()], ['Tasks (today)', String(APP.tasks.length)], ['Calls (today)', String(APP.calls.length)]].forEach(function (kv) {
           var row3 = dv(); row3.style.cssText = 'display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;';
           var k2 = sp(); k2.style.color = 'var(--text-2)'; k2.textContent = kv[0];
           var v2 = sp(); v2.style.cssText = 'font-family:var(--mono);font-size:12px;'; v2.textContent = kv[1];
