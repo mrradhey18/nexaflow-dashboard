@@ -1644,7 +1644,7 @@ create table user_calls (
   user_id uuid references profiles(id) not null,
   name text not null,
   duration integer default 0,
-  type text default 'inbound',
+  type text default 'Inbound',
   time text,
   work_date date not null,
   created_at timestamptz default now()
@@ -1973,7 +1973,7 @@ insert into holidays (holiday_date, name, type) values
       var callNameIn = inp('input', 'text', 'Contact name\u2026'); callNameIn.style.flex = '1'; callNameIn.style.minWidth = '100px';
       var callDurIn = inp('input', 'number', 'Min'); callDurIn.style.width = '70px'; callDurIn.min = '1';
       var callTypeSelect = mk('select', 'input'); callTypeSelect.style.width = '90px';
-      ['inbound', 'outbound', 'Missed'].forEach(function (o) { var op = mk('option'); op.value = o.toLowerCase(); op.textContent = o; callTypeSelect.appendChild(op); });
+      ['Inbound', 'Outbound', 'Unreachable'].forEach(function (o) { var op = mk('option'); op.value = o.toLowerCase(); op.textContent = o; callTypeSelect.appendChild(op); });
       var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
         var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0;
         if (!n) return;
@@ -1999,10 +1999,10 @@ insert into holidays (holiday_date, name, type) values
         });
         APP.calls.forEach(function (c) {
           var item = dv('call-item');
-          var clrs = { inbound: ['rgba(16,185,129,.12)', '#34d399'], outbound: ['rgba(99,102,241,.12)', '#818cf8'], missed: ['rgba(244,63,94,.12)', '#fb7185'] };
-          var clr = clrs[c.type] || clrs.inbound;
+          var clrs = { Inbound: ['rgba(16,185,129,.12)', '#34d399'], Outbound: ['rgba(99,102,241,.12)', '#818cf8'], Unreachable: ['rgba(244,63,94,.12)', '#fb7185'] };
+          var clr = clrs[c.type] || clrs.Inbound;
           var icon3 = dv('call-icon'); icon3.style.cssText = 'background:' + clr[0] + ';color:' + clr[1] + ';';
-          icon3.textContent = c.type === 'inbound' ? '\u2199' : c.type === 'outbound' ? '\u2197' : '\u2715';
+          icon3.textContent = c.type === 'Inbound' ? '\u2199' : c.type === 'Outbound' ? '\u2197' : '\u2715';
           var info = dv('call-info');
           var nm = dv('call-name'); nm.textContent = c.name;
           var meta = dv('call-meta'); meta.textContent = c.time + ' \u00b7 ' + c.type;
