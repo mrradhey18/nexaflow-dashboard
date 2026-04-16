@@ -2313,9 +2313,26 @@
       setTimeout(function () { t.remove(); }, 3500);
     }
 
-    ['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(function (evt) {
-      document.addEventListener(evt, resetActivity, { passive: true });
-    });
+['click','keydown','touchstart','touchend','touchmove','scroll','pointerdown','pointermove'].forEach(function(evt) {
+  document.addEventListener(evt, resetActivity, { passive: true });
+});
+
+// Reset on tab/app becoming visible again
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    // If they've been away longer than the limit, check out immediately
+    if (APP.status !== 'checked-out' && APP.status !== 'break') {
+      var elapsed = Date.now() - _lastActivity;
+      if (elapsed >= AUTO_LOGOUT_MS) {
+        changeStatus('checked-out').then(function() {
+          showToast('Auto checked-out due to inactivity.');
+        });
+      } else {
+        resetActivity();
+      }
+    }
+  }
+});
 
     // ═══════════════════════════════════════════════════════════
     // ── HELPERS ─────────────────────────────────────────────────
