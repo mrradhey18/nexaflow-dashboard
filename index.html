@@ -11,7 +11,7 @@
     *::after {
       box-sizing: border-box;
       margin: 0;
-      padding: 0;
+      padding: 0
     }
 
     :root {
@@ -55,13 +55,13 @@
       height: 100%;
       font-family: var(--font);
       background: var(--bg-app);
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .app {
       display: flex;
       height: 100vh;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .sidebar {
@@ -72,11 +72,11 @@
       display: flex;
       flex-direction: column;
       transition: width var(--trans);
-      overflow: hidden;
+      overflow: hidden
     }
 
     .sidebar.collapsed {
-      width: 58px;
+      width: 58px
     }
 
     .sb-logo {
@@ -85,7 +85,7 @@
       gap: 11px;
       padding: 19px 15px;
       border-bottom: 1px solid var(--border);
-      min-height: 64px;
+      min-height: 64px
     }
 
     .logo-mark {
@@ -100,7 +100,7 @@
       font-weight: 700;
       color: #fff;
       overflow: hidden;
-      background: transparent;
+      background: transparent
     }
 
     .logo-mark img {
@@ -108,24 +108,24 @@
       height: 32px;
       object-fit: cover;
       border-radius: 9px;
-      display: block;
+      display: block
     }
 
     .logo-text {
       overflow: hidden;
       white-space: nowrap;
-      transition: opacity var(--trans);
+      transition: opacity var(--trans)
     }
 
     .logo-name {
       font-size: 14.5px;
       font-weight: 600;
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .logo-sub {
       font-size: 10px;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .sidebar.collapsed .logo-text,
@@ -134,7 +134,7 @@
       opacity: 0;
       width: 0;
       pointer-events: none;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .sb-nav {
@@ -143,7 +143,7 @@
       padding: 10px 8px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 3px
     }
 
     .nav-item {
@@ -162,24 +162,30 @@
       width: 100%;
       text-align: left;
       font-family: var(--font);
-      transition: background var(--trans), color var(--trans);
+      transition: background var(--trans), color var(--trans)
     }
 
     .nav-item:hover {
       background: var(--bg-glass);
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .nav-item.active {
       background: var(--indigo-lo);
-      color: var(--indigo-hi);
+      color: var(--indigo-hi)
     }
 
     .nav-icon {
       font-size: 16px;
       flex-shrink: 0;
       width: 20px;
-      text-align: center;
+      text-align: center
+    }
+
+    .nav-icon i {
+      width: 18px;
+      display: inline-block;
+      text-align: center
     }
 
     .sb-bottom {
@@ -187,7 +193,7 @@
       border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 3px
     }
 
     .user-chip {
@@ -195,7 +201,7 @@
       align-items: center;
       gap: 9px;
       padding: 9px 10px;
-      border-radius: var(--r1);
+      border-radius: var(--r1)
     }
 
     .avatar {
@@ -206,31 +212,31 @@
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       color: #fff;
       font-weight: 600;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .av-sm {
       width: 28px;
       height: 28px;
-      font-size: 11px;
+      font-size: 11px
     }
 
     .av-md {
       width: 38px;
       height: 38px;
-      font-size: 14px;
+      font-size: 14px
     }
 
     .user-name {
       font-size: 13px;
       font-weight: 500;
       color: var(--text-1);
-      white-space: nowrap;
+      white-space: nowrap
     }
 
     .user-role-lbl {
       font-size: 10.5px;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .main {
@@ -238,7 +244,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      min-width: 0;
+      min-width: 0
     }
 
     .topbar {
@@ -249,18 +255,18 @@
       align-items: center;
       gap: 12px;
       padding: 0 24px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .tb-title {
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 600
     }
 
     .tb-sub {
       font-size: 11px;
       color: var(--text-2);
-      margin-top: 1px;
+      margin-top: 1px
     }
 
     .icon-btn {
@@ -278,19 +284,19 @@
       transition: all var(--trans);
       font-family: var(--font);
       flex-shrink: 0;
-      position: relative;
+      position: relative
     }
 
     .icon-btn:hover {
       color: var(--text-1);
       border-color: var(--border-hi);
-      background: var(--indigo-lo);
+      background: var(--indigo-lo)
     }
 
     .content {
       flex: 1;
       overflow-y: auto;
-      padding: 24px;
+      padding: 24px
     }
 
     .card {
@@ -298,69 +304,69 @@
       border: 1px solid var(--border);
       border-radius: var(--r2);
       padding: 20px;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .card-sm {
-      padding: 16px;
+      padding: 16px
     }
 
     .card-lbl {
       font-size: 12px;
       color: var(--text-2);
       font-weight: 500;
-      margin-bottom: 5px;
+      margin-bottom: 5px
     }
 
     .card-val {
       font-size: 26px;
       font-weight: 600;
-      line-height: 1.1;
+      line-height: 1.1
     }
 
     .card-sub {
       font-size: 11.5px;
       color: var(--text-2);
-      margin-top: 4px;
+      margin-top: 4px
     }
 
     .grid4 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 18px
     }
 
     .grid5 {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 18px
     }
 
     .grid3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 18px
     }
 
     .grid-main {
       display: grid;
       grid-template-columns: 1fr 300px;
-      gap: 18px;
+      gap: 18px
     }
 
     .grid-main-wide {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      gap: 18px
     }
 
     .col-stack {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 18px
     }
 
     .badge {
@@ -370,7 +376,7 @@
       padding: 4px 11px;
       border-radius: 100px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 500
     }
 
     .tag {
@@ -379,7 +385,7 @@
       padding: 2px 8px;
       border-radius: 100px;
       font-size: 10.5px;
-      font-weight: 500;
+      font-weight: 500
     }
 
     .btn {
@@ -393,99 +399,99 @@
       cursor: pointer;
       transition: all var(--trans);
       border: none;
-      font-family: var(--font);
+      font-family: var(--font)
     }
 
     .btn-primary {
       background: #6366f1;
-      color: #fff;
+      color: #fff
     }
 
     .btn-primary:hover {
-      background: #4f46e5;
+      background: #4f46e5
     }
 
     .btn-outline {
       background: transparent;
       color: var(--text-2);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border)
     }
 
     .btn-outline:hover {
       color: var(--text-1);
       border-color: var(--border-hi);
-      background: var(--indigo-lo);
+      background: var(--indigo-lo)
     }
 
     .btn-danger {
       background: rgba(244, 63, 94, .12);
       color: #fb7185;
-      border: 1px solid rgba(244, 63, 94, .25);
+      border: 1px solid rgba(244, 63, 94, .25)
     }
 
     .btn-danger:hover {
-      background: rgba(244, 63, 94, .2);
+      background: rgba(244, 63, 94, .2)
     }
 
     .btn-success {
       background: rgba(16, 185, 129, .12);
       color: #34d399;
-      border: 1px solid rgba(16, 185, 129, .25);
+      border: 1px solid rgba(16, 185, 129, .25)
     }
 
     .btn-success:hover {
-      background: rgba(16, 185, 129, .2);
+      background: rgba(16, 185, 129, .2)
     }
 
     .btn-warning {
       background: rgba(245, 158, 11, .12);
       color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, .25);
+      border: 1px solid rgba(245, 158, 11, .25)
     }
 
     .btn-warning:hover {
-      background: rgba(245, 158, 11, .2);
+      background: rgba(245, 158, 11, .2)
     }
 
     .btn-sm {
       padding: 6px 12px;
-      font-size: 12.5px;
+      font-size: 12.5px
     }
 
     .btn:disabled {
       opacity: .35;
       cursor: not-allowed;
-      pointer-events: none;
+      pointer-events: none
     }
 
     .sa-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 9px;
+      gap: 9px
     }
 
     .sec-hdr {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 16px
     }
 
     .sec-title {
       font-size: 13.5px;
-      font-weight: 600;
+      font-weight: 600
     }
 
     .tl {
       display: flex;
-      flex-direction: column;
+      flex-direction: column
     }
 
     .tl-item {
       display: flex;
       gap: 12px;
       padding: 9px 0;
-      position: relative;
+      position: relative
     }
 
     .tl-item:not(:last-child)::before {
@@ -495,7 +501,7 @@
       top: 34px;
       width: 1px;
       height: calc(100% - 12px);
-      background: var(--border);
+      background: var(--border)
     }
 
     .tl-dot {
@@ -507,13 +513,13 @@
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      border: 2px solid;
+      border: 2px solid
     }
 
     .donut-wrap {
       display: flex;
       justify-content: center;
-      margin: 12px 0;
+      margin: 12px 0
     }
 
     .ql-grid {
@@ -523,7 +529,7 @@
       margin-top: 4px;
       width: 100%;
       min-width: 0;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .ql-item {
@@ -539,12 +545,12 @@
       text-decoration: none;
       color: var(--text-1);
       min-width: 0;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .ql-item:hover {
       border-color: var(--border-hi);
-      background: var(--indigo-lo);
+      background: var(--indigo-lo)
     }
 
     .ql-icon {
@@ -555,7 +561,7 @@
       align-items: center;
       justify-content: center;
       font-size: 17px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .prog {
@@ -563,18 +569,18 @@
       border-radius: 100px;
       background: var(--border);
       overflow: hidden;
-      margin-top: 4px;
+      margin-top: 4px
     }
 
     .prog-fill {
       height: 100%;
       border-radius: 100px;
-      transition: width .7s ease;
+      transition: width .7s ease
     }
 
     .tbl {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: collapse
     }
 
     .tbl th {
@@ -583,17 +589,17 @@
       font-weight: 500;
       text-align: left;
       padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
     .tbl td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
-      font-size: 13px;
+      font-size: 13px
     }
 
     .tbl tr:last-child td {
-      border-bottom: none;
+      border-bottom: none
     }
 
     .input {
@@ -606,15 +612,15 @@
       font-family: var(--font);
       width: 100%;
       outline: none;
-      transition: border var(--trans);
+      transition: border var(--trans)
     }
 
     .input:focus {
-      border-color: #6366f1;
+      border-color: #6366f1
     }
 
     .input::placeholder {
-      color: var(--text-3);
+      color: var(--text-3)
     }
 
     .field-lbl {
@@ -622,20 +628,151 @@
       color: var(--text-2);
       font-weight: 500;
       margin-bottom: 6px;
-      display: block;
+      display: block
     }
 
     .field-grp {
-      margin-bottom: 15px;
+      margin-bottom: 15px
     }
 
     textarea.input {
       resize: vertical;
       min-height: 70px;
-      line-height: 1.5;
+      line-height: 1.5
     }
 
-    /* ── AUTH ── */
+    /* Toggle switch */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none
+    }
+
+    .toggle-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .toggle-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-1)
+    }
+
+    .toggle-desc {
+      font-size: 12px;
+      color: var(--text-2);
+      margin-top: 3px;
+      line-height: 1.4
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 16px
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      transition: all 0.2s ease
+    }
+
+    .toggle-slider:before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: var(--text-3);
+      border-radius: 50%;
+      transition: all 0.2s ease
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: #6366f1
+    }
+
+    .toggle-switch input:checked+.toggle-slider:before {
+      transform: translateX(20px);
+      background: #6366f1
+    }
+
+    .toggle-switch.saving {
+      opacity: 0.5;
+      pointer-events: none
+    }
+
+    /* Work mode banners */
+    .workmode-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 7777;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      animation: slideDownFade 0.35s ease both
+    }
+
+    .workmode-banner-off {
+      background: linear-gradient(90deg, rgba(244, 63, 94, 0.95), rgba(190, 18, 60, 0.95));
+      color: #fff
+    }
+
+    .workmode-banner-half {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
+      color: #fff
+    }
+
+    .workmode-banner-dismiss {
+      margin-left: auto;
+      cursor: pointer;
+      opacity: 0.8;
+      font-size: 16px
+    }
+
+    .workmode-banner-dismiss:hover {
+      opacity: 1
+    }
+
+    @keyframes slideDownFade {
+      from {
+        opacity: 0;
+        transform: translateY(-100%)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* AUTH */
     .auth-split {
       position: fixed;
       top: 0;
@@ -644,7 +781,7 @@
       height: 100vh;
       overflow: hidden;
       display: flex;
-      flex-direction: row;
+      flex-direction: row
     }
 
     .auth-left {
@@ -655,14 +792,14 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: center
     }
 
     .auth-left-bg {
       position: absolute;
       inset: 0;
       background: linear-gradient(135deg, #060b1a 0%, #0d1535 30%, #1a0e3a 60%, #0f0d2e 100%);
-      z-index: 0;
+      z-index: 0
     }
 
     .auth-left-orb {
@@ -670,7 +807,7 @@
       border-radius: 50%;
       filter: blur(80px);
       pointer-events: none;
-      z-index: 1;
+      z-index: 1
     }
 
     .auth-left-orb-1 {
@@ -679,7 +816,7 @@
       background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
       top: -100px;
       left: -100px;
-      animation: orbFloat1 8s ease-in-out infinite;
+      animation: orbFloat1 8s ease-in-out infinite
     }
 
     .auth-left-orb-2 {
@@ -688,7 +825,7 @@
       background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
       bottom: -80px;
       right: -80px;
-      animation: orbFloat2 10s ease-in-out infinite;
+      animation: orbFloat2 10s ease-in-out infinite
     }
 
     .auth-left-orb-3 {
@@ -698,7 +835,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      animation: orbFloat3 12s ease-in-out infinite;
+      animation: orbFloat3 12s ease-in-out infinite
     }
 
     .auth-left-noise {
@@ -707,7 +844,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
       opacity: 0.4;
       z-index: 2;
-      pointer-events: none;
+      pointer-events: none
     }
 
     .auth-left-grid {
@@ -716,7 +853,7 @@
       z-index: 2;
       pointer-events: none;
       background-image: linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
+      background-size: 60px 60px
     }
 
     .auth-left-content {
@@ -724,7 +861,7 @@
       z-index: 10;
       width: 100%;
       max-width: 480px;
-      padding: 0 40px 40px 30px;
+      padding: 0 40px 40px 30px
     }
 
     .auth-left-logo {
@@ -732,7 +869,7 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 40px;
-      animation: slideUpFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: slideUpFade 0.7s cubic-bezier(0.22, 1, 0.36, 1) both
     }
 
     .auth-left-logo-mark {
@@ -745,7 +882,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .auth-left-logo-mark img {
@@ -753,11 +890,11 @@
       height: 52px;
       object-fit: cover;
       border-radius: 16px;
-      display: block;
+      display: block
     }
 
     .auth-left-logo-text {
-      text-align: left;
+      text-align: left
     }
 
     .auth-left-logo-name {
@@ -767,7 +904,7 @@
       background: linear-gradient(135deg, #e0e7ff, #a5b4fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background-clip: text
     }
 
     .auth-left-logo-sub {
@@ -775,7 +912,7 @@
       color: rgba(165, 180, 252, 0.6);
       font-weight: 600;
       letter-spacing: 1.5px;
-      text-transform: uppercase;
+      text-transform: uppercase
     }
 
     .auth-left-heading {
@@ -788,7 +925,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: slideUpFade 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: slideUpFade 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both
     }
 
     .auth-left-sub {
@@ -796,14 +933,14 @@
       color: rgba(165, 180, 252, 0.65);
       line-height: 1.6;
       margin-bottom: 44px;
-      animation: slideUpFade 0.7s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: slideUpFade 0.7s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both
     }
 
     .auth-float-cards {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      animation: slideUpFade 0.7s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: slideUpFade 0.7s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both
     }
 
     .auth-float-card {
@@ -819,24 +956,24 @@
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
       text-align: left;
       cursor: default;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease
     }
 
     .auth-float-card:hover {
       transform: translateX(6px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12)
     }
 
     .auth-float-card:nth-child(1) {
-      animation: floatCard1 6s ease-in-out 1s infinite;
+      animation: floatCard1 6s ease-in-out 1s infinite
     }
 
     .auth-float-card:nth-child(2) {
-      animation: floatCard2 7s ease-in-out 1.5s infinite;
+      animation: floatCard2 7s ease-in-out 1.5s infinite
     }
 
     .auth-float-card:nth-child(3) {
-      animation: floatCard3 8s ease-in-out 2s infinite;
+      animation: floatCard3 8s ease-in-out 2s infinite
     }
 
     .auth-float-icon {
@@ -847,25 +984,25 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .auth-float-body {
       flex: 1;
-      min-width: 0;
+      min-width: 0
     }
 
     .auth-float-label {
       font-size: 13.5px;
       font-weight: 600;
       color: #e2e8f0;
-      white-space: nowrap;
+      white-space: nowrap
     }
 
     .auth-float-sub {
       font-size: 11px;
       color: rgba(148, 163, 184, 0.75);
-      margin-top: 2px;
+      margin-top: 2px
     }
 
     .auth-float-badge {
@@ -874,25 +1011,25 @@
       padding: 3px 9px;
       border-radius: 100px;
       white-space: nowrap;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .badge-green {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.25);
+      border: 1px solid rgba(16, 185, 129, 0.25)
     }
 
     .badge-blue {
       background: rgba(99, 102, 241, 0.15);
       color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.25)
     }
 
     .badge-amber {
       background: rgba(245, 158, 11, 0.15);
       color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(245, 158, 11, 0.25)
     }
 
     .auth-left-brand {
@@ -904,7 +1041,7 @@
       z-index: 10;
       font-size: 11px;
       color: rgba(99, 102, 241, 0.4);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.5px
     }
 
     .auth-right {
@@ -918,7 +1055,7 @@
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       background: #080b14;
-      position: relative;
+      position: relative
     }
 
     .auth-right::before {
@@ -926,7 +1063,7 @@
       position: absolute;
       inset: 0;
       background: radial-gradient(ellipse at 30% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 60%);
-      pointer-events: none;
+      pointer-events: none
     }
 
     .auth-card-glass {
@@ -939,14 +1076,14 @@
       border-radius: 20px;
       padding: 36px 32px;
       box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 24px 64px rgba(0, 0, 0, 0.5), 0 4px 24px rgba(99, 102, 241, 0.1);
-      animation: slideUpFade 0.6s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: slideUpFade 0.6s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both
     }
 
     .auth-card-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 28px;
+      margin-bottom: 28px
     }
 
     .auth-card-logo-mark {
@@ -959,7 +1096,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .auth-card-logo-mark img {
@@ -967,7 +1104,7 @@
       height: 36px;
       object-fit: cover;
       border-radius: 10px;
-      display: block;
+      display: block
     }
 
     .auth-card-logo-text .auth-card-name {
@@ -977,7 +1114,7 @@
       background: linear-gradient(135deg, #a5b4fc, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background-clip: text
     }
 
     .auth-card-logo-text .auth-card-sub-label {
@@ -985,7 +1122,7 @@
       color: rgba(99, 102, 241, 0.6);
       font-weight: 500;
       letter-spacing: 0.8px;
-      text-transform: uppercase;
+      text-transform: uppercase
     }
 
     .auth-card-title {
@@ -993,19 +1130,19 @@
       font-weight: 700;
       letter-spacing: -0.4px;
       color: #eef2ff;
-      margin-bottom: 6px;
+      margin-bottom: 6px
     }
 
     .auth-card-subtitle {
       font-size: 13.5px;
       color: var(--text-2);
       margin-bottom: 28px;
-      line-height: 1.5;
+      line-height: 1.5
     }
 
     .auth-input-wrap {
       position: relative;
-      margin-bottom: 15px;
+      margin-bottom: 15px
     }
 
     .auth-field-lbl {
@@ -1014,7 +1151,7 @@
       font-weight: 600;
       margin-bottom: 7px;
       display: block;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.2px
     }
 
     .auth-input {
@@ -1027,17 +1164,17 @@
       font-family: var(--font);
       width: 100%;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease
     }
 
     .auth-input::placeholder {
-      color: rgba(100, 116, 139, 0.7);
+      color: rgba(100, 116, 139, 0.7)
     }
 
     .auth-input:focus {
       border-color: rgba(99, 102, 241, 0.6);
       background: rgba(99, 102, 241, 0.05);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), 0 0 20px rgba(99, 102, 241, 0.08);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), 0 0 20px rgba(99, 102, 241, 0.08)
     }
 
     .auth-submit-btn {
@@ -1060,7 +1197,7 @@
       background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
       box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35), 0 1px 0 rgba(255, 255, 255, 0.15) inset;
       transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-      letter-spacing: 0.1px;
+      letter-spacing: 0.1px
     }
 
     .auth-submit-btn::before {
@@ -1069,37 +1206,37 @@
       inset: 0;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
       opacity: 1;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s
     }
 
     .auth-submit-btn:hover:not(:disabled) {
       transform: translateY(-1px) scale(1.01);
       box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
-      filter: brightness(1.06);
+      filter: brightness(1.06)
     }
 
     .auth-submit-btn:active:not(:disabled) {
-      transform: translateY(0) scale(0.99);
+      transform: translateY(0) scale(0.99)
     }
 
     .auth-submit-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      pointer-events: none;
+      pointer-events: none
     }
 
     .auth-err {
       font-size: 12px;
       color: #fb7185;
       margin-top: 8px;
-      min-height: 18px;
+      min-height: 18px
     }
 
     .auth-setup-link {
       text-align: center;
       margin-top: 20px;
       font-size: 12px;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .auth-setup-link-a {
@@ -1107,32 +1244,32 @@
       cursor: pointer;
       text-decoration: underline;
       text-underline-offset: 3px;
-      transition: color 0.15s;
+      transition: color 0.15s
     }
 
     .auth-setup-link-a:hover {
-      color: #c7d2fe;
+      color: #c7d2fe
     }
 
     .auth-divider {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin: 4px 0;
+      margin: 4px 0
     }
 
     .auth-divider-line {
       flex: 1;
       height: 1px;
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.07)
     }
 
     .auth-divider-text {
       font-size: 11px;
-      color: var(--text-3);
+      color: var(--text-3)
     }
 
-    /* ── CHECKOUT MODAL ── */
+    /* CHECKOUT MODAL */
     .checkout-modal-overlay {
       position: fixed;
       inset: 0;
@@ -1142,7 +1279,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 20px
     }
 
     .checkout-modal-box {
@@ -1154,13 +1291,13 @@
       max-width: 420px;
       box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.1), 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(99, 102, 241, 0.12);
       animation: slideUpFade 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-      text-align: center;
+      text-align: center
     }
 
     .checkout-modal-icon {
       font-size: 44px;
       margin-bottom: 16px;
-      display: block;
+      display: block
     }
 
     .checkout-modal-title {
@@ -1168,23 +1305,23 @@
       font-weight: 700;
       color: var(--text-1);
       margin-bottom: 8px;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.3px
     }
 
     .checkout-modal-sub {
       font-size: 13.5px;
       color: var(--text-2);
       line-height: 1.6;
-      margin-bottom: 28px;
+      margin-bottom: 28px
     }
 
     .checkout-modal-btns {
       display: flex;
       gap: 10px;
-      justify-content: center;
+      justify-content: center
     }
 
-    /* ── AUTO-LOGOUT BANNER ── */
+    /* AUTO-LOGOUT BANNER */
     .auto-logout-banner {
       position: fixed;
       bottom: 20px;
@@ -1199,7 +1336,7 @@
       align-items: center;
       gap: 12px;
       min-width: 280px;
-      animation: slideUpFade 0.3s ease both;
+      animation: slideUpFade 0.3s ease both
     }
 
     .auto-logout-dot {
@@ -1208,13 +1345,13 @@
       border-radius: 50%;
       background: #fbbf24;
       flex-shrink: 0;
-      animation: livePulse 1.5s ease-in-out infinite;
+      animation: livePulse 1.5s ease-in-out infinite
     }
 
     .auto-logout-text {
       flex: 1;
       font-size: 12.5px;
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .auto-logout-timer {
@@ -1222,7 +1359,7 @@
       font-size: 18px;
       font-weight: 700;
       color: #fbbf24;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .auto-logout-dismiss {
@@ -1231,18 +1368,10 @@
       cursor: pointer;
       text-decoration: underline;
       margin-top: 4px;
-      display: block;
+      display: block
     }
 
-    /* ── LOCAL HISTORY STYLES ── */
-    .lh-date-nav {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
+    /* LOCAL HISTORY */
     .lh-date-pill {
       padding: 5px 14px;
       border-radius: 100px;
@@ -1252,25 +1381,25 @@
       background: var(--bg-card2);
       color: var(--text-2);
       cursor: pointer;
-      transition: all var(--trans);
+      transition: all var(--trans)
     }
 
     .lh-date-pill:hover {
       border-color: var(--border-hi);
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .lh-date-pill.active {
       background: var(--indigo-lo);
       border-color: var(--border-hi);
-      color: var(--indigo-hi);
+      color: var(--indigo-hi)
     }
 
     .lh-empty {
       text-align: center;
       padding: 40px 20px;
       color: var(--text-2);
-      font-size: 13px;
+      font-size: 13px
     }
 
     .lh-section-title {
@@ -1279,7 +1408,7 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--text-3);
-      margin: 16px 0 8px;
+      margin: 16px 0 8px
     }
 
     .lh-item {
@@ -1288,11 +1417,11 @@
       gap: 10px;
       padding: 9px 0;
       border-bottom: 1px solid var(--border);
-      font-size: 13px;
+      font-size: 13px
     }
 
     .lh-item:last-child {
-      border-bottom: none;
+      border-bottom: none
     }
 
     .lh-badge {
@@ -1303,12 +1432,12 @@
       align-items: center;
       justify-content: center;
       font-size: 13px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .lh-info {
       flex: 1;
-      min-width: 0;
+      min-width: 0
     }
 
     .lh-name {
@@ -1316,24 +1445,24 @@
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis
     }
 
     .lh-meta {
       font-size: 11px;
       color: var(--text-2);
-      margin-top: 2px;
+      margin-top: 2px
     }
 
     @keyframes slideUpFade {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(20px)
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
       }
     }
 
@@ -1341,11 +1470,11 @@
 
       0%,
       100% {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1)
       }
 
       50% {
-        transform: translate(30px, 20px) scale(1.05);
+        transform: translate(30px, 20px) scale(1.05)
       }
     }
 
@@ -1353,11 +1482,11 @@
 
       0%,
       100% {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1)
       }
 
       50% {
-        transform: translate(-25px, -30px) scale(1.08);
+        transform: translate(-25px, -30px) scale(1.08)
       }
     }
 
@@ -1365,11 +1494,11 @@
 
       0%,
       100% {
-        transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%) scale(1)
       }
 
       50% {
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%) scale(1.1)
       }
     }
 
@@ -1377,11 +1506,11 @@
 
       0%,
       100% {
-        transform: translateY(0px);
+        transform: translateY(0px)
       }
 
       50% {
-        transform: translateY(-4px);
+        transform: translateY(-4px)
       }
     }
 
@@ -1389,11 +1518,11 @@
 
       0%,
       100% {
-        transform: translateY(0px);
+        transform: translateY(0px)
       }
 
       50% {
-        transform: translateY(-6px);
+        transform: translateY(-6px)
       }
     }
 
@@ -1401,11 +1530,11 @@
 
       0%,
       100% {
-        transform: translateY(0px);
+        transform: translateY(0px)
       }
 
       50% {
-        transform: translateY(-3px);
+        transform: translateY(-3px)
       }
     }
 
@@ -1416,7 +1545,7 @@
       background: #34d399;
       flex-shrink: 0;
       box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
-      animation: livePulse 2s ease-in-out infinite;
+      animation: livePulse 2s ease-in-out infinite
     }
 
     @keyframes livePulse {
@@ -1424,12 +1553,12 @@
       0%,
       100% {
         opacity: 1;
-        box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
+        box-shadow: 0 0 6px rgba(52, 211, 153, 0.6)
       }
 
       50% {
         opacity: 0.5;
-        box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+        box-shadow: 0 0 12px rgba(52, 211, 153, 0.9)
       }
     }
 
@@ -1439,7 +1568,7 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: var(--bg-app);
+      background: var(--bg-app)
     }
 
     .auth-card {
@@ -1448,14 +1577,14 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--r2);
-      padding: 32px;
+      padding: 32px
     }
 
     .err-msg {
       font-size: 12px;
       color: #fb7185;
       margin-top: 8px;
-      min-height: 18px;
+      min-height: 18px
     }
 
     .spinner {
@@ -1466,7 +1595,7 @@
       border-top-color: var(--indigo);
       border-radius: 50%;
       animation: spin .6s linear infinite;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .loading-screen {
@@ -1476,13 +1605,13 @@
       justify-content: center;
       height: 100vh;
       gap: 14px;
-      background: var(--bg-app);
+      background: var(--bg-app)
     }
 
     .loading-screen .spinner {
       width: 32px;
       height: 32px;
-      border-width: 3px;
+      border-width: 3px
     }
 
     .modal-overlay {
@@ -1494,7 +1623,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 20px
     }
 
     .modal-box {
@@ -1505,7 +1634,7 @@
       width: 100%;
       max-width: 620px;
       max-height: 90vh;
-      overflow-y: auto;
+      overflow-y: auto
     }
 
     .step-num {
@@ -1520,7 +1649,7 @@
       font-size: 11px;
       font-weight: 700;
       margin-right: 8px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .sql-block {
@@ -1534,7 +1663,7 @@
       white-space: pre;
       overflow-x: auto;
       margin-top: 6px;
-      line-height: 1.6;
+      line-height: 1.6
     }
 
     .saved-pill {
@@ -1548,18 +1677,18 @@
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, .2);
       opacity: 0;
-      transition: opacity .3s;
+      transition: opacity .3s
     }
 
     .saved-pill.show {
-      opacity: 1;
+      opacity: 1
     }
 
     .pie-row {
       display: flex;
       align-items: center;
       margin-bottom: 9px;
-      font-size: 12.5px;
+      font-size: 12.5px
     }
 
     .pie-dot {
@@ -1567,18 +1696,18 @@
       height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
-      margin-right: 8px;
+      margin-right: 8px
     }
 
     .pie-name {
       color: var(--text-2);
-      flex: 1;
+      flex: 1
     }
 
     .pie-val {
       font-weight: 500;
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 12px
     }
 
     .task-item {
@@ -1586,11 +1715,11 @@
       align-items: flex-start;
       gap: 10px;
       padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
     .task-item:last-child {
-      border-bottom: none;
+      border-bottom: none
     }
 
     .task-cb {
@@ -1605,43 +1734,43 @@
       justify-content: center;
       margin-top: 1px;
       transition: all var(--trans);
-      background: transparent;
+      background: transparent
     }
 
     .task-cb.done {
       background: #6366f1;
-      border-color: #6366f1;
+      border-color: #6366f1
     }
 
     .task-cb.done::after {
       content: '✓';
       font-size: 10px;
       color: #fff;
-      font-weight: 700;
+      font-weight: 700
     }
 
     .task-text {
       font-size: 13px;
       flex: 1;
-      line-height: 1.4;
+      line-height: 1.4
     }
 
     .task-text.done {
       text-decoration: line-through;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .task-pri {
       font-size: 10px;
       font-weight: 600;
       padding: 2px 7px;
-      border-radius: 100px;
+      border-radius: 100px
     }
 
     .task-add {
       display: flex;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 12px
     }
 
     .sales-chart {
@@ -1649,7 +1778,7 @@
       align-items: flex-end;
       gap: 4px;
       height: 70px;
-      margin: 12px 0 4px;
+      margin: 12px 0 4px
     }
 
     .sales-bar-col {
@@ -1657,19 +1786,19 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
-      flex: 1;
+      flex: 1
     }
 
     .sales-bar {
       width: 100%;
       border-radius: 3px 3px 0 0;
       min-height: 2px;
-      transition: height .5s ease;
+      transition: height .5s ease
     }
 
     .sales-bar-lbl {
       font-size: 9px;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .call-item {
@@ -1677,11 +1806,11 @@
       align-items: center;
       gap: 10px;
       padding: 9px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
     .call-item:last-child {
-      border-bottom: none;
+      border-bottom: none
     }
 
     .call-icon {
@@ -1692,12 +1821,12 @@
       align-items: center;
       justify-content: center;
       font-size: 13px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
     .call-info {
       flex: 1;
-      min-width: 0;
+      min-width: 0
     }
 
     .call-name {
@@ -1705,19 +1834,19 @@
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis
     }
 
     .call-meta {
       font-size: 11px;
       color: var(--text-2);
-      margin-top: 2px;
+      margin-top: 2px
     }
 
     .call-dur {
       font-family: var(--mono);
       font-size: 12px;
-      color: var(--text-2);
+      color: var(--text-2)
     }
 
     .stabs {
@@ -1726,7 +1855,7 @@
       background: var(--bg-card2);
       border-radius: var(--r1);
       padding: 3px;
-      margin-bottom: 18px;
+      margin-bottom: 18px
     }
 
     .stab {
@@ -1741,13 +1870,13 @@
       transition: all var(--trans);
       border: none;
       background: none;
-      font-family: var(--font);
+      font-family: var(--font)
     }
 
     .stab.active {
       background: var(--bg-card);
       color: var(--text-1);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .2)
     }
 
     .quote-card {
@@ -1758,13 +1887,13 @@
       margin-bottom: 18px;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
+      gap: 12px
     }
 
     .quote-icon {
       font-size: 24px;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 2px
     }
 
     .quote-text {
@@ -1772,14 +1901,14 @@
       color: var(--text-1);
       font-style: italic;
       line-height: 1.6;
-      flex: 1;
+      flex: 1
     }
 
     .quote-author {
       font-size: 11px;
       color: var(--indigo-hi);
       margin-top: 4px;
-      font-weight: 500;
+      font-weight: 500
     }
 
     .data-loading {
@@ -1788,23 +1917,12 @@
       gap: 8px;
       color: var(--text-2);
       font-size: 12px;
-      padding: 12px 0;
-    }
-
-    .tl-checkout-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 7px;
-      border-radius: 100px;
-      font-size: 10px;
-      font-weight: 500;
-      margin-top: 4px;
+      padding: 12px 0
     }
 
     @keyframes spin {
       to {
-        transform: rotate(360deg);
+        transform: rotate(360deg)
       }
     }
 
@@ -1812,57 +1930,57 @@
 
       0%,
       100% {
-        opacity: 1;
+        opacity: 1
       }
 
       50% {
-        opacity: .35;
+        opacity: .35
       }
     }
 
     .pulse {
-      animation: pulse 2s infinite;
+      animation: pulse 2s infinite
     }
 
     @keyframes fadeUp {
       from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(12px)
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
       }
     }
 
     .fade-up {
-      animation: fadeUp .3s ease both;
+      animation: fadeUp .3s ease both
     }
 
     ::-webkit-scrollbar {
-      width: 4px;
+      width: 4px
     }
 
     ::-webkit-scrollbar-track {
-      background: transparent;
+      background: transparent
     }
 
     ::-webkit-scrollbar-thumb {
       background: var(--border);
-      border-radius: 4px;
+      border-radius: 4px
     }
 
     body.auth-active {
-      overflow: hidden;
+      overflow: hidden
     }
 
-    @media (max-width: 900px) {
+    @media(max-width:900px) {
       .auth-split {
         flex-direction: column;
         overflow-y: auto;
         height: auto;
-        min-height: 100vh;
+        min-height: 100vh
       }
 
       .auth-left {
@@ -1872,12 +1990,12 @@
         align-items: flex-start;
         justify-content: flex-start;
         padding: 40px 24px 36px;
-        overflow: hidden;
+        overflow: hidden
       }
 
       .auth-left-content {
         padding: 0;
-        max-width: 100%;
+        max-width: 100%
       }
 
       .auth-right {
@@ -1886,27 +2004,27 @@
         height: auto;
         min-height: 0;
         padding: 24px 16px 40px;
-        overflow: visible;
+        overflow: visible
       }
 
       .auth-left-heading {
-        font-size: 28px;
+        font-size: 28px
       }
 
       .auth-float-cards {
-        display: none;
+        display: none
       }
     }
 
-    @media (max-width: 600px) {
+    @media(max-width:600px) {
       .auth-split {
         flex-direction: column;
         overflow-y: auto;
-        height: 100vh;
+        height: 100vh
       }
 
       .auth-left {
-        display: none;
+        display: none
       }
 
       .auth-right {
@@ -1917,35 +2035,35 @@
         padding: 24px 16px;
         overflow-y: auto;
         background: #080b14;
-        align-items: center;
+        align-items: center
       }
 
       .auth-card-glass {
-        padding: 28px 20px;
+        padding: 28px 20px
       }
     }
 
     @media(max-width:1100px) {
       .grid5 {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr)
       }
 
       .grid-main {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr
       }
 
       .ql-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr)
       }
     }
 
     @media(max-width:960px) {
       .grid4 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr)
       }
 
       .sidebar {
-        width: 58px;
+        width: 58px
       }
 
       .sidebar .logo-text,
@@ -1953,47 +2071,47 @@
       .sidebar .user-info {
         opacity: 0;
         width: 0;
-        pointer-events: none;
+        pointer-events: none
       }
 
       .grid-main-wide {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr
       }
     }
 
     @media(max-width:600px) {
       .content {
-        padding: 12px;
+        padding: 12px
       }
 
       .grid4 {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr
       }
 
       .grid5 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr)
       }
 
       .topbar {
         padding: 0 12px;
-        gap: 6px;
+        gap: 6px
       }
 
       .ql-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr)
       }
 
       .ql-item {
         padding: 9px 10px;
-        gap: 8px;
+        gap: 8px
       }
 
       .modal-box {
-        padding: 18px;
+        padding: 18px
       }
 
       .quote-card {
-        padding: 12px 14px;
+        padding: 12px 14px
       }
     }
   </style>
@@ -2006,24 +2124,24 @@
     .sidebar {
       background: linear-gradient(180deg, #0d1117 0%, #0f1520 100%);
       border-right: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.4);
+      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.4)
     }
 
     [data-theme="light"] .sidebar {
       background: linear-gradient(180deg, #f8faff 0%, #f0f4ff 100%);
       border-right: 1px solid rgba(0, 0, 0, 0.07);
-      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.06);
+      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.06)
     }
 
     .sb-logo {
       padding: 20px 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(99, 102, 241, 0.04);
+      background: rgba(99, 102, 241, 0.04)
     }
 
     [data-theme="light"] .sb-logo {
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      background: rgba(99, 102, 241, 0.03);
+      background: rgba(99, 102, 241, 0.03)
     }
 
     .logo-name {
@@ -2033,14 +2151,14 @@
       background: linear-gradient(135deg, #a5b4fc, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background-clip: text
     }
 
     [data-theme="light"] .logo-name {
       background: linear-gradient(135deg, #6366f1, #4f46e5);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background-clip: text
     }
 
     .logo-sub {
@@ -2048,22 +2166,12 @@
       color: rgba(99, 102, 241, 0.6);
       font-weight: 500;
       letter-spacing: 0.5px;
-      text-transform: uppercase;
+      text-transform: uppercase
     }
 
     .sb-nav {
       padding: 12px 10px;
-      gap: 2px;
-    }
-
-    .nav-section-lbl {
-      font-size: 9.5px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-3);
-      padding: 8px 10px 4px;
-      margin-top: 4px;
+      gap: 2px
     }
 
     .nav-item {
@@ -2073,25 +2181,25 @@
       font-weight: 500;
       gap: 12px;
       position: relative;
-      transition: all 0.15s ease;
+      transition: all 0.15s ease
     }
 
     .nav-item:hover {
       background: rgba(99, 102, 241, 0.08);
       color: var(--text-1);
-      transform: translateX(1px);
+      transform: translateX(1px)
     }
 
     .nav-item.active {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.12));
       color: #a5b4fc;
-      box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.2)
     }
 
     [data-theme="light"] .nav-item.active {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
       color: #4f46e5;
-      box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.15);
+      box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.15)
     }
 
     .nav-item.active::before {
@@ -2103,48 +2211,38 @@
       width: 3px;
       height: 60%;
       background: linear-gradient(180deg, #6366f1, #8b5cf6);
-      border-radius: 0 3px 3px 0;
+      border-radius: 0 3px 3px 0
     }
 
     .nav-icon {
       width: 18px;
       text-align: center;
       font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .nav-icon i {
-      width: 18px;
-      display: inline-block;
-      text-align: center;
+      flex-shrink: 0
     }
 
     .sb-bottom {
       padding: 10px 10px 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.05)
     }
 
     [data-theme="light"] .sb-bottom {
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      border-top: 1px solid rgba(0, 0, 0, 0.06)
     }
 
     .user-chip {
       border-radius: 10px;
       padding: 10px 12px;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease
     }
 
     .user-chip:hover {
-      background: rgba(99, 102, 241, 0.06);
+      background: rgba(99, 102, 241, 0.06)
     }
 
     .avatar {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-    }
-
-    .nav-item i {
-      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3)
     }
   </style>
 </head>
@@ -2201,16 +2299,55 @@
       dataLoaded: false,
       quoteIndex: Math.floor(Math.random() * QUOTES.length),
       showCheckoutModal: false,
-      localHistoryDate: null
+      localHistoryDate: null,
+      // Work mode — loaded from Supabase profiles table
+      workOff: false,
+      halfDay: false,
+      halfDayReminderDismissed: false,
+      workOffBannerDismissed: false,
+      workModeSaving: false  // tracks async save in progress
     };
 
+    // ── SQL to add work mode columns to profiles (shown in setup) ──
+    var SQL_WORK_MODE_COLS = `-- Add work mode columns to profiles table (run once)
+ALTER TABLE profiles
+  ADD COLUMN IF NOT EXISTS work_off boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS half_day boolean DEFAULT false;`;
+
     // ═══════════════════════════════════════════════════════════
-    // ── LOCAL STORAGE HISTORY (separate from Supabase) ─────────
+    // ── SUPABASE WORK MODE PERSISTENCE ──────────────────────────
+    // Reads/writes work_off + half_day directly to profiles table.
+    // This means settings sync across all devices instantly.
+    // ═══════════════════════════════════════════════════════════
+    async function dbSaveWorkMode() {
+      if (!sb || !APP.profile) return;
+      APP.workModeSaving = true;
+      try {
+        var r = await sb.from('profiles')
+          .update({ work_off: APP.workOff, half_day: APP.halfDay })
+          .eq('id', APP.profile.id);
+        if (r.error) console.error('WorkMode save error:', r.error);
+        else {
+          // Keep local profile in sync
+          APP.profile.work_off = APP.workOff;
+          APP.profile.half_day = APP.halfDay;
+        }
+      } catch (e) { console.error('WorkMode save exception:', e); }
+      APP.workModeSaving = false;
+    }
+
+    function loadWorkModeFromProfile() {
+      if (!APP.profile) return;
+      // If columns exist on profile, use them. Fall back to false if null/undefined.
+      APP.workOff = APP.profile.work_off === true;
+      APP.halfDay = APP.profile.half_day === true;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // ── LOCAL STORAGE HISTORY ───────────────────────────────────
     // ═══════════════════════════════════════════════════════════
     var LS_PREFIX = 'nf_history_';
-
     function lsKey(date) { return LS_PREFIX + date; }
-
     function lsSaveDay(date) {
       try {
         var existing = lsGetDay(date);
@@ -2224,77 +2361,63 @@
         localStorage.setItem(lsKey(date), JSON.stringify(data));
       } catch (e) { console.warn('LS save failed', e); }
     }
-
     function lsGetDay(date) {
-      try {
-        var raw = localStorage.getItem(lsKey(date));
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) { return null; }
+      try { var raw = localStorage.getItem(lsKey(date)); return raw ? JSON.parse(raw) : null; }
+      catch (e) { return null; }
     }
-
     function lsGetAllDates() {
       var dates = [];
-      try {
-        for (var i = 0; i < localStorage.length; i++) {
-          var key = localStorage.key(i);
-          if (key && key.indexOf(LS_PREFIX) === 0) {
-            dates.push(key.replace(LS_PREFIX, ''));
-          }
-        }
-      } catch (e) { }
+      try { for (var i = 0; i < localStorage.length; i++) { var key = localStorage.key(i); if (key && key.indexOf(LS_PREFIX) === 0) { dates.push(key.replace(LS_PREFIX, '')); } } }
+      catch (e) { }
       return dates.sort().reverse();
     }
-
-    function lsSaveCurrent() {
-      if (APP.profile) lsSaveDay(todayStr());
-    }
+    function lsSaveCurrent() { if (APP.profile) lsSaveDay(todayStr()); }
 
     // ═══════════════════════════════════════════════════════════
-    // ── AUTO LOGOUT (1 hour inactivity, paused on break) ───────
+    // ── AUTO LOGOUT ─────────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
     var AUTO_LOGOUT_MS = 60 * 60 * 1000;
     var AUTO_WARN_MS = 55 * 60 * 1000;
-    var _lastActivity = Date.now();
-    var _autoLogoutTimer = null;
-    var _autoWarnTimer = null;
+    var LS_ACTIVITY_KEY = 'nf_last_activity';
     var _showingWarn = false;
 
+    function _getLastActivity() { var v = localStorage.getItem(LS_ACTIVITY_KEY); return v ? parseInt(v, 10) : Date.now(); }
+    function _setLastActivity(ts) { localStorage.setItem(LS_ACTIVITY_KEY, String(ts || Date.now())); }
+
     function resetActivity() {
-      _lastActivity = Date.now();
+      _setLastActivity(Date.now());
       if (_showingWarn) { _showingWarn = false; renderAutoLogoutBanner(false); }
-      scheduleAutoLogout();
     }
 
-    function scheduleAutoLogout() {
-      clearTimeout(_autoLogoutTimer);
-      clearTimeout(_autoWarnTimer);
-      if (!APP.authUser || APP.status === 'checked-out') return;
-      if (APP.status === 'break') return;
-      var elapsed = Date.now() - _lastActivity;
-      var warnIn = Math.max(0, AUTO_WARN_MS - elapsed);
-      var logoutIn = Math.max(0, AUTO_LOGOUT_MS - elapsed);
-      _autoWarnTimer = setTimeout(function () {
-        if (APP.status !== 'checked-out' && APP.status !== 'break') {
-          _showingWarn = true;
-          renderAutoLogoutBanner(true);
-        }
-      }, warnIn);
-      _autoLogoutTimer = setTimeout(function () {
-        if (APP.status !== 'checked-out' && APP.status !== 'break') {
-          _showingWarn = false;
-          renderAutoLogoutBanner(false);
-          changeStatus('checked-out').then(function () {
-            showToast('Auto checked-out due to inactivity.');
-          });
-        }
-      }, logoutIn);
-    }
+    setInterval(function () {
+      if (!APP.authUser || APP.status === 'checked-out' || APP.status === 'break') return;
+      var elapsed = Date.now() - _getLastActivity();
+      if (elapsed >= AUTO_LOGOUT_MS) {
+        _showingWarn = false; renderAutoLogoutBanner(false);
+        changeStatus('checked-out').then(function () { showToast('Auto checked-out due to 1 hour of inactivity.'); });
+      } else if (elapsed >= AUTO_WARN_MS && !_showingWarn) { _showingWarn = true; renderAutoLogoutBanner(true); }
+      else if (elapsed < AUTO_WARN_MS && _showingWarn) { _showingWarn = false; renderAutoLogoutBanner(false); }
+    }, 30000);
+
+    ['click', 'keydown', 'touchstart', 'touchend', 'touchmove', 'scroll', 'pointerdown', 'pointermove'].forEach(function (evt) {
+      document.addEventListener(evt, resetActivity, { passive: true });
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible') return;
+      if (!APP.authUser || APP.status === 'checked-out' || APP.status === 'break') return;
+      var elapsed = Date.now() - _getLastActivity();
+      if (elapsed >= AUTO_LOGOUT_MS) {
+        _showingWarn = false; renderAutoLogoutBanner(false);
+        changeStatus('checked-out').then(function () { showToast('Auto checked-out due to 1 hour of inactivity.'); });
+      } else if (elapsed >= AUTO_WARN_MS && !_showingWarn) { _showingWarn = true; renderAutoLogoutBanner(true); }
+    });
 
     function renderAutoLogoutBanner(show) {
       var existing = document.getElementById('auto-logout-banner');
       if (existing) existing.remove();
       if (!show) return;
-      var remaining = Math.max(0, AUTO_LOGOUT_MS - (Date.now() - _lastActivity));
+      var remaining = Math.max(0, AUTO_LOGOUT_MS - (Date.now() - _getLastActivity()));
       var mins = Math.ceil(remaining / 60000);
       var banner = document.createElement('div');
       banner.id = 'auto-logout-banner';
@@ -2305,34 +2428,58 @@
       document.body.appendChild(banner);
     }
 
-    function showToast(msg) {
+    setInterval(function () {
+      var banner = document.getElementById('auto-logout-banner');
+      if (!banner) return;
+      var remaining = Math.max(0, AUTO_LOGOUT_MS - (Date.now() - _getLastActivity()));
+      var mins = Math.ceil(remaining / 60000);
+      var timerEl = banner.querySelector('.auto-logout-timer');
+      if (timerEl) timerEl.textContent = mins + 'm';
+    }, 60000);
+
+    function showToast(msg, color) {
       var t = document.createElement('div');
-      t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#6366f1;color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;z-index:9999;font-family:var(--font);box-shadow:0 4px 20px rgba(99,102,241,0.4);animation:slideUpFade 0.3s ease both;';
+      t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:' + (color || '#6366f1') + ';color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;z-index:9999;font-family:var(--font);box-shadow:0 4px 20px rgba(99,102,241,0.4);animation:slideUpFade 0.3s ease both;white-space:nowrap;';
       t.textContent = msg;
       document.body.appendChild(t);
       setTimeout(function () { t.remove(); }, 3500);
     }
 
-['click','keydown','touchstart','touchend','touchmove','scroll','pointerdown','pointermove'].forEach(function(evt) {
-  document.addEventListener(evt, resetActivity, { passive: true });
-});
+    // ═══════════════════════════════════════════════════════════
+    // ── WORK MODE BANNERS ────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════
+    function renderWorkModeBanners() {
+      var existingOff = document.getElementById('workoff-banner');
+      var existingHalf = document.getElementById('halfday-banner');
+      if (existingOff) existingOff.remove();
+      if (existingHalf) existingHalf.remove();
+      if (!APP.authUser) return;
 
-// Reset on tab/app becoming visible again
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    // If they've been away longer than the limit, check out immediately
-    if (APP.status !== 'checked-out' && APP.status !== 'break') {
-      var elapsed = Date.now() - _lastActivity;
-      if (elapsed >= AUTO_LOGOUT_MS) {
-        changeStatus('checked-out').then(function() {
-          showToast('Auto checked-out due to inactivity.');
-        });
+      if (APP.workOff && !APP.workOffBannerDismissed) {
+        var ob = document.createElement('div');
+        ob.id = 'workoff-banner';
+        ob.className = 'workmode-banner workmode-banner-off';
+        ob.innerHTML = '<span style="font-size:20px;">🚫</span> <strong>Work Off Today</strong> — You\'re marked as off. Checking in is disabled. <span class="workmode-banner-dismiss" onclick="APP.workOffBannerDismissed=true;renderWorkModeBanners();" title="Dismiss">✕</span>';
+        document.body.appendChild(ob);
+        var appEl = document.querySelector('.app');
+        if (appEl) appEl.style.paddingTop = '46px';
       } else {
-        resetActivity();
+        var appEl = document.querySelector('.app');
+        if (appEl && !APP.halfDay) appEl.style.paddingTop = '';
+      }
+
+      if (APP.halfDay && !APP.halfDayReminderDismissed) {
+        var t = totals(APP.timeline);
+        var totalWorkMin = t.work + t.meet + t.call + t.focus;
+        if (totalWorkMin >= 240) {
+          var hb = document.createElement('div');
+          hb.id = 'halfday-banner';
+          hb.className = 'workmode-banner workmode-banner-half';
+          hb.innerHTML = '<span style="font-size:20px;">🌗</span> <strong>Half Day Reminder</strong> — You\'ve worked ' + fmt(totalWorkMin) + '. Your half day target of 4h is complete! Consider checking out. <span class="workmode-banner-dismiss" onclick="APP.halfDayReminderDismissed=true;renderWorkModeBanners();" title="Dismiss">✕</span>';
+          document.body.appendChild(hb);
+        }
       }
     }
-  }
-});
 
     // ═══════════════════════════════════════════════════════════
     // ── HELPERS ─────────────────────────────────────────────────
@@ -2352,7 +2499,7 @@ document.addEventListener('visibilitychange', function() {
       return app(b, dot, ' ' + c.label);
     }
     function LogoMark() {
-      var lm = dv('logo-mark');
+      var lm = dv();
       lm.style.cssText = 'width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6366f1,#8b5cf6);box-shadow:0 2px 10px rgba(99,102,241,0.4);overflow:hidden;';
       var img = mk('img'); img.src = __LOGO__;
       img.style.cssText = 'width:34px;height:34px;object-fit:cover;border-radius:10px;display:block;';
@@ -2414,21 +2561,19 @@ document.addEventListener('visibilitychange', function() {
     }
 
     // ═══════════════════════════════════════════════════════════
-    // ── SUPABASE DATA OPS (unchanged) ───────────────────────────
+    // ── SUPABASE DATA OPS ────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
     async function dbLoadTasks() {
       if (!sb || !APP.profile) return;
       var r = await sb.from('user_tasks').select('*').eq('user_id', APP.profile.id).eq('work_date', todayStr()).order('created_at', { ascending: true });
       if (r.error) { console.error('loadTasks', r.error); return; }
-      APP.tasks = r.data || [];
-      lsSaveCurrent();
+      APP.tasks = r.data || []; lsSaveCurrent();
     }
     async function dbAddTask(text, priority) {
       if (!sb || !APP.profile) return null;
       var r = await sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single();
       if (r.error) { console.error('addTask', r.error); return null; }
-      lsSaveCurrent();
-      return r.data;
+      lsSaveCurrent(); return r.data;
     }
     async function dbToggleTask(id, done) {
       if (!sb) return;
@@ -2444,15 +2589,13 @@ document.addEventListener('visibilitychange', function() {
       if (!sb || !APP.profile) return;
       var r = await sb.from('user_calls').select('*').eq('user_id', APP.profile.id).eq('work_date', todayStr()).order('created_at', { ascending: false });
       if (r.error) { console.error('loadCalls', r.error); return; }
-      APP.calls = r.data || [];
-      lsSaveCurrent();
+      APP.calls = r.data || []; lsSaveCurrent();
     }
     async function dbAddCall(name, duration, type, time) {
       if (!sb || !APP.profile) return null;
       var r = await sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single();
       if (r.error) { console.error('addCall', r.error); return null; }
-      lsSaveCurrent();
-      return r.data;
+      lsSaveCurrent(); return r.data;
     }
     async function dbDeleteCall(id) {
       if (!sb) return;
@@ -2465,8 +2608,7 @@ document.addEventListener('visibilitychange', function() {
       var fromStr = from.getFullYear() + '-' + String(from.getMonth() + 1).padStart(2, '0') + '-' + String(from.getDate()).padStart(2, '0');
       var r = await sb.from('user_sales').select('*').eq('user_id', APP.profile.id).gte('work_date', fromStr).lte('work_date', todayStr());
       if (r.error) { console.error('loadSales', r.error); return; }
-      var history = genSalesHistory();
-      var byDate = {};
+      var history = genSalesHistory(), byDate = {};
       (r.data || []).forEach(function (row) { byDate[row.work_date] = (byDate[row.work_date] || 0) + row.amount; });
       history.forEach(function (d) { d.amount = byDate[d.date] || 0; });
       APP.salesHistory = history; APP.todaySales = byDate[todayStr()] || 0;
@@ -2492,7 +2634,6 @@ document.addEventListener('visibilitychange', function() {
       var entry = APP.salesHistory.find(function (d) { return d.date === todayStr(); });
       if (entry) entry.amount = 0;
     }
-
     async function loadToday() {
       if (!sb || !APP.profile) return;
       var r = await sb.from('sessions').select('*').eq('user_id', APP.profile.id).eq('work_date', todayStr()).order('started_at', { ascending: true });
@@ -2544,16 +2685,38 @@ document.addEventListener('visibilitychange', function() {
       return result;
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // ── changeStatus() — FIX: allow check-in from ANY status ────
+    // Previously required checked-out first. Now it cleanly ends
+    // any open session and starts the new one — no restriction.
+    // ═══════════════════════════════════════════════════════════
     async function changeStatus(ns) {
       if (APP.saving) return;
+      // Block check-in (and other work statuses) only when Work Off
+      if (ns !== 'checked-out' && ns !== 'break' && APP.workOff) {
+        showToast('🚫 Work Off is enabled. Disable it in Settings → Work Mode first.', '#ef4444');
+        return;
+      }
       APP.saving = true; render();
-      if (APP.currentSession) await endSess(APP.currentSession);
-      if (ns !== 'checked-out') await startSess(ns);
+
+      // End ANY currently open session (no need to be checked-out first)
+      if (APP.currentSession) {
+        await endSess(APP.currentSession);
+        APP.currentSession = null;
+      }
+
+      // Start new session unless checking out
+      if (ns !== 'checked-out') {
+        await startSess(ns);
+      }
+
       await loadToday();
       APP.saving = false;
-      scheduleAutoLogout();
+      _setLastActivity(Date.now());
+      renderWorkModeBanners();
       render();
     }
+
     async function doSignIn(email, pass) {
       if (!sb) return { error: { message: 'Database not connected' } };
       var r = await sb.auth.signInWithPassword({ email: email, password: pass });
@@ -2566,8 +2729,7 @@ document.addEventListener('visibilitychange', function() {
       APP.authUser = null; APP.profile = null; APP.status = 'checked-out';
       APP.timeline = []; APP.currentSession = null; APP.page = 'dashboard';
       APP.tasks = []; APP.calls = []; APP.salesHistory = []; APP.todaySales = 0; APP.dataLoaded = false;
-      APP.showCheckoutModal = false;
-      clearTimeout(_autoLogoutTimer); clearTimeout(_autoWarnTimer);
+      APP.showCheckoutModal = false; APP.workOff = false; APP.halfDay = false;
       renderAutoLogoutBanner(false);
       render();
     }
@@ -2577,41 +2739,62 @@ document.addEventListener('visibilitychange', function() {
       APP.dataLoaded = true;
     }
 
+    function totals(sessions) {
+      var w = 0, b = 0, m = 0, c = 0, f = 0;
+      sessions.filter(function (s) { return s.ended_at; }).forEach(function (s) {
+        var d = s.duration_minutes || 0;
+        if (s.type === 'checked-in') w += d;
+        if (s.type === 'break') b += d;
+        if (s.type === 'meeting') m += d;
+        if (s.type === 'call') c += d;
+        if (s.type === 'focus') f += d;
+      });
+      var open = sessions.find(function (s) { return !s.ended_at; });
+      if (open) {
+        var cur = minBetween(open.started_at);
+        if (open.type === 'checked-in') w += cur;
+        if (open.type === 'break') b += cur;
+        if (open.type === 'meeting') m += cur;
+        if (open.type === 'call') c += cur;
+        if (open.type === 'focus') f += cur;
+      }
+      return { work: w, brk: b, meet: m, call: c, focus: f, total: w + b + m + c + f, workHours: w + m + c + f };
+    }
+
     // ═══════════════════════════════════════════════════════════
     // ── CHECKOUT MODAL ──────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
     function CheckoutModal() {
       var overlay = dv('checkout-modal-overlay');
       var box = dv('checkout-modal-box');
-
       var icon = sp('checkout-modal-icon'); icon.textContent = '👋';
       var title = dv('checkout-modal-title'); title.textContent = 'Welcome back!';
       var sub = dv('checkout-modal-sub');
-      sub.textContent = 'You are currently checked out. Check in to start tracking your work session for today.';
 
-      var btns = dv('checkout-modal-btns');
-
-      var checkInBtn = btn('btn-success', '✓ Check In', async function () {
-        checkInBtn.disabled = true; checkInBtn.textContent = 'Checking in…';
-        APP.showCheckoutModal = false;
-        await changeStatus('checked-in');
-        showToast('Checked in! Have a great day.');
-      });
-      checkInBtn.style.cssText = 'padding:11px 28px;font-size:14px;border-radius:10px;';
-
-      var cancelBtn = btn('btn-outline', 'Later', function () {
-        APP.showCheckoutModal = false;
-        render();
-      });
-      cancelBtn.style.cssText = 'padding:11px 22px;font-size:14px;border-radius:10px;';
-
-      app(btns, checkInBtn, cancelBtn);
-      app(box, icon, title, sub, btns);
+      if (APP.workOff) {
+        icon.textContent = '🚫';
+        title.textContent = 'Work Off Today';
+        sub.textContent = 'You have marked today as Work Off. Checking in is disabled. You can change this in Settings → Work Mode.';
+        var btns = dv('checkout-modal-btns');
+        var cancelBtn = btn('btn-outline', 'OK, Got it', function () { APP.showCheckoutModal = false; render(); });
+        cancelBtn.style.cssText = 'padding:11px 28px;font-size:14px;border-radius:10px;';
+        btns.appendChild(cancelBtn); app(box, icon, title, sub, btns);
+      } else {
+        sub.textContent = 'You are currently checked out. Check in to start tracking your work session for today.';
+        var btns = dv('checkout-modal-btns');
+        var checkInBtn = btn('btn-success', '✓ Check In', async function () {
+          checkInBtn.disabled = true; checkInBtn.textContent = 'Checking in…';
+          APP.showCheckoutModal = false;
+          await changeStatus('checked-in');
+          showToast('Checked in! Have a great day.', '#10b981');
+        });
+        checkInBtn.style.cssText = 'padding:11px 28px;font-size:14px;border-radius:10px;';
+        var cancelBtn = btn('btn-outline', 'Later', function () { APP.showCheckoutModal = false; render(); });
+        cancelBtn.style.cssText = 'padding:11px 22px;font-size:14px;border-radius:10px;';
+        app(btns, checkInBtn, cancelBtn); app(box, icon, title, sub, btns);
+      }
       overlay.appendChild(box);
-
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) { APP.showCheckoutModal = false; render(); }
-      });
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) { APP.showCheckoutModal = false; render(); } });
       return overlay;
     }
 
@@ -2620,7 +2803,6 @@ document.addEventListener('visibilitychange', function() {
     // ═══════════════════════════════════════════════════════════
     function LocalHistory() {
       var wrap = dv('fade-up');
-
       var hdrCard = dv('card'); hdrCard.style.marginBottom = '16px';
       var hdrRow = dv('sec-hdr');
       var hdrTitle = dv('sec-title'); hdrTitle.textContent = '📦 Local Data History';
@@ -2629,119 +2811,78 @@ document.addEventListener('visibilitychange', function() {
       var hdrSub = dv(); hdrSub.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-top:6px;line-height:1.6;';
       hdrSub.textContent = 'Locally cached snapshots of your tasks and calls. Stored in your browser.';
       app(hdrCard, hdrRow, hdrSub);
-
       var allDates = lsGetAllDates();
-
       if (!allDates.length) {
         var empty = dv('card');
         var emptyInner = dv('lh-empty');
         emptyInner.innerHTML = '📭<br><br>No local history yet.<br><span style="font-size:11px;">Data is saved here as you work each day.</span>';
-        empty.appendChild(emptyInner);
-        app(wrap, hdrCard, empty);
-        return wrap;
+        empty.appendChild(emptyInner); app(wrap, hdrCard, empty); return wrap;
       }
-
-      if (!APP.localHistoryDate || allDates.indexOf(APP.localHistoryDate) < 0) {
-        APP.localHistoryDate = allDates[0];
-      }
-
+      if (!APP.localHistoryDate || allDates.indexOf(APP.localHistoryDate) < 0) APP.localHistoryDate = allDates[0];
       var navWrap = dv('card'); navWrap.style.marginBottom = '16px'; navWrap.style.padding = '14px 16px';
       var navTitle = dv(); navTitle.style.cssText = 'font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-3);margin-bottom:10px;';
-      navTitle.textContent = 'Select Day · ' + allDates.length + ' saved';
-      navWrap.appendChild(navTitle);
+      navTitle.textContent = 'Select Day · ' + allDates.length + ' saved'; navWrap.appendChild(navTitle);
       var pillRow = dv(); pillRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:7px;';
       allDates.forEach(function (date) {
         var pill = dv('lh-date-pill' + (APP.localHistoryDate === date ? ' active' : ''));
-        pill.textContent = fmtDateLabel(date);
-        pill.title = date;
+        pill.textContent = fmtDateLabel(date); pill.title = date;
         pill.addEventListener('click', function () { APP.localHistoryDate = date; render(); });
         pillRow.appendChild(pill);
       });
       app(navWrap, pillRow);
-
       var data = lsGetDay(APP.localHistoryDate);
       var dataCard = dv('card');
-
-      if (!data) {
-        var noData = dv('lh-empty'); noData.textContent = 'No data for this date.';
-        dataCard.appendChild(noData);
-        app(wrap, hdrCard, navWrap, dataCard);
-        return wrap;
-      }
-
+      if (!data) { var noData = dv('lh-empty'); noData.textContent = 'No data for this date.'; dataCard.appendChild(noData); app(wrap, hdrCard, navWrap, dataCard); return wrap; }
       var dateHeader = dv(); dateHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;';
       var dateLbl = dv(); dateLbl.style.cssText = 'font-size:15px;font-weight:600;color:var(--text-1);';
       dateLbl.textContent = new Date(APP.localHistoryDate + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       var savedAt = dv(); savedAt.style.cssText = 'font-size:11px;color:var(--text-3);font-family:var(--mono);';
       savedAt.textContent = data.savedAt ? 'Saved at ' + fmtT(data.savedAt) : '';
-      app(dateHeader, dateLbl, savedAt);
-      dataCard.appendChild(dateHeader);
-
+      app(dateHeader, dateLbl, savedAt); dataCard.appendChild(dateHeader);
       var statsRow = dv('grid3'); statsRow.style.marginBottom = '16px';
       var tasks = data.tasks || [], calls = data.calls || [];
       var doneTasks = tasks.filter(function (t) { return t.done; }).length;
-      [StatCard('Tasks', doneTasks + '/' + tasks.length, 'Completed today'),
-      StatCard('Calls', String(calls.length), 'Logged calls'),
-      StatCard('Sales', fmtMoney(data.todaySales || 0), 'Day total', '#10b981')
-      ].forEach(function (c) { statsRow.appendChild(c); });
+      [StatCard('Tasks', doneTasks + '/' + tasks.length, 'Completed today'), StatCard('Calls', String(calls.length), 'Logged calls'), StatCard('Sales', fmtMoney(data.todaySales || 0), 'Day total', '#10b981')].forEach(function (c) { statsRow.appendChild(c); });
       dataCard.appendChild(statsRow);
-
       if (tasks.length) {
-        var tTitle = dv('lh-section-title'); tTitle.textContent = 'Tasks (' + tasks.length + ')';
-        dataCard.appendChild(tTitle);
+        var tTitle = dv('lh-section-title'); tTitle.textContent = 'Tasks (' + tasks.length + ')'; dataCard.appendChild(tTitle);
         tasks.forEach(function (t) {
-          var item = dv('lh-item');
-          var badge = dv('lh-badge');
+          var item = dv('lh-item'), badge = dv('lh-badge');
           badge.textContent = t.done ? '✓' : '○';
           badge.style.cssText = t.done ? 'background:rgba(99,102,241,.12);color:var(--indigo-hi);' : 'background:var(--bg-card2);color:var(--text-3);';
-          var info = dv('lh-info');
-          var name = dv('lh-name'); name.textContent = t.text;
+          var info = dv('lh-info'), name = dv('lh-name'); name.textContent = t.text;
           if (t.done) name.style.textDecoration = 'line-through';
-          var meta = dv('lh-meta');
-          var pri = PRIORITIES[t.priority] || PRIORITIES.medium;
+          var meta = dv('lh-meta'), pri = PRIORITIES[t.priority] || PRIORITIES.medium;
           meta.innerHTML = '<span style="padding:1px 7px;border-radius:100px;font-size:10px;background:' + pri.bg + ';color:' + pri.color + ';">' + t.priority + '</span>';
-          app(info, name, meta);
-          app(item, badge, info);
-          dataCard.appendChild(item);
+          app(info, name, meta); app(item, badge, info); dataCard.appendChild(item);
         });
       }
-
       if (calls.length) {
-        var cTitle = dv('lh-section-title'); cTitle.textContent = 'Calls (' + calls.length + ')';
-        dataCard.appendChild(cTitle);
+        var cTitle = dv('lh-section-title'); cTitle.textContent = 'Calls (' + calls.length + ')'; dataCard.appendChild(cTitle);
         var clrs = { inbound: ['rgba(16,185,129,.12)', '#34d399', '↙'], outbound: ['rgba(99,102,241,.12)', '#818cf8', '↗'], unreachable: ['rgba(244,63,94,.12)', '#fb7185', '✕'] };
         calls.forEach(function (c) {
-          var item = dv('lh-item');
-          var clr = clrs[c.type] || clrs.inbound;
-          var badge = dv('lh-badge'); badge.textContent = clr[2];
-          badge.style.cssText = 'background:' + clr[0] + ';color:' + clr[1] + ';';
-          var info = dv('lh-info');
-          var name = dv('lh-name'); name.textContent = c.name;
+          var item = dv('lh-item'), clr = clrs[c.type] || clrs.inbound;
+          var badge = dv('lh-badge'); badge.textContent = clr[2]; badge.style.cssText = 'background:' + clr[0] + ';color:' + clr[1] + ';';
+          var info = dv('lh-info'), name = dv('lh-name'); name.textContent = c.name;
           var meta = dv('lh-meta'); meta.textContent = (c.time || '') + ' · ' + c.type + (c.duration ? ' · ' + fmt(c.duration) : '');
-          app(info, name, meta);
-          app(item, badge, info);
-          dataCard.appendChild(item);
+          app(info, name, meta); app(item, badge, info); dataCard.appendChild(item);
         });
       }
-
-      if (!tasks.length && !calls.length) {
-        var noItems = dv('lh-empty'); noItems.textContent = 'No tasks or calls saved for this day.';
-        dataCard.appendChild(noItems);
-      }
-
-      app(wrap, hdrCard, navWrap, dataCard);
-      return wrap;
+      if (!tasks.length && !calls.length) { var noItems = dv('lh-empty'); noItems.textContent = 'No tasks or calls saved for this day.'; dataCard.appendChild(noItems); }
+      app(wrap, hdrCard, navWrap, dataCard); return wrap;
     }
 
     // ═══════════════════════════════════════════════════════════
     // ── SQL SETUP ───────────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
-    var SQL_BASE = `-- ① PROFILES
+    var SQL_BASE = `-- ① PROFILES (includes work mode columns)
 create table profiles (
   id uuid references auth.users primary key,
   full_name text not null,
   avatar_initials text default 'U',
   role text default 'Staff',
+  work_off boolean default false,
+  half_day boolean default false,
   created_at timestamptz default now()
 );
 alter table profiles enable row level security;
@@ -2847,7 +2988,12 @@ insert into holidays (holiday_date, name, type) values
       var overlay = dv('modal-overlay'), box = dv('modal-box');
       if (canClose) { var cb = btn('btn-outline btn-sm', '✕ Close', function () { APP.showSetup = false; render(); }); cb.style.marginBottom = '14px'; box.appendChild(cb); }
       var title = dv(); title.style.cssText = 'font-size:16px;font-weight:700;margin-bottom:6px;'; title.textContent = '⚙️ Database Setup';
-      var sub = dv(); sub.style.cssText = 'font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;'; sub.textContent = 'Run the SQL below in your Supabase SQL Editor.';
+      var sub = dv(); sub.style.cssText = 'font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.6;'; sub.textContent = 'Run the SQL below in your Supabase SQL Editor. Work mode columns (work_off, half_day) are included in profiles.';
+
+      // Migration note for existing installs
+      var migNote = dv(); migNote.style.cssText = 'background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:#fbbf24;line-height:1.6;';
+      migNote.innerHTML = '<strong>Existing install?</strong> Run this migration to add work mode columns:<br><code style="font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;">' + SQL_WORK_MODE_COLS.replace(/\n/g, '<br>') + '</code>';
+
       function makeStep(num, title2, sql, note) {
         var wrap2 = dv(); wrap2.style.marginBottom = '16px';
         var hdr = dv(); hdr.style.cssText = 'display:flex;align-items:center;margin-bottom:8px;';
@@ -2866,7 +3012,7 @@ insert into holidays (holiday_date, name, type) values
       var t2 = sp(); t2.style.cssText = 'font-size:13px;font-weight:600;'; t2.textContent = 'Create user + profile record';
       app(s2, n2, t2);
       var profSQL = dv('sql-block'); profSQL.textContent = "-- After creating user in Auth → Users:\ninsert into profiles (id, full_name, avatar_initials, role)\nvalues ('YOUR_USER_UUID', 'Your Name', 'YN', 'Admin');";
-      app(box, title, sub, makeStep('1', 'Base tables: profiles & sessions', SQL_BASE, 'Run first.'), makeStep('2', 'User data tables: tasks, calls, sales', SQL_USER_DATA, 'Enables cross-device sync.'), makeStep('4', 'Holidays table', SQL_HOLIDAYS, 'Optional.'), s2, profSQL);
+      app(box, title, sub, migNote, makeStep('1', 'Base tables: profiles & sessions (with work_off, half_day)', SQL_BASE, 'Run first.'), makeStep('2', 'User data tables: tasks, calls, sales', SQL_USER_DATA, 'Enables cross-device sync.'), makeStep('4', 'Holidays table', SQL_HOLIDAYS, 'Optional.'), s2, profSQL);
       overlay.appendChild(box); return overlay;
     }
 
@@ -2989,6 +3135,13 @@ insert into holidays (holiday_date, name, type) values
       var menu = dv('icon-btn'); menu.textContent = '☰'; menu.addEventListener('click', function () { APP.collapsed = !APP.collapsed; render(); });
       var tb = dv(); tb.style.flex = '1';
       app(tb, app(dv('tb-title'), titles[APP.page] || 'Dashboard'), app(dv('tb-sub'), nowFull()));
+      if (APP.workOff) {
+        var woTag = sp('tag'); woTag.textContent = '🚫 Work Off'; woTag.style.cssText = 'background:rgba(244,63,94,.12);color:#fb7185;font-size:11px;border:1px solid rgba(244,63,94,.2);';
+        tb.appendChild(woTag);
+      } else if (APP.halfDay) {
+        var hdTag = sp('tag'); hdTag.textContent = '🌗 Half Day'; hdTag.style.cssText = 'background:rgba(245,158,11,.12);color:#fbbf24;font-size:11px;border:1px solid rgba(245,158,11,.2);';
+        tb.appendChild(hdTag);
+      }
       var sbadge = dv('badge'); sbadge.style.background = cfg.bg; sbadge.style.color = cfg.color; sbadge.style.fontSize = '12px';
       var si = sp(); si.textContent = cfg.icon; if (APP.status !== 'checked-out') si.classList.add('pulse');
       app(sbadge, si, ' ' + cfg.label);
@@ -3034,18 +3187,6 @@ insert into holidays (holiday_date, name, type) values
       return svg;
     }
 
-    function totals(sessions) {
-      var w = 0, b = 0, m = 0, c = 0, f = 0;
-      sessions.filter(function (s) { return s.ended_at; }).forEach(function (s) {
-        var d = s.duration_minutes || 0;
-        if (s.type === 'checked-in') w += d; if (s.type === 'break') b += d;
-        if (s.type === 'meeting') m += d; if (s.type === 'call') c += d; if (s.type === 'focus') f += d;
-      });
-      var open = sessions.find(function (s) { return !s.ended_at; });
-      if (open) { var cur = minBetween(open.started_at); if (open.type === 'checked-in') w += cur; if (open.type === 'break') b += cur; if (open.type === 'meeting') m += cur; if (open.type === 'call') c += cur; if (open.type === 'focus') f += cur; }
-      return { work: w, brk: b, meet: m, call: c, focus: f, total: w + b + m + c + f };
-    }
-
     // ═══════════════════════════════════════════════════════════
     // ── DASHBOARD ───────────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
@@ -3056,19 +3197,35 @@ insert into holidays (holiday_date, name, type) values
       var qBody = dv(), qText = dv('quote-text'); qText.textContent = '"' + q.text + '"';
       var qAuth = dv('quote-author'); qAuth.textContent = '— ' + q.author;
       app(qBody, qText, qAuth); app(qCard, qIcon, qBody);
+
+      if (APP.workOff) {
+        var wob = dv(); wob.style.cssText = 'background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:var(--r2);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:13px;';
+        wob.innerHTML = '<span style="font-size:20px;">🚫</span><div><strong style="color:#fb7185;">Work Off Today</strong><div style="font-size:12px;color:var(--text-2);margin-top:2px;">Check-in is disabled. Go to Settings → Work Mode to change.</div></div>';
+        wrap.appendChild(wob);
+      } else if (APP.halfDay) {
+        var totalWorkMin2 = t.workHours;
+        var hdColor = totalWorkMin2 >= 240 ? '#fbbf24' : 'var(--text-2)';
+        var hdb = dv(); hdb.style.cssText = 'background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:13px;';
+        var prog = Math.min(100, Math.round(totalWorkMin2 / 240 * 100));
+        hdb.innerHTML = '<span style="font-size:20px;">🌗</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;"><strong style="color:#fbbf24;">Half Day Mode</strong><span style="font-size:12px;color:' + hdColor + ';font-family:var(--mono);">' + fmt(totalWorkMin2) + ' / 4h</span></div><div style="height:4px;background:var(--border);border-radius:100px;margin-top:8px;overflow:hidden;"><div style="height:100%;width:' + prog + '%;background:#f59e0b;border-radius:100px;transition:width .5s;"></div></div></div>';
+        wrap.appendChild(hdb);
+      }
+
       var callSessions = tl.filter(function (s) { return s.type === 'call'; });
       var totalCallMin = callSessions.reduce(function (a, s) { return a + (s.duration_minutes || 0); }, 0);
       var openCall = callSessions.find(function (s) { return !s.ended_at; });
       if (openCall) totalCallMin += minBetween(openCall.started_at);
       var todayTasks = APP.tasks, doneTasks = todayTasks.filter(function (t2) { return t2.done; }).length;
       var salesToday = APP.todaySales, salesWeekTotal = APP.salesHistory.reduce(function (a, d) { return a + (d.date === todayStr() ? salesToday : d.amount); }, 0);
+
       var sr = dv('grid5');
-      [StatCard('Active Work', fmt(t.work), 'Logged today'),
+      [StatCard('Work Hours', fmt(t.workHours), 'Check-in + Meeting + Call + Payment'),
       StatCard('Calls Today', String(callSessions.length), totalCallMin > 0 ? 'Total: ' + fmt(totalCallMin) : 'No calls yet', '#8b5cf6'),
       StatCard('Tasks', doneTasks + '/' + todayTasks.length, doneTasks === todayTasks.length && todayTasks.length > 0 ? 'All done! 🎉' : 'Pending: ' + (todayTasks.length - doneTasks), '#0ea5e9'),
       StatCard('Sales Today', fmtMoney(salesToday), 'Click + to add', '#10b981'),
       StatCard('Week Sales', fmtMoney(salesWeekTotal), 'All added sales', '#f59e0b'),
       ].forEach(function (c) { sr.appendChild(c); });
+
       var qc = dv('card'); qc.style.marginBottom = '18px';
       var qhdr = dv('sec-hdr'); app(qhdr, app(dv('sec-title'), 'Quick Access'), app(sp(), '')); qc.appendChild(qhdr);
       var qlGrid = dv('ql-grid');
@@ -3084,16 +3241,24 @@ insert into holidays (holiday_date, name, type) values
       });
       qc.appendChild(qlGrid);
       var mainArea = dv('grid-main'), left = dv('col-stack');
+
       var sc = dv('card'), shdr = dv('sec-hdr'), sttl = dv('sec-title'); sttl.textContent = 'Your Status';
       app(shdr, sttl, SBadge(APP.status)); sc.appendChild(shdr);
       var saRow = dv('sa-row');
-      [{ key: 'checked-in', label: 'Check In', cls: 'btn-success', dis: APP.status !== 'checked-out' },
-      { key: 'checked-out', label: 'Check Out', cls: 'btn-danger', dis: APP.status === 'checked-out' },
-      { key: 'break', label: '☕ Break', cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'break' },
-      { key: 'meeting', label: 'Meeting', cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'meeting' },
-      { key: 'call', label: 'Call', cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'call' },
-      { key: 'focus', label: '◎ Payment', cls: 'btn-outline', dis: APP.status === 'checked-out' || APP.status === 'focus' }
-      ].forEach(function (a) { saRow.appendChild(btn(a.cls + ' btn-sm', a.label, function () { changeStatus(a.key); }, a.dis || APP.saving)); });
+
+      // FIX: Status buttons — removed the restriction that blocked check-in unless checked-out.
+      // Now you can switch directly from any status to any other.
+      // Only "Work Off" still blocks non-break/checkout actions.
+      [
+        { key: 'checked-in', label: 'Check In', cls: 'btn-success', dis: APP.status === 'checked-in' || APP.workOff },
+        { key: 'checked-out', label: 'Check Out', cls: 'btn-danger', dis: APP.status === 'checked-out' },
+        { key: 'break', label: '☕ Break', cls: 'btn-outline', dis: APP.status === 'break' },
+        { key: 'meeting', label: 'Meeting', cls: 'btn-outline', dis: APP.status === 'meeting' || APP.workOff },
+        { key: 'call', label: 'Call', cls: 'btn-outline', dis: APP.status === 'call' || APP.workOff },
+        { key: 'focus', label: '◎ Payment', cls: 'btn-outline', dis: APP.status === 'focus' || APP.workOff }
+      ].forEach(function (a) {
+        saRow.appendChild(btn(a.cls + ' btn-sm', a.label, function () { changeStatus(a.key); }, a.dis || APP.saving));
+      });
       sc.appendChild(saRow);
       var sn = dv(); sn.style.cssText = 'font-size:11px;color:var(--text-2);margin-top:10px;'; sn.textContent = '✓ All data synced to database'; sc.appendChild(sn);
 
@@ -3167,6 +3332,7 @@ insert into holidays (holiday_date, name, type) values
       }
       tlCard.appendChild(tlWrap);
       app(left, sc, callCard, tlCard);
+
       var right = dv('col-stack');
       var taskCard = dv('card'), taskHdr = dv('sec-hdr');
       var taskCount = sp('tag'); taskCount.textContent = doneTasks + '/' + todayTasks.length + ' done'; taskCount.style.cssText = 'background:rgba(14,165,233,.12);color:#38bdf8;';
@@ -3225,11 +3391,20 @@ insert into holidays (holiday_date, name, type) values
       app(salesAddRow, saleIn, addSaleBtn, resetSaleBtn); salesCard.appendChild(salesAddRow);
 
       var dc = dv('card'), dttl = dv('sec-title'); dttl.textContent = 'Time Distribution'; dc.appendChild(dttl);
-      var dd = [{ l: 'Active Work', color: '#6366f1', v: t.work }, { l: 'Breaks', color: '#f59e0b', v: t.brk }, { l: 'Meetings', color: '#0ea5e9', v: t.meet }, { l: 'Calls', color: '#8b5cf6', v: t.call }, { l: 'Payment', color: '#d946ef', v: t.focus }].filter(function (d) { return d.v > 0; });
+      var dd = [
+        { l: 'Active Work', color: '#6366f1', v: t.work },
+        { l: 'Breaks', color: '#f59e0b', v: t.brk },
+        { l: 'Meetings', color: '#0ea5e9', v: t.meet },
+        { l: 'Calls', color: '#8b5cf6', v: t.call },
+        { l: 'Payment', color: '#d946ef', v: t.focus }
+      ].filter(function (d) { return d.v > 0; });
       if (dd.length) {
         var dw = dv('donut-wrap'); dw.appendChild(Donut(dd)); dc.appendChild(dw);
         var dtot = dd.reduce(function (a, d) { return a + d.v; }, 0) || 1;
         dd.forEach(function (d) { var row = dv('pie-row'), dot2 = sp('pie-dot'); dot2.style.background = d.color; var nm = sp('pie-name'); nm.textContent = d.l; var pv = sp('pie-val'); pv.textContent = Math.round(d.v / dtot * 100) + '%'; app(row, dot2, nm, pv); dc.appendChild(row); });
+        var whNote = dv(); whNote.style.cssText = 'margin-top:10px;padding:8px 10px;background:var(--bg-card2);border-radius:var(--r1);font-size:11.5px;color:var(--text-2);border:1px solid var(--border);';
+        whNote.innerHTML = '⏱ <strong style="color:var(--text-1);">Work Hours: ' + fmt(t.workHours) + '</strong> (excl. breaks)';
+        dc.appendChild(whNote);
       } else { var de = dv(); de.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:24px 0;'; de.textContent = 'Log time to see breakdown'; dc.appendChild(de); }
       app(right, taskCard, salesCard, dc);
       app(mainArea, left, right);
@@ -3237,15 +3412,38 @@ insert into holidays (holiday_date, name, type) values
       return wrap;
     }
 
-    // Analytics, History, Team, Settings — unchanged from original
+    // ═══════════════════════════════════════════════════════════
+    // ── ANALYTICS ───────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════
     function Analytics() {
-      var wrap = dv('fade-up'), t = totals(APP.timeline), pp = t.total > 0 ? Math.round(t.work / t.total * 100) : 0;
+      var wrap = dv('fade-up'), t = totals(APP.timeline);
+      var pp = t.total > 0 ? Math.round(t.workHours / t.total * 100) : 0;
       var sr = dv('grid4');
-      [StatCard('Today Total', fmt(t.total), 'All logged time'), StatCard('Active Work', fmt(t.work), 'Productive time'), StatCard('Productivity', pp + '%', 'Active vs total'), StatCard('Sessions', String(APP.timeline.length), 'Check-ins today')].forEach(function (c) { sr.appendChild(c); });
+      [StatCard('Today Total', fmt(t.total), 'All logged time'),
+      StatCard('Work Hours', fmt(t.workHours), 'Excl. breaks'),
+      StatCard('Productivity', pp + '%', 'Work vs total'),
+      StatCard('Sessions', String(APP.timeline.length), 'Check-ins today')
+      ].forEach(function (c) { sr.appendChild(c); });
       var bc = dv('card'); bc.style.marginBottom = '18px'; var bttl = dv('sec-title'); bttl.style.marginBottom = '16px'; bttl.textContent = "Today's Breakdown"; bc.appendChild(bttl);
-      var rows2 = [{ l: 'Active Work', v: t.work, c: '#6366f1' }, { l: 'Breaks', v: t.brk, c: '#f59e0b' }, { l: 'Meetings', v: t.meet, c: '#0ea5e9' }, { l: 'Calls', v: t.call, c: '#8b5cf6' }, { l: 'Payment', v: t.focus, c: '#d946ef' }];
+      var rows2 = [
+        { l: 'Active Work', v: t.work, c: '#6366f1' },
+        { l: 'Breaks', v: t.brk, c: '#f59e0b' },
+        { l: 'Meetings', v: t.meet, c: '#0ea5e9' },
+        { l: 'Calls', v: t.call, c: '#8b5cf6' },
+        { l: 'Payment', v: t.focus, c: '#d946ef' }
+      ];
       var mx = Math.max.apply(null, rows2.map(function (r) { return r.v; }).concat([1]));
-      rows2.forEach(function (r) { var row = dv(); row.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:10px;'; var lbl3 = sp(); lbl3.style.cssText = 'width:90px;color:var(--text-2);flex-shrink:0;'; lbl3.textContent = r.l; var pb = dv('prog'); pb.style.flex = '1'; var pf = dv('prog-fill'); pf.style.width = (r.v / mx * 100) + '%'; pf.style.background = r.c; pb.appendChild(pf); var vs = sp(); vs.style.cssText = 'font-family:var(--mono);color:var(--text-2);width:50px;text-align:right;flex-shrink:0;'; vs.textContent = fmt(r.v); app(row, lbl3, pb, vs); bc.appendChild(row); });
+      rows2.forEach(function (r) {
+        var row = dv(); row.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:10px;';
+        var lbl3 = sp(); lbl3.style.cssText = 'width:90px;color:var(--text-2);flex-shrink:0;'; lbl3.textContent = r.l;
+        var pb = dv('prog'); pb.style.flex = '1'; var pf = dv('prog-fill'); pf.style.width = (r.v / mx * 100) + '%'; pf.style.background = r.c; pb.appendChild(pf);
+        var vs = sp(); vs.style.cssText = 'font-family:var(--mono);color:var(--text-2);width:50px;text-align:right;flex-shrink:0;'; vs.textContent = fmt(r.v);
+        app(row, lbl3, pb, vs); bc.appendChild(row);
+      });
+      var whRow = dv(); whRow.style.cssText = 'margin-top:6px;padding:9px 12px;background:var(--indigo-lo);border-radius:var(--r1);font-size:12.5px;display:flex;justify-content:space-between;';
+      var whL = sp(); whL.style.cssText = 'color:var(--indigo-hi);font-weight:600;'; whL.textContent = '⏱ Total Work Hours (excl. breaks)';
+      var whV = sp(); whV.style.cssText = 'font-family:var(--mono);color:var(--indigo-hi);font-weight:600;'; whV.textContent = fmt(t.workHours);
+      app(whRow, whL, whV); bc.appendChild(whRow);
       var hc = dv('card'), hHdr = dv('sec-hdr'), hTtl = dv('sec-title'); hTtl.textContent = 'Last 30 Days';
       var hSub = sp(); hSub.style.cssText = 'font-size:11px;color:var(--text-2);'; hSub.textContent = 'Loading…';
       app(hHdr, hTtl, hSub); hc.appendChild(hHdr);
@@ -3255,23 +3453,47 @@ insert into holidays (holiday_date, name, type) values
         var fromStr = from.getFullYear() + '-' + String(from.getMonth() + 1).padStart(2, '0') + '-' + String(from.getDate()).padStart(2, '0');
         var s30 = await loadRange(APP.profile.id, fromStr, todayStr());
         var byDate = {};
-        s30.forEach(function (s) { if (!byDate[s.work_date]) byDate[s.work_date] = { work: 0, brk: 0, sessions: 0 }; var d = s.duration_minutes || 0; if (s.type === 'checked-in') byDate[s.work_date].work += d; if (s.type === 'break') byDate[s.work_date].brk += d; byDate[s.work_date].sessions++; });
+        s30.forEach(function (s) {
+          if (!byDate[s.work_date]) byDate[s.work_date] = { work: 0, brk: 0, meet: 0, call: 0, focus: 0, sessions: 0 };
+          var d = s.duration_minutes || 0;
+          if (s.type === 'checked-in') byDate[s.work_date].work += d;
+          if (s.type === 'break') byDate[s.work_date].brk += d;
+          if (s.type === 'meeting') byDate[s.work_date].meet += d;
+          if (s.type === 'call') byDate[s.work_date].call += d;
+          if (s.type === 'focus') byDate[s.work_date].focus += d;
+          byDate[s.work_date].sessions++;
+        });
         var dates = Object.keys(byDate).sort(); hSub.textContent = dates.length + ' days with activity';
         if (!dates.length) { var em2 = dv(); em2.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:20px 0;'; em2.textContent = 'No data yet.'; hBody.appendChild(em2); return; }
-        var tw = 0; dates.forEach(function (d) { tw += byDate[d].work; }); var avg = dates.length ? Math.round(tw / dates.length) : 0;
+        var tw = 0; dates.forEach(function (d) { tw += byDate[d].work + byDate[d].meet + byDate[d].call + byDate[d].focus; });
+        var avg = dates.length ? Math.round(tw / dates.length) : 0;
         var sRow2 = dv(); sRow2.style.cssText = 'display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;';
-        [{ l: 'Days Tracked', v: String(dates.length) }, { l: 'Total Work', v: fmt(tw) }, { l: 'Daily Avg', v: fmt(avg) }].forEach(function (s) { var cc = dv(); cc.style.cssText = 'background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r1);padding:10px 14px;flex:1;min-width:80px;'; app(cc, app(dv(), s.l), app(dv(), s.v)); sRow2.appendChild(cc); });
+        [{ l: 'Days Tracked', v: String(dates.length) }, { l: 'Total Work Hrs', v: fmt(tw) }, { l: 'Daily Avg', v: fmt(avg) }].forEach(function (s) {
+          var cc = dv(); cc.style.cssText = 'background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r1);padding:10px 14px;flex:1;min-width:80px;';
+          app(cc, app(dv(), s.l), app(dv(), s.v)); sRow2.appendChild(cc);
+        });
         hBody.appendChild(sRow2);
         var recent = dates.slice(-14).reverse();
         var tbl = mk('table', 'tbl'), thead = mk('thead'), htr2 = mk('tr');
-        ['Date', 'Work', 'Breaks', 'Sessions'].forEach(function (h) { var th = mk('th'); th.textContent = h; htr2.appendChild(th); });
+        ['Date', 'Work Hrs', 'Breaks', 'Sessions'].forEach(function (h) { var th = mk('th'); th.textContent = h; htr2.appendChild(th); });
         thead.appendChild(htr2); var tbody = mk('tbody');
-        recent.forEach(function (d) { var row2 = byDate[d], iT = d === todayStr(), tr = mk('tr'); var dL = new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' }); var tdD = mk('td'); tdD.style.fontWeight = iT ? '600' : '400'; if (iT) { var tag2 = sp('tag'); tag2.textContent = 'today'; tag2.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);margin-right:6px;'; tdD.appendChild(tag2); } tdD.appendChild(txt(dL)); var tdW = mk('td'); tdW.style.cssText = 'font-family:var(--mono);font-size:12px;'; tdW.textContent = fmt(row2.work); var tdB = mk('td'); tdB.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdB.textContent = fmt(row2.brk); var tdS = mk('td'); tdS.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdS.textContent = String(row2.sessions); app(tr, tdD, tdW, tdB, tdS); tbody.appendChild(tr); });
+        recent.forEach(function (d) {
+          var row2 = byDate[d], iT = d === todayStr(), tr = mk('tr');
+          var dL = new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+          var tdD = mk('td'); tdD.style.fontWeight = iT ? '600' : '400'; if (iT) { var tag2 = sp('tag'); tag2.textContent = 'today'; tag2.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);margin-right:6px;'; tdD.appendChild(tag2); } tdD.appendChild(txt(dL));
+          var tdW = mk('td'); tdW.style.cssText = 'font-family:var(--mono);font-size:12px;'; tdW.textContent = fmt(row2.work + row2.meet + row2.call + row2.focus);
+          var tdB = mk('td'); tdB.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdB.textContent = fmt(row2.brk);
+          var tdS = mk('td'); tdS.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; tdS.textContent = String(row2.sessions);
+          app(tr, tdD, tdW, tdB, tdS); tbody.appendChild(tr);
+        });
         tbl.appendChild(thead); tbl.appendChild(tbody); hBody.appendChild(tbl);
       })();
       app(wrap, sr, bc, hc); return wrap;
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // ── HISTORY ─────────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════
     function History() {
       if (!APP.historyDate) APP.historyDate = todayStr();
       var wrap = dv('fade-up'), header = dv('card'); header.style.marginBottom = '16px';
@@ -3289,7 +3511,11 @@ insert into holidays (holiday_date, name, type) values
         var loading2 = dv(); loading2.style.cssText = 'display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:13px;padding:20px;'; loading2.appendChild(dv('spinner')); loading2.appendChild(txt(' Loading…')); results.appendChild(loading2);
         var sessions2 = await loadDate(APP.historyDate, APP.profile.id); results.innerHTML = '';
         var t2 = totals(sessions2), sr2 = dv('grid4'); sr2.style.marginBottom = '16px';
-        [StatCard('Work', fmt(t2.work), ''), StatCard('Break', fmt(t2.brk), ''), StatCard('Meetings', fmt(t2.meet), ''), StatCard('Total', fmt(t2.total), '')].forEach(function (c) { sr2.appendChild(c); }); results.appendChild(sr2);
+        [StatCard('Work Hrs', fmt(t2.workHours), '(excl. breaks)'),
+        StatCard('Break', fmt(t2.brk), ''),
+        StatCard('Meetings', fmt(t2.meet), ''),
+        StatCard('Total', fmt(t2.total), '')
+        ].forEach(function (c) { sr2.appendChild(c); }); results.appendChild(sr2);
         var sc2 = dv('card'), sHdr2 = dv('sec-hdr'), sTtl2 = dv('sec-title'); sTtl2.textContent = 'Sessions';
         var sCnt2 = sp(); sCnt2.style.cssText = 'font-size:11px;color:var(--text-2);font-family:var(--mono);'; sCnt2.textContent = sessions2.length + ' entries';
         app(sHdr2, sTtl2, sCnt2); sc2.appendChild(sHdr2);
@@ -3297,7 +3523,15 @@ insert into holidays (holiday_date, name, type) values
         else {
           var tbl2 = mk('table', 'tbl'), thead2 = mk('thead'), htr3 = mk('tr');
           ['#', 'Status', 'Start', 'End', 'Duration'].forEach(function (h) { var th = mk('th'); th.textContent = h; htr3.appendChild(th); }); thead2.appendChild(htr3); var tbody2 = mk('tbody');
-          sessions2.forEach(function (s, i) { var c3 = SC[s.type] || SC['checked-in'], tr2 = mk('tr'); var td1 = mk('td'); td1.style.cssText = 'font-family:var(--mono);font-size:11px;color:var(--text-3);'; td1.textContent = String(i + 1); var td2 = mk('td'), bdg = sp('tag'); bdg.textContent = c3.label; bdg.style.cssText = 'background:' + c3.bg + ';color:' + c3.color + ';'; td2.appendChild(bdg); var td3 = mk('td'); td3.style.cssText = 'font-family:var(--mono);font-size:12px;'; td3.textContent = fmtT(s.started_at); var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td4.textContent = s.ended_at ? fmtT(s.ended_at) : 'ongoing'; var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;'; td5.textContent = s.duration_minutes != null ? fmt(s.duration_minutes) : '—'; app(tr2, td1, td2, td3, td4, td5); tbody2.appendChild(tr2); });
+          sessions2.forEach(function (s, i) {
+            var c3 = SC[s.type] || SC['checked-in'], tr2 = mk('tr');
+            var td1 = mk('td'); td1.style.cssText = 'font-family:var(--mono);font-size:11px;color:var(--text-3);'; td1.textContent = String(i + 1);
+            var td2 = mk('td'), bdg = sp('tag'); bdg.textContent = c3.label; bdg.style.cssText = 'background:' + c3.bg + ';color:' + c3.color + ';'; td2.appendChild(bdg);
+            var td3 = mk('td'); td3.style.cssText = 'font-family:var(--mono);font-size:12px;'; td3.textContent = fmtT(s.started_at);
+            var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td4.textContent = s.ended_at ? fmtT(s.ended_at) : 'ongoing';
+            var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;'; td5.textContent = s.duration_minutes != null ? fmt(s.duration_minutes) : '—';
+            app(tr2, td1, td2, td3, td4, td5); tbody2.appendChild(tr2);
+          });
           tbl2.appendChild(thead2); tbl2.appendChild(tbody2); sc2.appendChild(tbl2);
         }
         results.appendChild(sc2);
@@ -3305,6 +3539,9 @@ insert into holidays (holiday_date, name, type) values
       return wrap;
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // ── TEAM ────────────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════
     function Team() {
       var wrap = dv('fade-up');
       if (!APP.profile || APP.profile.role !== 'Admin') { var c = dv('card'); c.style.cssText = 'text-align:center;padding:40px;color:var(--text-2);'; c.textContent = '🔒 Admin access required.'; wrap.appendChild(c); return wrap; }
@@ -3314,13 +3551,22 @@ insert into holidays (holiday_date, name, type) values
         var ac = team.filter(function (m) { return ['checked-in', 'focus', 'call'].includes(m.status); }).length;
         var sc3 = team.filter(function (m) { return ['break', 'meeting'].includes(m.status); }).length;
         var aw = team.filter(function (m) { return m.status === 'checked-out'; }).length;
-        var sr3 = dv('grid4');[StatCard('Team', String(team.length), 'Users'), StatCard('Working', String(ac), 'Checked in'), StatCard('In Session', String(sc3), 'Break/meeting'), StatCard('Away', String(aw), 'Checked out')].forEach(function (c2) { sr3.appendChild(c2); });
+        var sr3 = dv('grid4');
+        [StatCard('Team', String(team.length), 'Users'), StatCard('Working', String(ac), 'Checked in'), StatCard('In Session', String(sc3), 'Break/meeting'), StatCard('Away', String(aw), 'Checked out')].forEach(function (c2) { sr3.appendChild(c2); });
         var tc2 = dv('card'), tHdr2 = dv('sec-hdr'), tTtl2 = dv('sec-title'); tTtl2.textContent = 'Live Team Status';
         var tSub2 = sp(); tSub2.style.cssText = 'font-size:11px;color:var(--text-2);'; tSub2.textContent = 'Real-time';
         app(tHdr2, tTtl2, tSub2); tc2.appendChild(tHdr2);
         var tbl3 = mk('table', 'tbl'), thead3 = mk('thead'), htr4 = mk('tr');
         ['Member', 'Role', 'Status', "Today's Work", 'Sessions'].forEach(function (h) { var th = mk('th'); th.textContent = h; htr4.appendChild(th); }); thead3.appendChild(htr4); var tbody3 = mk('tbody');
-        team.forEach(function (m) { var tr3 = mk('tr'); var td1 = mk('td'), nr = dv(); nr.style.cssText = 'display:flex;align-items:center;gap:9px;'; app(nr, Av(m.avatar, 'sm'), app(sp(), m.name)); td1.appendChild(nr); var td2 = mk('td'), rt = sp('tag'); rt.textContent = m.role; rt.style.cssText = m.role === 'Admin' ? 'background:var(--indigo-lo);color:var(--indigo-hi);' : 'background:rgba(16,185,129,.1);color:#34d399;'; td2.appendChild(rt); var td3 = mk('td'); td3.appendChild(SBadge(m.status)); var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;'; td4.textContent = fmt(m.workMin); var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td5.textContent = String(m.sessions); app(tr3, td1, td2, td3, td4, td5); tbody3.appendChild(tr3); });
+        team.forEach(function (m) {
+          var tr3 = mk('tr');
+          var td1 = mk('td'), nr = dv(); nr.style.cssText = 'display:flex;align-items:center;gap:9px;'; app(nr, Av(m.avatar, 'sm'), app(sp(), m.name)); td1.appendChild(nr);
+          var td2 = mk('td'), rt = sp('tag'); rt.textContent = m.role; rt.style.cssText = m.role === 'Admin' ? 'background:var(--indigo-lo);color:var(--indigo-hi);' : 'background:rgba(16,185,129,.1);color:#34d399;'; td2.appendChild(rt);
+          var td3 = mk('td'); td3.appendChild(SBadge(m.status));
+          var td4 = mk('td'); td4.style.cssText = 'font-family:var(--mono);font-size:12px;'; td4.textContent = fmt(m.workMin);
+          var td5 = mk('td'); td5.style.cssText = 'font-family:var(--mono);font-size:12px;color:var(--text-2);'; td5.textContent = String(m.sessions);
+          app(tr3, td1, td2, td3, td4, td5); tbody3.appendChild(tr3);
+        });
         tbl3.appendChild(thead3); tbl3.appendChild(tbody3); tc2.appendChild(tbl3);
         var rb = btn('btn-outline btn-sm', '↺ Refresh', function () { wrap.innerHTML = ''; wrap.appendChild(loading3.cloneNode(true)); Team(); }); rb.style.marginTop = '14px'; tc2.appendChild(rb);
         app(wrap, sr3, tc2);
@@ -3328,12 +3574,19 @@ insert into holidays (holiday_date, name, type) values
       return wrap;
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // ── SETTINGS — Work Mode tab now saves to Supabase ──────────
+    // ═══════════════════════════════════════════════════════════
     function Settings() {
       var u = APP.profile, wrap = dv('fade-up'); wrap.style.maxWidth = '680px';
-      var TABS = ['Profile', 'Appearance', 'Holidays', 'Database & Info'];
+      var TABS = ['Profile', 'Work Mode', 'Appearance', 'Holidays', 'Database & Info'];
       var tabRow = dv('stabs');
-      TABS.forEach(function (t, i) { var b = mk('button', 'stab' + (APP.settingsTab === i ? ' active' : '')); b.textContent = t; b.addEventListener('click', function () { APP.settingsTab = i; render(); }); tabRow.appendChild(b); });
+      TABS.forEach(function (t, i) {
+        var b = mk('button', 'stab' + (APP.settingsTab === i ? ' active' : ''));
+        b.textContent = t; b.addEventListener('click', function () { APP.settingsTab = i; render(); }); tabRow.appendChild(b);
+      });
       wrap.appendChild(tabRow);
+
       if (APP.settingsTab === 0) {
         var pc = dv('card'); pc.style.marginBottom = '16px'; var pttl = dv('sec-title'); pttl.style.marginBottom = '16px'; pttl.textContent = 'Profile'; pc.appendChild(pttl);
         var pRow2 = dv(); pRow2.style.cssText = 'display:flex;align-items:center;gap:14px;margin-bottom:18px;'; pRow2.appendChild(Av(u && u.avatar_initials, 'md'));
@@ -3345,16 +3598,149 @@ insert into holidays (holiday_date, name, type) values
         var iN2 = inp('input', 'text', '', (u && u.full_name) || ''); app(fN2, lN2, iN2);
         var saved2 = sp('saved-pill'); saved2.textContent = '✓ Saved'; saved2.style.marginLeft = '8px';
         var sbRow2 = dv(); sbRow2.style.cssText = 'display:flex;align-items:center;';
-        var saveBtn2 = btn('btn-primary btn-sm', 'Save Changes', async function () { var nn = iN2.value.trim(); if (!nn || !sb) return; var init = nn.split(' ').map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2); await sb.from('profiles').update({ full_name: nn, avatar_initials: init }).eq('id', APP.profile.id); APP.profile.full_name = nn; APP.profile.avatar_initials = init; saved2.classList.add('show'); setTimeout(function () { saved2.classList.remove('show'); }, 2500); });
+        var saveBtn2 = btn('btn-primary btn-sm', 'Save Changes', async function () {
+          var nn = iN2.value.trim(); if (!nn || !sb) return;
+          var init = nn.split(' ').map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+          await sb.from('profiles').update({ full_name: nn, avatar_initials: init }).eq('id', APP.profile.id);
+          APP.profile.full_name = nn; APP.profile.avatar_initials = init;
+          saved2.classList.add('show'); setTimeout(function () { saved2.classList.remove('show'); }, 2500);
+        });
         app(sbRow2, saveBtn2, saved2); app(pc, fN2, sbRow2);
-        var rc2 = dv('card'); rc2.style.marginBottom = '16px'; var rttl2 = dv('sec-title'); rttl2.style.marginBottom = '8px'; rttl2.textContent = 'Session Management'; var rsub2 = dv(); rsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:14px;'; rsub2.textContent = 'Force end your open session if something went wrong.';
+        var rc2 = dv('card'); rc2.style.marginBottom = '16px'; var rttl2 = dv('sec-title'); rttl2.style.marginBottom = '8px'; rttl2.textContent = 'Session Management';
+        var rsub2 = dv(); rsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:14px;'; rsub2.textContent = 'Force end your open session if something went wrong.';
         var rBtn2 = btn('btn-danger btn-sm', 'Force Check Out', async function () { if (!confirm('End current session and check out?')) return; await changeStatus('checked-out'); });
         app(rc2, rttl2, rsub2, rBtn2); app(wrap, pc, rc2);
+
       } else if (APP.settingsTab === 1) {
+        // ── WORK MODE — saves to Supabase, syncs across devices ──
+        var wmCard = dv('card'); wmCard.style.marginBottom = '16px';
+        var wmHdr = dv('sec-hdr'), wmTtl = dv('sec-title'); wmTtl.textContent = '⚙️ Work Mode';
+
+        // Sync indicator
+        var syncIndicator = dv(); syncIndicator.id = 'wm-sync-indicator';
+        syncIndicator.style.cssText = 'font-size:11.5px;color:var(--indigo-hi);margin-left:8px;display:inline-flex;align-items:center;gap:5px;';
+        syncIndicator.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;box-shadow:0 0 6px rgba(52,211,153,.6);"></span> Synced to Supabase';
+
+        app(wmHdr, wmTtl, syncIndicator);
+        var wmSub = dv(); wmSub.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:16px;line-height:1.6;';
+        wmSub.textContent = 'Work mode settings are stored in your Supabase profile — they sync across all your devices instantly.';
+        wmCard.appendChild(app(wmHdr));
+        wmCard.appendChild(wmSub);
+
+        // ── Work Off toggle ──────────────────────────────────────
+        var woRow = dv('toggle-row');
+        var woInfo = dv('toggle-info');
+        var woLabel = dv('toggle-label'); woLabel.textContent = '🚫 Work Off';
+        var woDesc = dv('toggle-desc'); woDesc.textContent = 'Mark yourself as off today. Check-in will be blocked and a reminder banner will show. Changes are saved to the database and sync across devices.';
+        app(woInfo, woLabel, woDesc);
+
+        var woSwitch = dv('toggle-switch' + (APP.workModeSaving ? ' saving' : ''));
+        var woInput = mk('input'); woInput.type = 'checkbox'; woInput.checked = APP.workOff;
+        var woSlider = dv('toggle-slider');
+
+        woInput.addEventListener('change', async function () {
+          var newVal = woInput.checked;
+          // Optimistic update
+          APP.workOff = newVal;
+          if (newVal) {
+            APP.halfDay = false; // mutually exclusive
+          }
+          APP.workOffBannerDismissed = false;
+          renderWorkModeBanners();
+          render(); // re-render so toggle state is immediately visible
+
+          // Save to Supabase
+          var ind = document.getElementById('wm-sync-indicator');
+          if (ind) ind.innerHTML = '<div class="spinner" style="width:12px;height:12px;margin-right:4px;"></div> Saving…';
+
+          await dbSaveWorkMode();
+
+          showToast(newVal ? '🚫 Work Off enabled — synced to database' : '✓ Work Off disabled — synced to database', newVal ? '#ef4444' : '#10b981');
+          render(); // re-render to show updated sync indicator
+        });
+
+        app(woSwitch, woInput, woSlider);
+        app(woRow, woInfo, woSwitch);
+        wmCard.appendChild(woRow);
+
+        // ── Half Day toggle ──────────────────────────────────────
+        var hdRow = dv('toggle-row');
+        var hdInfo = dv('toggle-info');
+        var hdLabel = dv('toggle-label'); hdLabel.textContent = '🌗 Half Day';
+        var hdDesc = dv('toggle-desc'); hdDesc.textContent = 'Enable when working a half day (4 hours). A reminder banner will appear when you reach 4 hours of work. Changes sync across devices.';
+        app(hdInfo, hdLabel, hdDesc);
+
+        var hdSwitch = dv('toggle-switch' + (APP.workModeSaving ? ' saving' : ''));
+        var hdInput = mk('input'); hdInput.type = 'checkbox'; hdInput.checked = APP.halfDay;
+        if (APP.workOff) {
+          hdInput.disabled = true;
+          hdSwitch.style.opacity = '0.4';
+          hdSwitch.title = 'Disabled when Work Off is on';
+        }
+        var hdSlider = dv('toggle-slider');
+
+        hdInput.addEventListener('change', async function () {
+          var newVal = hdInput.checked;
+          APP.halfDay = newVal;
+          APP.halfDayReminderDismissed = false;
+          renderWorkModeBanners();
+          render();
+
+          var ind = document.getElementById('wm-sync-indicator');
+          if (ind) ind.innerHTML = '<div class="spinner" style="width:12px;height:12px;margin-right:4px;"></div> Saving…';
+
+          await dbSaveWorkMode();
+
+          showToast(newVal ? '🌗 Half Day on — synced to database' : 'Half Day off — synced to database', newVal ? '#f59e0b' : '#6366f1');
+          render();
+        });
+
+        app(hdSwitch, hdInput, hdSlider);
+        app(hdRow, hdInfo, hdSwitch);
+        wmCard.appendChild(hdRow);
+
+        // ── Today's Work Summary ─────────────────────────────────
+        var t = totals(APP.timeline);
+        var statusCard = dv('card'); statusCard.style.marginBottom = '16px';
+        var stTtl = dv('sec-title'); stTtl.style.marginBottom = '12px'; stTtl.textContent = "Today's Work Summary";
+        statusCard.appendChild(stTtl);
+        var statGrid = dv('grid3');
+        [StatCard('Work Hours', fmt(t.workHours), 'Excl. breaks', '#6366f1'),
+        StatCard('Break Time', fmt(t.brk), 'Rest taken'),
+        StatCard('Total Time', fmt(t.total), 'All sessions'),
+        ].forEach(function (c) { statGrid.appendChild(c); });
+        statusCard.appendChild(statGrid);
+
+        if (APP.halfDay) {
+          var prog2 = Math.min(100, Math.round(t.workHours / 240 * 100));
+          var progCard = dv(); progCard.style.cssText = 'margin-top:12px;padding:12px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:var(--r1);';
+          var progLbl = dv(); progLbl.style.cssText = 'display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:8px;';
+          var pLText = sp(); pLText.style.color = '#fbbf24'; pLText.textContent = '🌗 Half Day Progress';
+          var pLVal = sp(); pLVal.style.cssText = 'font-family:var(--mono);color:var(--text-2);'; pLVal.textContent = fmt(t.workHours) + ' / 4h (' + prog2 + '%)';
+          app(progLbl, pLText, pLVal);
+          var progBar = dv(); progBar.style.cssText = 'height:6px;background:var(--border);border-radius:100px;overflow:hidden;';
+          var progFill = dv(); progFill.style.cssText = 'height:100%;width:' + prog2 + '%;background:#f59e0b;border-radius:100px;transition:width .5s;';
+          progBar.appendChild(progFill);
+          app(progCard, progLbl, progBar);
+          if (prog2 >= 100) {
+            var doneNote = dv(); doneNote.style.cssText = 'margin-top:8px;font-size:12px;color:#fbbf24;font-weight:600;'; doneNote.textContent = '✓ Half day target reached! Consider checking out.';
+            progCard.appendChild(doneNote);
+          }
+          statusCard.appendChild(progCard);
+        }
+
+        // DB migration note
+        var migCard = dv(); migCard.style.cssText = 'background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.18);border-radius:var(--r1);padding:12px 14px;margin-top:4px;font-size:12px;color:var(--text-2);line-height:1.6;';
+        migCard.innerHTML = '<strong style="color:var(--indigo-hi);">Existing install?</strong> If toggles aren\'t saving, run this in Supabase SQL Editor:<br><code style="font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px;">ALTER TABLE profiles ADD COLUMN IF NOT EXISTS work_off boolean DEFAULT false, ADD COLUMN IF NOT EXISTS half_day boolean DEFAULT false;</code>';
+
+        app(wrap, wmCard, statusCard, migCard);
+
+      } else if (APP.settingsTab === 2) {
         var tc3 = dv('card'); tc3.style.marginBottom = '16px'; var tttl2 = dv('sec-title'); tttl2.style.marginBottom = '14px'; tttl2.textContent = 'Theme'; tc3.appendChild(tttl2);
         var tRow2 = dv(); tRow2.style.cssText = 'display:flex;gap:9px;';
         ['dark', 'light'].forEach(function (t2) { var b = btn('btn-sm ' + (APP.theme === t2 ? 'btn-primary' : 'btn-outline'), t2 === 'dark' ? '🌙 Dark' : '☀️ Light', function () { document.body.setAttribute('data-theme', t2); localStorage.setItem('nf_theme', t2); APP.theme = t2; render(); }); tRow2.appendChild(b); }); tc3.appendChild(tRow2); app(wrap, tc3);
-      } else if (APP.settingsTab === 2) {
+
+      } else if (APP.settingsTab === 3) {
         var hWrap = dv(); app(wrap, hWrap);
         var hc2 = dv('card'); hc2.style.marginBottom = '16px'; var hhdr = dv('sec-hdr'); var httl = dv('sec-title'); httl.textContent = 'Holidays & Leaves'; var htag = sp('tag'); htag.textContent = '● Live'; htag.style.cssText = 'background:rgba(16,185,129,.12);color:#34d399;'; app(hhdr, httl, htag); hc2.appendChild(hhdr);
         var hsub = dv(); hsub.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:0;line-height:1.6;'; hsub.textContent = 'All public & optional holidays fetched from your database.'; hc2.appendChild(hsub); hWrap.appendChild(hc2);
@@ -3377,23 +3763,54 @@ insert into holidays (holiday_date, name, type) values
             var hMeta = dv(); hMeta.style.cssText = 'font-size:11px;color:var(--text-2);margin-top:3px;'; hMeta.textContent = dt.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); app(info, hName, hMeta);
             var tc = typeColors[h.type] || { bg: 'rgba(99,102,241,.1)', color: 'var(--indigo-hi)', label: h.type || 'Holiday' };
             var typTag = sp('tag'); typTag.textContent = tc.label; typTag.style.cssText = 'background:' + tc.bg + ';color:' + tc.color + ';flex-shrink:0;';
-            var isToday = h.holiday_date === today; if (isToday) { var todayTag = sp('tag'); todayTag.textContent = '★ Today'; todayTag.style.cssText = 'background:rgba(245,158,11,.15);color:#fbbf24;flex-shrink:0;'; }
+            var isToday = h.holiday_date === today;
+            if (isToday) { var todayTag = sp('tag'); todayTag.textContent = '★ Today'; todayTag.style.cssText = 'background:rgba(245,158,11,.15);color:#fbbf24;flex-shrink:0;'; }
             app(row, dateBlock, info, typTag); if (isToday) row.appendChild(todayTag); return row;
           }
           if (upcoming.length) { var upHdr = dv(); upHdr.style.cssText = 'font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-2);padding:8px 0 4px;'; upHdr.textContent = 'Upcoming (' + upcoming.length + ')'; hlBody.appendChild(upHdr); upcoming.slice(0, 10).forEach(function (h) { hlBody.appendChild(renderHolidayRow(h)); }); }
           if (past.length) { var pastHdr = dv(); pastHdr.style.cssText = 'font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-3);padding:12px 0 4px;'; pastHdr.textContent = 'Past (' + past.length + ')'; hlBody.appendChild(pastHdr); past.slice(-5).reverse().forEach(function (h) { var row = renderHolidayRow(h); row.style.opacity = '0.55'; hlBody.appendChild(row); }); }
         })();
-        if (APP.profile && APP.profile.role === 'Admin') { var sqlCard = dv('card'); sqlCard.style.marginBottom = '16px'; var sqlHdr = dv('sec-hdr'); var sqlTtl = dv('sec-title'); sqlTtl.textContent = 'Add / Remove Holidays'; var sqlAtag = sp('tag'); sqlAtag.textContent = 'Admin'; sqlAtag.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);'; app(sqlHdr, sqlTtl, sqlAtag); sqlCard.appendChild(sqlHdr); var holSQL = '-- Add holiday\ninsert into holidays (holiday_date, name, type) values\n  (\'2026-08-15\', \'Independence Day\', \'public\');\n\n-- Remove holiday\ndelete from holidays where holiday_date = \'2026-01-01\';\n\n-- View all\nselect * from holidays order by holiday_date;'; var sqlEl2 = dv('sql-block'); sqlEl2.textContent = holSQL; sqlCard.appendChild(sqlEl2); var cp2 = btn('btn-outline btn-sm', '📋 Copy SQL', function () { navigator.clipboard.writeText(holSQL).catch(function () { }); cp2.textContent = '✓ Copied!'; setTimeout(function () { cp2.textContent = '📋 Copy SQL'; }, 2000); }); cp2.style.marginTop = '8px'; sqlCard.appendChild(cp2); hWrap.appendChild(sqlCard); }
-      } else if (APP.settingsTab === 3) {
-        var dc2 = dv('card'); dc2.style.marginBottom = '16px'; var dttl2 = dv('sec-title'); dttl2.style.marginBottom = '8px'; dttl2.textContent = 'Database Setup'; var dsub2 = dv(); dsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:12px;'; dsub2.textContent = 'Run the SQL setup for cross-device sync.'; var dBtn2 = btn('btn-outline btn-sm', '⚙ View Full Setup Guide', function () { APP.showSetup = true; render(); }); app(dc2, dttl2, dsub2, dBtn2);
-        var syncNote = dv('card'); syncNote.style.marginBottom = '16px'; var snTitle = dv('sec-title'); snTitle.style.marginBottom = '8px'; snTitle.textContent = '🔄 Cross-Device Sync'; var snText = dv(); snText.style.cssText = 'font-size:12.5px;color:var(--text-2);line-height:1.6;'; snText.textContent = 'Tasks, calls, and sales are stored in Supabase. Any device you log into shows the same data.'; app(syncNote, snTitle, snText);
-        var lsCard = dv('card'); lsCard.style.marginBottom = '16px'; var lsTitle = dv('sec-title'); lsTitle.style.marginBottom = '8px'; lsTitle.textContent = '📦 Local Storage Cache'; var lsText = dv(); lsText.style.cssText = 'font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:12px;'; lsText.textContent = 'Daily snapshots of tasks and calls are also saved in your browser localStorage for offline browsing.';
+        if (APP.profile && APP.profile.role === 'Admin') {
+          var sqlCard = dv('card'); sqlCard.style.marginBottom = '16px'; var sqlHdr = dv('sec-hdr'); var sqlTtl = dv('sec-title'); sqlTtl.textContent = 'Add / Remove Holidays'; var sqlAtag = sp('tag'); sqlAtag.textContent = 'Admin'; sqlAtag.style.cssText = 'background:var(--indigo-lo);color:var(--indigo-hi);'; app(sqlHdr, sqlTtl, sqlAtag); sqlCard.appendChild(sqlHdr);
+          var holSQL = "-- Add holiday\ninsert into holidays (holiday_date, name, type) values\n  ('2026-08-15', 'Independence Day', 'public');\n\n-- Remove holiday\ndelete from holidays where holiday_date = '2026-01-01';\n\n-- View all\nselect * from holidays order by holiday_date;";
+          var sqlEl2 = dv('sql-block'); sqlEl2.textContent = holSQL; sqlCard.appendChild(sqlEl2);
+          var cp2 = btn('btn-outline btn-sm', '📋 Copy SQL', function () { navigator.clipboard.writeText(holSQL).catch(function () { }); cp2.textContent = '✓ Copied!'; setTimeout(function () { cp2.textContent = '📋 Copy SQL'; }, 2000); }); cp2.style.marginTop = '8px'; sqlCard.appendChild(cp2); hWrap.appendChild(sqlCard);
+        }
+
+      } else if (APP.settingsTab === 4) {
+        var dc2 = dv('card'); dc2.style.marginBottom = '16px'; var dttl2 = dv('sec-title'); dttl2.style.marginBottom = '8px'; dttl2.textContent = 'Database Setup';
+        var dsub2 = dv(); dsub2.style.cssText = 'font-size:12.5px;color:var(--text-2);margin-bottom:12px;'; dsub2.textContent = 'Run the SQL setup for cross-device sync.';
+        var dBtn2 = btn('btn-outline btn-sm', '⚙ View Full Setup Guide', function () { APP.showSetup = true; render(); });
+        app(dc2, dttl2, dsub2, dBtn2);
+        var syncNote = dv('card'); syncNote.style.marginBottom = '16px'; var snTitle = dv('sec-title'); snTitle.style.marginBottom = '8px'; snTitle.textContent = '🔄 Cross-Device Sync';
+        var snText = dv(); snText.style.cssText = 'font-size:12.5px;color:var(--text-2);line-height:1.6;'; snText.textContent = 'Tasks, calls, sales and Work Mode settings are all stored in Supabase. Any device you log into shows the same state.'; app(syncNote, snTitle, snText);
+        var lsCard = dv('card'); lsCard.style.marginBottom = '16px'; var lsTitle = dv('sec-title'); lsTitle.style.marginBottom = '8px'; lsTitle.textContent = '📦 Local Storage Cache';
+        var lsText = dv(); lsText.style.cssText = 'font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:12px;'; lsText.textContent = 'Daily snapshots of tasks and calls are also saved in your browser localStorage for offline browsing.';
         var lsCount = lsGetAllDates().length; var lsStat = dv(); lsStat.style.cssText = 'font-size:12.5px;color:var(--indigo-hi);margin-bottom:12px;'; lsStat.textContent = lsCount + ' days of data saved locally.';
-        var clearLsBtn = btn('btn-danger btn-sm', '🗑 Clear Local History', function () { if (confirm('Delete all local history snapshots? Supabase data is NOT affected.')) { var dates = lsGetAllDates(); dates.forEach(function (d) { localStorage.removeItem(lsKey(d)); }); showToast('Local history cleared.'); render(); } });
+        var clearLsBtn = btn('btn-danger btn-sm', '🗑 Clear Local History', function () {
+          if (confirm('Delete all local history snapshots? Supabase data is NOT affected.')) {
+            var dates = lsGetAllDates(); dates.forEach(function (d) { localStorage.removeItem(lsKey(d)); }); showToast('Local history cleared.'); render();
+          }
+        });
         app(lsCard, lsTitle, lsText, lsStat, clearLsBtn);
         var ic2 = dv('card'); ic2.style.marginBottom = '16px'; var ittl2 = dv('sec-title'); ittl2.style.marginBottom = '12px'; ittl2.textContent = 'Workspace Info'; ic2.appendChild(ittl2);
-        [['Version', '4.3.0 (Enhanced)'], ['Your Role', (u && u.role) || '—'], ['User ID', (APP.authUser && APP.authUser.id) ? APP.authUser.id.slice(0, 8) + '…' : '—'], ['Database', sb ? '✓ Supabase Connected' : '✕ Not connected'], ['Today (local)', todayStr()], ['Tasks (today)', String(APP.tasks.length)], ['Calls (today)', String(APP.calls.length)], ['Auto-logout', '60 min inactivity'], ['Local days saved', String(lsCount)]].forEach(function (kv) {
-          var row3 = dv(); row3.style.cssText = 'display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;'; var k2 = sp(); k2.style.color = 'var(--text-2)'; k2.textContent = kv[0]; var v2 = sp(); v2.style.cssText = 'font-family:var(--mono);font-size:12px;'; v2.textContent = kv[1]; app(row3, k2, v2); ic2.appendChild(row3);
+        [['Version', '4.5.0 (Work Mode → Supabase)'],
+        ['Your Role', (u && u.role) || '—'],
+        ['User ID', (APP.authUser && APP.authUser.id) ? APP.authUser.id.slice(0, 8) + '…' : '—'],
+        ['Database', sb ? '✓ Supabase Connected' : '✕ Not connected'],
+        ['Today (local)', todayStr()],
+        ['Work Off', APP.workOff ? '✓ ON (synced)' : 'OFF'],
+        ['Half Day', APP.halfDay ? '✓ ON (synced)' : 'OFF'],
+        ['Tasks (today)', String(APP.tasks.length)],
+        ['Calls (today)', String(APP.calls.length)],
+        ['Auto-logout', '60 min inactivity (polling)'],
+        ['Check-in rule', 'Any status → Any status (no checkout required)'],
+        ['Local days saved', String(lsCount)]
+        ].forEach(function (kv) {
+          var row3 = dv(); row3.style.cssText = 'display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;';
+          var k2 = sp(); k2.style.color = 'var(--text-2)'; k2.textContent = kv[0];
+          var v2 = sp(); v2.style.cssText = 'font-family:var(--mono);font-size:12px;'; v2.textContent = kv[1];
+          app(row3, k2, v2); ic2.appendChild(row3);
         });
         app(wrap, dc2, syncNote, lsCard, ic2);
       }
@@ -3414,12 +3831,10 @@ insert into holidays (holiday_date, name, type) values
       }
       if (!APP.authUser || !APP.profile) { root.appendChild(AuthView()); return; }
 
-      // Checkout modal — show on top of dashboard if user is checked out after login
       if (APP.showCheckoutModal) {
         var appEl2 = dv('app'); appEl2.appendChild(Sidebar());
         var mainEl2 = dv('main'); mainEl2.appendChild(Topbar());
-        var content2 = dv('content');
-        content2.appendChild(Dashboard());
+        var content2 = dv('content'); content2.appendChild(Dashboard());
         mainEl2.appendChild(content2); appEl2.appendChild(mainEl2); root.appendChild(appEl2);
         root.appendChild(CheckoutModal());
         return;
@@ -3431,15 +3846,19 @@ insert into holidays (holiday_date, name, type) values
       var mainEl = dv('main'); mainEl.appendChild(Topbar());
       var content = dv('content'); content.appendChild(View());
       mainEl.appendChild(content); appEl.appendChild(mainEl); root.appendChild(appEl);
+      setTimeout(renderWorkModeBanners, 50);
     }
 
-    // ─── TIMERS ──────────────────────────────────────────────────────────────────
+    // ─── TIMERS ──────────────────────────────────────────────────
     setInterval(function () { var c = document.getElementById('live-clock'); if (c) c.textContent = now5(); }, 30000);
+
     var _lastTrackedDate = todayStr();
     setInterval(function () {
       var currentDate = todayStr();
       if (currentDate !== _lastTrackedDate) {
         _lastTrackedDate = currentDate;
+        APP.halfDayReminderDismissed = false;
+        APP.workOffBannerDismissed = false;
         if (APP.authUser && APP.profile) {
           APP.quoteIndex = Math.floor(Math.random() * QUOTES.length);
           APP.historyDate = null;
@@ -3448,12 +3867,16 @@ insert into holidays (holiday_date, name, type) values
       }
     }, 60000);
 
-    // Auto-save to LS every 5 minutes while active
+    setInterval(function () { if (APP.authUser && APP.profile && APP.dataLoaded) { lsSaveCurrent(); } }, 5 * 60 * 1000);
+
     setInterval(function () {
-      if (APP.authUser && APP.profile && APP.dataLoaded) { lsSaveCurrent(); }
+      if (APP.halfDay && !APP.halfDayReminderDismissed && APP.authUser) {
+        var t = totals(APP.timeline);
+        if (t.workHours >= 240) renderWorkModeBanners();
+      }
     }, 5 * 60 * 1000);
 
-    // ─── BOOT ────────────────────────────────────────────────────────────────────
+    // ─── BOOT ────────────────────────────────────────────────────
     async function boot() {
       document.body.setAttribute('data-theme', APP.theme);
       var msgEl = document.getElementById('load-msg');
@@ -3469,11 +3892,12 @@ insert into holidays (holiday_date, name, type) values
           if (msgEl) msgEl.textContent = 'Loading profile…';
           APP.profile = await loadProfile(session.user.id);
           if (APP.profile) {
+            // Load work mode from profile (Supabase)
+            loadWorkModeFromProfile();
             if (msgEl) msgEl.textContent = 'Syncing your data…';
             await loadAllUserData();
             if (APP.status === 'checked-out') { APP.showCheckoutModal = true; }
-            scheduleAutoLogout();
-            _lastActivity = Date.now();
+            _setLastActivity(Date.now());
           }
         }
       } catch (e) { console.error(e); }
@@ -3484,19 +3908,20 @@ insert into holidays (holiday_date, name, type) values
           APP.authUser = session.user;
           APP.profile = await loadProfile(session.user.id);
           if (APP.profile) {
+            // Load work mode from profile on login
+            loadWorkModeFromProfile();
             APP.quoteIndex = Math.floor(Math.random() * QUOTES.length);
             await loadAllUserData();
             if (APP.status === 'checked-out') { APP.showCheckoutModal = true; }
-            scheduleAutoLogout();
-            _lastActivity = Date.now();
+            _setLastActivity(Date.now());
           }
           render();
         } else if (event === 'SIGNED_OUT') {
           APP.authUser = null; APP.profile = null; APP.status = 'checked-out';
           APP.timeline = []; APP.currentSession = null;
           APP.tasks = []; APP.calls = []; APP.salesHistory = []; APP.todaySales = 0; APP.dataLoaded = false;
-          APP.showCheckoutModal = false;
-          clearTimeout(_autoLogoutTimer); clearTimeout(_autoWarnTimer); renderAutoLogoutBanner(false);
+          APP.showCheckoutModal = false; APP.workOff = false; APP.halfDay = false;
+          renderAutoLogoutBanner(false);
           render();
         }
       });
