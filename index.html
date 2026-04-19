@@ -920,125 +920,282 @@ function showToast(msg, color) {
     // ═══════════════════════════════════════════════════════════
     // ── LOCAL HISTORY VIEW ──────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
-    function LocalHistory(){
-      // Always snapshot today on open so it appears in the list
-      if(APP.profile&&APP.dataLoaded)lsSaveCurrent();
+function LocalHistory(){
+  if(APP.profile&&APP.dataLoaded)lsSaveCurrent();
 
-      var wrap=dv('fade-up');
-      var allDates=lsGetAllDates();
+  var wrap=dv('fade-up');
+  var allDates=lsGetAllDates();
+  var todayD=todayStr();
+  var tomorrowD=(function(){var d=new Date();d.setDate(d.getDate()+1);return d.toISOString().slice(0,10);})();
 
-      // Header
-      var hdrCard=dv('card');hdrCard.style.marginBottom='16px';
-      var hdrRow=dv('sec-hdr');
-      var hdrTitle=dv('sec-title');hdrTitle.textContent='📦 Local Data History';
-      var hdrTag=sp('tag');hdrTag.textContent=allDates.length+' days saved';hdrTag.style.cssText='background:rgba(99,102,241,.12);color:var(--indigo-hi);';
-      app(hdrRow,hdrTitle,hdrTag);
-      var hdrSub=dv();hdrSub.style.cssText='font-size:12.5px;color:var(--text-2);margin-top:6px;line-height:1.6;';
-      hdrSub.textContent='Browser-cached snapshots of your tasks, calls and sales. Use ‹ › to navigate between days.';
-      app(hdrCard,hdrRow,hdrSub);
+  // Ensure today always exists in list
+  if(allDates.indexOf(todayD)<0)allDates.unshift(todayD);
 
-      if(!allDates.length){
-        var empty=dv('card');
-        var emptyInner=dv('lh-empty');
-        emptyInner.innerHTML='📭<br><br>No local history yet.<br><span style="font-size:11px;">Open this page while logged in and data will appear here.</span>';
-        empty.appendChild(emptyInner);app(wrap,hdrCard,empty);return wrap;
-      }
+  // Header
+  var hdrCard=dv('card');hdrCard.style.marginBottom='16px';
+  var hdrRow=dv('sec-hdr');
+  var hdrTitle=dv('sec-title');hdrTitle.textContent='📦 Local Data History';
+  var hdrTag=sp('tag');hdrTag.textContent=allDates.length+' days saved';hdrTag.style.cssText='background:rgba(99,102,241,.12);color:var(--indigo-hi);';
+  app(hdrRow,hdrTitle,hdrTag);
+  var hdrSub=dv();hdrSub.style.cssText='font-size:12.5px;color:var(--text-2);margin-top:6px;line-height:1.6;';
+  hdrSub.textContent='Browser-cached snapshots of your tasks and calls. Plan tomorrow or sync to Supabase for cross-device access.';
+  app(hdrCard,hdrRow,hdrSub);
 
-      // Make sure selected date is valid
-      if(!APP.localHistoryDate||allDates.indexOf(APP.localHistoryDate)<0)APP.localHistoryDate=allDates[0];
-      var curIdx=allDates.indexOf(APP.localHistoryDate);
+  // ── SYNC CARD ────────────────────────────────────────────────
+  var syncCard=dv('card');syncCard.style.cssText='margin-bottom:16px;padding:14px 16px;';
+  var syncTitle=dv('sec-title');syncTitle.style.marginBottom='10px';syncTitle.textContent='☁️ Supabase Sync';
+  var syncSub=dv();syncSub.style.cssText='font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.6;';
+  syncSub.textContent='Keep your local snapshots backed up to Supabase. Restore them on any device with Download Data.';
+  syncCard.appendChild(syncTitle);
+  syncCard.appendChild(syncSub);
 
-      // ── NAV BAR (prev/next + pills) ─────────────────────────────
-      var navCard=dv('card');navCard.style.cssText='margin-bottom:16px;padding:14px 16px;';
+  var syncBtnRow=dv();syncBtnRow.style.cssText='display:flex;gap:9px;flex-wrap:wrap;align-items:center;';
+  var syncStatus=dv();syncStatus.style.cssText='font-size:12px;color:var(--text-2);margin-top:8px;min-height:18px;';
 
-      // Prev / Next row
-      var navBtnRow=dv();navBtnRow.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:12px;';
-      var prevBtn2=btn('btn-outline btn-sm','‹ Prev',function(){
-        if(curIdx+1<allDates.length){APP.localHistoryDate=allDates[curIdx+1];render();}
+  // Upload
+  var uploadBtn=btn('btn-outline btn-sm','⬆ Upload Data',async function(){
+    if(!sb){syncStatus.textContent='⚠️ Database not connected.';return;}
+    uploadBtn.disabled=true;uploadBtn.textContent='Uploading…';
+    try{
+      var dates=lsGetAllDates();
+      var rows=dates.map(function(d){
+        var snap=lsGetDay(d);
+        return{user_id:APP.authUser.id,snap_date:d,payload:JSON.stringify(snap),saved_at:new Date().toISOString()};
       });
-      prevBtn2.disabled=(curIdx+1>=allDates.length);
-      var nextBtn2=btn('btn-outline btn-sm','Next ›',function(){
-        if(curIdx-1>=0){APP.localHistoryDate=allDates[curIdx-1];render();}
-      });
-      nextBtn2.disabled=(curIdx<=0);
-      var curDateLbl=dv();curDateLbl.style.cssText='flex:1;text-align:center;font-size:13px;font-weight:600;color:var(--text-1);font-family:var(--mono);';
-      curDateLbl.textContent=fmtDateLabel(APP.localHistoryDate)+' ('+APP.localHistoryDate+')';
-      var todayBtn3=btn('btn-outline btn-sm','Today',function(){APP.localHistoryDate=allDates[0];render();});
-      todayBtn3.disabled=(curIdx===0);
-      app(navBtnRow,prevBtn2,curDateLbl,nextBtn2,todayBtn3);
-      navCard.appendChild(navBtnRow);
-
-      // Pill row — all available dates
-      var pillLabel=dv();pillLabel.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-3);margin-bottom:8px;';
-      pillLabel.textContent='All saved days';navCard.appendChild(pillLabel);
-      var pillRow=dv();pillRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;';
-      allDates.forEach(function(date){
-        var pill=dv('lh-date-pill'+(APP.localHistoryDate===date?' active':''));
-        pill.textContent=fmtDateLabel(date);pill.title=date;
-        pill.addEventListener('click',function(){APP.localHistoryDate=date;render();});
-        pillRow.appendChild(pill);
-      });
-      navCard.appendChild(pillRow);
-
-      // ── DATA CARD ────────────────────────────────────────────────
-      var data=lsGetDay(APP.localHistoryDate);
-      var dataCard=dv('card');
-
-      if(!data){
-        var noData=dv('lh-empty');noData.textContent='No snapshot saved for this date.';
-        dataCard.appendChild(noData);
-        app(wrap,hdrCard,navCard,dataCard);return wrap;
-      }
-
-      var dateHeader=dv();dateHeader.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;';
-      var dateLbl=dv();dateLbl.style.cssText='font-size:15px;font-weight:600;color:var(--text-1);';
-      dateLbl.textContent=new Date(APP.localHistoryDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-      var savedAt=dv();savedAt.style.cssText='font-size:11px;color:var(--text-3);font-family:var(--mono);';
-      savedAt.textContent=data.savedAt?'Snapshot: '+fmtT(data.savedAt):'';
-      app(dateHeader,dateLbl,savedAt);dataCard.appendChild(dateHeader);
-
-      var statsRow=dv('grid3');statsRow.style.marginBottom='16px';
-      var tasks=data.tasks||[],calls=data.calls||[];
-      var doneTasks=tasks.filter(function(t){return t.done;}).length;
-      [StatCard('Tasks',doneTasks+'/'+tasks.length,'Done today'),
-       StatCard('Calls',String(calls.length),'Logged calls'),
-       StatCard('Sales',fmtMoney(data.todaySales||0),'Day total','#10b981')
-      ].forEach(function(c){statsRow.appendChild(c);});
-      dataCard.appendChild(statsRow);
-
-      if(tasks.length){
-        var tTitle=dv('lh-section-title');tTitle.textContent='Tasks ('+tasks.length+')';dataCard.appendChild(tTitle);
-        tasks.forEach(function(t){
-          var item=dv('lh-item'),badge=dv('lh-badge');
-          badge.textContent=t.done?'✓':'○';
-          badge.style.cssText=t.done?'background:rgba(99,102,241,.12);color:var(--indigo-hi);':'background:var(--bg-card2);color:var(--text-3);';
-          var info=dv('lh-info'),name=dv('lh-name');name.textContent=t.text;
-          if(t.done)name.style.textDecoration='line-through';
-          var meta=dv('lh-meta'),pri=PRIORITIES[t.priority]||PRIORITIES.medium;
-          meta.innerHTML='<span style="padding:1px 7px;border-radius:100px;font-size:10px;background:'+pri.bg+';color:'+pri.color+';">'+t.priority+'</span>';
-          app(info,name,meta);app(item,badge,info);dataCard.appendChild(item);
-        });
-      }
-
-      if(calls.length){
-        var cTitle=dv('lh-section-title');cTitle.textContent='Calls ('+calls.length+')';dataCard.appendChild(cTitle);
-        var clrs={inbound:['rgba(16,185,129,.12)','#34d399','↙'],outbound:['rgba(99,102,241,.12)','#818cf8','↗'],unreachable:['rgba(244,63,94,.12)','#fb7185','✕']};
-        calls.forEach(function(c){
-          var item=dv('lh-item'),clr=clrs[c.type]||clrs.inbound;
-          var badge=dv('lh-badge');badge.textContent=clr[2];badge.style.cssText='background:'+clr[0]+';color:'+clr[1]+';';
-          var info=dv('lh-info'),name=dv('lh-name');name.textContent=c.name;
-          var meta=dv('lh-meta');meta.textContent=(c.time||'')+' · '+c.type+(c.duration?' · '+fmt(c.duration):'');
-          app(info,name,meta);app(item,badge,info);dataCard.appendChild(item);
-        });
-      }
-
-      if(!tasks.length&&!calls.length){
-        var noItems=dv('lh-empty');noItems.textContent='No tasks or calls in this snapshot.';dataCard.appendChild(noItems);
-      }
-
-      app(wrap,hdrCard,navCard,dataCard);return wrap;
+      var{error}=await sb.from('local_history').upsert(rows,{onConflict:'user_id,snap_date'});
+      if(error)throw error;
+      syncStatus.textContent='✓ Uploaded '+rows.length+' snapshots.';
+      showToast('⬆ '+rows.length+' snapshots uploaded!','#6366f1');
+    }catch(e){
+      syncStatus.textContent='Error: '+(e.message||'Upload failed.');
+      showToast('Upload failed','#ef4444');
     }
+    uploadBtn.disabled=false;uploadBtn.textContent='⬆ Upload Data';
+  });
 
+  // Download — highlighted as primary
+  var downloadBtn=btn('btn-primary btn-sm','⬇ Download Data',async function(){
+    if(!sb){syncStatus.textContent='⚠️ Database not connected.';return;}
+    downloadBtn.disabled=true;downloadBtn.textContent='Downloading…';
+    try{
+      var{data,error}=await sb.from('local_history')
+        .select('snap_date,payload')
+        .eq('user_id',APP.authUser.id)
+        .order('snap_date',{ascending:false});
+      if(error)throw error;
+      var count=0;
+      (data||[]).forEach(function(row){
+        try{
+          var snap=JSON.parse(row.payload);
+          localStorage.setItem(lsKey(row.snap_date),JSON.stringify(snap));
+          count++;
+        }catch(e){}
+      });
+      syncStatus.textContent='✓ Downloaded '+count+' snapshots to local storage.';
+      showToast('⬇ '+count+' snapshots restored!','#10b981');
+      setTimeout(function(){render();},600);
+    }catch(e){
+      syncStatus.textContent='Error: '+(e.message||'Download failed.');
+      showToast('Download failed','#ef4444');
+    }
+    downloadBtn.disabled=false;downloadBtn.textContent='⬇ Download Data';
+  });
+
+  app(syncBtnRow,uploadBtn,downloadBtn);
+  syncCard.appendChild(syncBtnRow);
+  syncCard.appendChild(syncStatus);
+
+  if(!allDates.length){
+    var empty=dv('card');
+    var emptyInner=dv('lh-empty');
+    emptyInner.innerHTML='📭<br><br>No local history yet.<br><span style="font-size:11px;">Open this page while logged in and data will appear here.</span>';
+    empty.appendChild(emptyInner);app(wrap,hdrCard,syncCard,empty);return wrap;
+  }
+
+  // ── Default to today ──
+  if(!APP.localHistoryDate||
+     (allDates.indexOf(APP.localHistoryDate)<0&&APP.localHistoryDate!==tomorrowD)){
+    APP.localHistoryDate=todayD;
+  }
+
+  // ── NAV BAR — only Prev/Next, no pills ───────────────────────
+  var navCard=dv('card');navCard.style.cssText='margin-bottom:16px;padding:14px 16px;';
+
+  // Build ordered nav list: allDates (past→today) + tomorrow
+  var navDates=allDates.slice();
+  if(navDates.indexOf(tomorrowD)<0)navDates.unshift(tomorrowD);
+  // Sort descending so index 0 = most future
+  navDates.sort(function(a,b){return b>a?1:b<a?-1:0;});
+  var curIdx=navDates.indexOf(APP.localHistoryDate);
+  if(curIdx<0){curIdx=navDates.indexOf(todayD);}
+
+  var navBtnRow=dv();navBtnRow.style.cssText='display:flex;align-items:center;gap:10px;';
+  var prevBtn2=btn('btn-outline btn-sm','‹ Prev',function(){
+    if(curIdx+1<navDates.length){APP.localHistoryDate=navDates[curIdx+1];render();}
+  });
+  prevBtn2.disabled=(curIdx+1>=navDates.length);
+
+  var nextBtn2=btn('btn-outline btn-sm','Next ›',function(){
+    if(curIdx-1>=0){APP.localHistoryDate=navDates[curIdx-1];render();}
+  });
+  nextBtn2.disabled=(curIdx<=0);
+
+  var curDateLbl=dv();curDateLbl.style.cssText='flex:1;text-align:center;font-size:14px;font-weight:700;color:var(--text-1);font-family:var(--mono);';
+  var displayLabel=new Date(APP.localHistoryDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  var isTomorrow=APP.localHistoryDate===tomorrowD;
+  var isToday2=APP.localHistoryDate===todayD;
+  curDateLbl.textContent=displayLabel+(isToday2?' (Today)':isTomorrow?' (Tomorrow)':'');
+
+  var todayBtn3=btn('btn-outline btn-sm','Today',function(){APP.localHistoryDate=todayD;render();});
+  todayBtn3.disabled=isToday2;
+  app(navBtnRow,prevBtn2,curDateLbl,nextBtn2,todayBtn3);
+  navCard.appendChild(navBtnRow);
+
+
+  // ── DATA CARD ────────────────────────────────────────────────
+  var data=lsGetDay(APP.localHistoryDate)||{tasks:[],calls:[],todaySales:0,savedAt:Date.now()};
+  var dataCard=dv('card');
+
+  var dateHeader=dv();dateHeader.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;';
+  var dateLbl=dv();dateLbl.style.cssText='font-size:15px;font-weight:600;color:var(--text-1);flex:1;';
+  dateLbl.textContent=new Date(APP.localHistoryDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if(isTomorrow){
+    var futTag=sp('tag');futTag.textContent='📅 Tomorrow';futTag.style.cssText='background:rgba(245,158,11,.12);color:#fbbf24;';
+    dateHeader.appendChild(futTag);
+  }
+  var savedAtLbl=dv();savedAtLbl.style.cssText='font-size:11px;color:var(--text-3);font-family:var(--mono);';
+  savedAtLbl.textContent=data.savedAt?'Snapshot: '+fmtT(data.savedAt):'';
+  app(dateHeader,dateLbl,savedAtLbl);dataCard.appendChild(dateHeader);
+
+  var statsRow=dv('grid3');statsRow.style.marginBottom='16px';
+  var tasks=data.tasks||[],calls=data.calls||[];
+  var doneTasks=tasks.filter(function(t){return t.done;}).length;
+  [StatCard('Tasks',doneTasks+'/'+tasks.length,'Done today'),
+   StatCard('Calls',String(calls.length),'Logged calls'),
+   StatCard('Sales',fmtMoney(data.todaySales||0),'Day total','#10b981')
+  ].forEach(function(c){statsRow.appendChild(c);});
+  dataCard.appendChild(statsRow);
+
+  // ── ADD TASK FORM ────────────────────────────────────────────
+  var addTaskSection=dv();addTaskSection.style.cssText='margin-bottom:14px;padding:12px;background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.15);border-radius:var(--r1);';
+  var addTaskTitle=dv();addTaskTitle.style.cssText='font-size:12px;font-weight:600;color:var(--indigo-hi);margin-bottom:8px;';
+  addTaskTitle.textContent='+ Add Task';addTaskSection.appendChild(addTaskTitle);
+  var taskRow=dv();taskRow.style.cssText='display:flex;gap:8px;flex-wrap:wrap;';
+  var taskInp=inp('input','text','Task description…','');
+  taskInp.style.cssText='flex:1;min-width:160px;padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
+  var priSel=mk('select');priSel.style.cssText='padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
+  ['medium','high','low'].forEach(function(p){var o=mk('option');o.value=p;o.textContent=p;priSel.appendChild(o);});
+  var addTaskBtn=btn('btn-primary btn-sm','Add',function(){
+    var txt=taskInp.value.trim();if(!txt)return;
+    var snap=lsGetDay(APP.localHistoryDate)||{tasks:[],calls:[],todaySales:0,savedAt:Date.now()};
+    snap.tasks=snap.tasks||[];
+    snap.tasks.push({id:'t'+Date.now(),text:txt,done:false,priority:priSel.value,createdAt:Date.now()});
+    snap.savedAt=Date.now();
+    localStorage.setItem(lsKey(APP.localHistoryDate),JSON.stringify(snap));
+    showToast('Task added','#6366f1');render();
+  });
+  // Enter key on task input
+  taskInp.addEventListener('keydown',function(e){if(e.key==='Enter')addTaskBtn.click();});
+  app(taskRow,taskInp,priSel,addTaskBtn);addTaskSection.appendChild(taskRow);
+  dataCard.appendChild(addTaskSection);
+
+  // ── ADD CALL FORM ────────────────────────────────────────────
+  var addCallSection=dv();addCallSection.style.cssText='margin-bottom:14px;padding:12px;background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.15);border-radius:var(--r1);';
+  var addCallTitle=dv();addCallTitle.style.cssText='font-size:12px;font-weight:600;color:#34d399;margin-bottom:8px;';
+  addCallTitle.textContent='+ Add Call';addCallSection.appendChild(addCallTitle);
+  var callRow=dv();callRow.style.cssText='display:flex;gap:8px;flex-wrap:wrap;';
+  var callNameInp=inp('input','text','Contact name…','');
+  callNameInp.style.cssText='flex:1;min-width:140px;padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
+  var callTypeSel=mk('select');callTypeSel.style.cssText='padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
+  ['GBP Follow-up','Prospecting','Payment','Pitching'].forEach(function(p){
+    var o=mk('option');o.value=p;o.textContent=p;callTypeSel.appendChild(o);
+  });
+  var addCallBtn=btn('btn-primary btn-sm','Add',function(){
+    var nm=callNameInp.value.trim();if(!nm)return;
+    var snap=lsGetDay(APP.localHistoryDate)||{tasks:[],calls:[],todaySales:0,savedAt:Date.now()};
+    snap.calls=snap.calls||[];
+    var now=new Date();
+    snap.calls.push({id:'c'+Date.now(),name:nm,type:callTypeSel.value,time:now.getHours()+':'+String(now.getMinutes()).padStart(2,'0'),duration:0,createdAt:Date.now()});
+    snap.savedAt=Date.now();
+    localStorage.setItem(lsKey(APP.localHistoryDate),JSON.stringify(snap));
+    showToast('Call added','#10b981');render();
+  });
+  callNameInp.addEventListener('keydown',function(e){if(e.key==='Enter')addCallBtn.click();});
+  app(callRow,callNameInp,callTypeSel,addCallBtn);addCallSection.appendChild(callRow);
+  dataCard.appendChild(addCallSection);
+
+  // ── TASKS LIST ───────────────────────────────────────────────
+  if(tasks.length){
+    var tTitle=dv('lh-section-title');tTitle.textContent='Tasks ('+tasks.length+')';dataCard.appendChild(tTitle);
+    tasks.forEach(function(t,tIdx){
+      var item=dv('lh-item');item.style.cssText+='justify-content:space-between;';
+      var leftSide=dv();leftSide.style.cssText='display:flex;align-items:center;gap:10px;flex:1;min-width:0;';
+      var badge=dv('lh-badge');
+      badge.textContent=t.done?'✓':'○';
+      badge.style.cssText=(t.done?'background:rgba(99,102,241,.12);color:var(--indigo-hi);':'background:var(--bg-card2);color:var(--text-3);')+'cursor:pointer;';
+      badge.addEventListener('click',function(){
+        var snap=lsGetDay(APP.localHistoryDate);if(!snap)return;
+        snap.tasks[tIdx].done=!snap.tasks[tIdx].done;snap.savedAt=Date.now();
+        localStorage.setItem(lsKey(APP.localHistoryDate),JSON.stringify(snap));render();
+      });
+      var info=dv('lh-info'),name=dv('lh-name');name.textContent=t.text;
+      if(t.done)name.style.textDecoration='line-through';
+      var meta=dv('lh-meta'),pri=PRIORITIES[t.priority]||PRIORITIES.medium;
+      meta.innerHTML='<span style="padding:1px 7px;border-radius:100px;font-size:10px;background:'+pri.bg+';color:'+pri.color+';">'+t.priority+'</span>';
+      app(info,name,meta);app(leftSide,badge,info);
+      var delBtn=btn('btn-danger btn-sm','✕',function(){
+        if(!confirm('Delete this task?'))return;
+        var snap=lsGetDay(APP.localHistoryDate);if(!snap)return;
+        snap.tasks.splice(tIdx,1);snap.savedAt=Date.now();
+        localStorage.setItem(lsKey(APP.localHistoryDate),JSON.stringify(snap));
+        showToast('Task deleted','#ef4444');render();
+      });
+      delBtn.style.cssText='padding:3px 8px;font-size:11px;flex-shrink:0;';
+      app(item,leftSide,delBtn);dataCard.appendChild(item);
+    });
+  }
+
+  // ── CALLS LIST ───────────────────────────────────────────────
+  if(calls.length){
+    var cTitle=dv('lh-section-title');cTitle.textContent='Calls ('+calls.length+')';dataCard.appendChild(cTitle);
+    var clrs={
+      'GBP Follow-up':['rgba(99,102,241,.12)','#818cf8','G'],
+      'Prospecting':['rgba(16,185,129,.12)','#34d399','P'],
+      'Payment':['rgba(245,158,11,.12)','#fbbf24','£'],
+      'Pitching':['rgba(244,63,94,.12)','#fb7185','↗']
+    };
+    calls.forEach(function(c,cIdx){
+      var item=dv('lh-item');item.style.cssText+='justify-content:space-between;';
+      var leftSide=dv();leftSide.style.cssText='display:flex;align-items:center;gap:10px;flex:1;min-width:0;';
+      var clr=clrs[c.type]||['rgba(99,102,241,.12)','#818cf8','•'];
+      var badge=dv('lh-badge');badge.textContent=clr[2];badge.style.cssText='background:'+clr[0]+';color:'+clr[1]+';';
+      var info=dv('lh-info'),name=dv('lh-name');name.textContent=c.name;
+      var meta=dv('lh-meta');meta.textContent=(c.time||'')+' · '+c.type+(c.duration?' · '+fmt(c.duration):'');
+      app(info,name,meta);app(leftSide,badge,info);
+      var delBtn2=btn('btn-danger btn-sm','✕',function(){
+        if(!confirm('Delete this call?'))return;
+        var snap=lsGetDay(APP.localHistoryDate);if(!snap)return;
+        snap.calls.splice(cIdx,1);snap.savedAt=Date.now();
+        localStorage.setItem(lsKey(APP.localHistoryDate),JSON.stringify(snap));
+        showToast('Call deleted','#ef4444');render();
+      });
+      delBtn2.style.cssText='padding:3px 8px;font-size:11px;flex-shrink:0;';
+      app(item,leftSide,delBtn2);dataCard.appendChild(item);
+    });
+  }
+
+  if(!tasks.length&&!calls.length){
+    var noItems=dv('lh-empty');
+    noItems.textContent=isTomorrow?'Nothing planned yet. Add tasks or calls above!':'No tasks or calls in this snapshot.';
+    dataCard.appendChild(noItems);
+  }
+
+wrap.appendChild(hdrCard);
+wrap.appendChild(navCard);
+wrap.appendChild(dataCard);
+wrap.appendChild(syncCard);
+  return wrap;
+}
     // ═══════════════════════════════════════════════════════════
     // ── SQL SETUP ───────────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
