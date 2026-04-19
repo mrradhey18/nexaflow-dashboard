@@ -452,77 +452,115 @@ ALTER TABLE profiles
     }
     function lsSaveCurrent(){if(APP.profile)lsSaveDay(todayStr());}
 
-    // ═══════════════════════════════════════════════════════════
-    // ── AUTO LOGOUT ─────────────────────────────────────────────
-    // ═══════════════════════════════════════════════════════════
-    var AUTO_LOGOUT_MS=20*60*1000;   // 20 minutes
-    var AUTO_WARN_MS=17*60*1000;    // warn at 17 minutes
-    var LS_ACTIVITY_KEY='nf_last_activity';
-    var _showingWarn=false;
+   // ═══════════════════════════════════════════════════════════
+// ── AUTO LOGOUT ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+var AUTO_LOGOUT_MS = 20 * 60 * 1000;  // 20 minutes
+var AUTO_WARN_MS   = 17 * 60 * 1000;  // warn at 17 minutes
+var LS_ACTIVITY_KEY = 'nf_last_activity';
+var _showingWarn = false;
+var _autoLogoutFired = false;
 
-    function _getLastActivity(){var v=localStorage.getItem(LS_ACTIVITY_KEY);return v?parseInt(v,10):Date.now();}
-    function _setLastActivity(ts){localStorage.setItem(LS_ACTIVITY_KEY,String(ts||Date.now()));}
+function _getLastActivity() {
+  var v = localStorage.getItem(LS_ACTIVITY_KEY);
+  return v ? parseInt(v, 10) : Date.now();
+}
+function _setLastActivity(ts) {
+  localStorage.setItem(LS_ACTIVITY_KEY, String(ts || Date.now()));
+}
 
-    function resetActivity(){
-      _setLastActivity(Date.now());
-      if(_showingWarn){_showingWarn=false;renderAutoLogoutBanner(false);}
-    }
+function resetActivity() {
+  _setLastActivity(Date.now());
+  _autoLogoutFired = false;
+  if (_showingWarn) { _showingWarn = false; renderAutoLogoutBanner(false); }
+}
 
-    setInterval(function(){
-      if(!APP.authUser||APP.status==='checked-out'||APP.status==='break')return;
-      var elapsed=Date.now()-_getLastActivity();
-      if(elapsed>=AUTO_LOGOUT_MS){
-        _showingWarn=false;renderAutoLogoutBanner(false);
-        changeStatus('checked-out').then(function(){showToast('Auto checked-out due to 20 min of inactivity.');});
-      }else if(elapsed>=AUTO_WARN_MS&&!_showingWarn){_showingWarn=true;renderAutoLogoutBanner(true);}
-      else if(elapsed<AUTO_WARN_MS&&_showingWarn){_showingWarn=false;renderAutoLogoutBanner(false);}
-    },30000);
+async function forceAutoLogout() {
+  if (_autoLogoutFired) return;   // prevent double-fire
+  _autoLogoutFired = true;
+  _showingWarn = false;
+  renderAutoLogoutBanner(false);
+  try { await changeStatus('checked-out'); } catch(e) { console.error(e); }
+  try { await sb.auth.signOut(); } catch(e) { console.error(e); }
+  // Clear all app state
+  APP.authUser = null; APP.profile = null;
+  APP.status = 'checked-out'; APP.timeline = [];
+  APP.currentSession = null; APP.tasks = []; APP.calls = [];
+  APP.salesHistory = []; APP.todaySales = 0; APP.dataLoaded = false;
+  APP.showCheckoutModal = false; APP.workOff = false; APP.halfDay = false;
+  showToast('Auto logged out due to 20 min of inactivity.', '#ef4444');
+  setTimeout(function() { render(); }, 800);
+}
 
-    ['click','keydown','touchstart','touchend','touchmove','scroll','pointerdown','pointermove'].forEach(function(evt){
-      document.addEventListener(evt,resetActivity,{passive:true});
-    });
+// ── Main polling interval (every 15s for reliability) ──
+setInterval(function() {
+  if (!APP.authUser || !APP.profile) return;
+  if (APP.status === 'checked-out' || APP.status === 'break') return;
+  var elapsed = Date.now() - _getLastActivity();
+  if (elapsed >= AUTO_LOGOUT_MS) {
+    forceAutoLogout();
+  } else if (elapsed >= AUTO_WARN_MS && !_showingWarn) {
+    _showingWarn = true;
+    renderAutoLogoutBanner(true);
+  } else if (elapsed < AUTO_WARN_MS && _showingWarn) {
+    _showingWarn = false;
+    renderAutoLogoutBanner(false);
+  }
+}, 15000);  // check every 15s instead of 30s
 
-    document.addEventListener('visibilitychange',function(){
-      if(document.visibilityState!=='visible')return;
-      if(!APP.authUser||APP.status==='checked-out'||APP.status==='break')return;
-      var elapsed=Date.now()-_getLastActivity();
-      if(elapsed>=AUTO_LOGOUT_MS){
-        _showingWarn=false;renderAutoLogoutBanner(false);
-        changeStatus('checked-out').then(function(){showToast('Auto checked-out due to 20 min of inactivity.');});
-      }else if(elapsed>=AUTO_WARN_MS&&!_showingWarn){_showingWarn=true;renderAutoLogoutBanner(true);}
-    });
+// ── Activity listeners ──
+['click','keydown','touchstart','touchend','touchmove','scroll','pointerdown','pointermove'].forEach(function(evt) {
+  document.addEventListener(evt, resetActivity, { passive: true });
+});
 
-    function renderAutoLogoutBanner(show){
-      var existing=document.getElementById('auto-logout-banner');
-      if(existing)existing.remove();
-      if(!show)return;
-      var remaining=Math.max(0,AUTO_LOGOUT_MS-(Date.now()-_getLastActivity()));
-      var mins=Math.ceil(remaining/60000);
-      var banner=document.createElement('div');
-      banner.id='auto-logout-banner';
-      banner.className='auto-logout-banner';
-      banner.innerHTML='<div class="auto-logout-dot"></div>'+
-        '<div class="auto-logout-text">No activity detected<br><a class="auto-logout-dismiss" onclick="resetActivity()">I\'m here, reset timer</a></div>'+
-        '<div class="auto-logout-timer">'+mins+'m</div>';
-      document.body.appendChild(banner);
-    }
+// ── Tab visibility check — catches returning to an idle tab ──
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState !== 'visible') return;
+  if (!APP.authUser || !APP.profile) return;
+  if (APP.status === 'checked-out' || APP.status === 'break') return;
+  var elapsed = Date.now() - _getLastActivity();
+  if (elapsed >= AUTO_LOGOUT_MS) {
+    forceAutoLogout();
+  } else if (elapsed >= AUTO_WARN_MS && !_showingWarn) {
+    _showingWarn = true;
+    renderAutoLogoutBanner(true);
+  }
+});
 
-    setInterval(function(){
-      var banner=document.getElementById('auto-logout-banner');
-      if(!banner)return;
-      var remaining=Math.max(0,AUTO_LOGOUT_MS-(Date.now()-_getLastActivity()));
-      var mins=Math.ceil(remaining/60000);
-      var timerEl=banner.querySelector('.auto-logout-timer');
-      if(timerEl)timerEl.textContent=mins+'m';
-    },60000);
+function renderAutoLogoutBanner(show) {
+  var existing = document.getElementById('auto-logout-banner');
+  if (existing) existing.remove();
+  if (!show) return;
+  var remaining = Math.max(0, AUTO_LOGOUT_MS - (Date.now() - _getLastActivity()));
+  var mins = Math.ceil(remaining / 60000);
+  var banner = document.createElement('div');
+  banner.id = 'auto-logout-banner';
+  banner.className = 'auto-logout-banner';
+  banner.innerHTML =
+    '<div class="auto-logout-dot"></div>' +
+    '<div class="auto-logout-text">No activity detected — logging out soon<br>' +
+    '<a class="auto-logout-dismiss" onclick="resetActivity()">I\'m here, reset timer</a></div>' +
+    '<div class="auto-logout-timer">' + mins + 'm</div>';
+  document.body.appendChild(banner);
+}
 
-    function showToast(msg,color){
-      var t=document.createElement('div');
-      t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:'+(color||'#6366f1')+';color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;z-index:9999;font-family:var(--font);box-shadow:0 4px 20px rgba(99,102,241,0.4);animation:slideUpFade 0.3s ease both;white-space:nowrap;';
-      t.textContent=msg;
-      document.body.appendChild(t);
-      setTimeout(function(){t.remove();},3500);
-    }
+// ── Update banner countdown every 30s ──
+setInterval(function() {
+  var banner = document.getElementById('auto-logout-banner');
+  if (!banner) return;
+  var remaining = Math.max(0, AUTO_LOGOUT_MS - (Date.now() - _getLastActivity()));
+  var mins = Math.ceil(remaining / 60000);
+  var timerEl = banner.querySelector('.auto-logout-timer');
+  if (timerEl) timerEl.textContent = mins + 'm';
+}, 30000);
+
+function showToast(msg, color) {
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:' + (color || '#6366f1') + ';color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;z-index:9999;font-family:var(--font);box-shadow:0 4px 20px rgba(99,102,241,0.4);animation:slideUpFade 0.3s ease both;white-space:nowrap;';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3500);
+}
 
     // ═══════════════════════════════════════════════════════════
     // ── WORK MODE BANNERS ────────────────────────────────────────
