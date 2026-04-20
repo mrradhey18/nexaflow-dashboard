@@ -3174,12 +3174,48 @@ app(item, leftSide, btnGroup); dataCard.appendChild(item);
     noItems.textContent = isFuture ? 'Nothing planned yet for this date. Add tasks or calls above!' : 'No tasks or calls in this snapshot.';
     dataCard.appendChild(noItems);
   }
+// ── LOCAL NOTES CARD ────────────────────────────────────────
+var localNotesKey = 'nf_notes_' + APP.localHistoryDate;
+var localNotesCard = dv('card'); localNotesCard.style.marginBottom = '16px';
+var localNotesHdr = dv('sec-hdr');
+app(localNotesHdr, app(dv('sec-title'), '📝 Notes for ' + (isToday2 ? 'Today' : fmtDateLabel(APP.localHistoryDate))));
+localNotesCard.appendChild(localNotesHdr);
 
-  wrap.appendChild(hdrCard);
-  wrap.appendChild(navCard);
-  wrap.appendChild(dataCard);
-  wrap.appendChild(syncCard);
-  return wrap;
+var localNotesArea = mk('textarea', 'input');
+localNotesArea.placeholder = 'Jot down anything for this day…';
+localNotesArea.style.cssText = 'min-height:100px;resize:vertical;font-size:13px;line-height:1.6;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);color:var(--text-1);border-radius:9px;padding:11px 13px;width:100%;font-family:var(--font);transition:border .2s;';
+localNotesArea.value = localStorage.getItem(localNotesKey) || '';
+
+var localNotesSaved = sp();
+localNotesSaved.style.cssText = 'font-size:11px;margin-top:7px;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2);opacity:0;transition:opacity .3s;';
+localNotesSaved.textContent = '✓ Saved locally';
+
+var _localNoteTimer = null;
+localNotesArea.addEventListener('input', function() {
+  clearTimeout(_localNoteTimer);
+  localNotesSaved.style.opacity = '0';
+  _localNoteTimer = setTimeout(function() {
+    localStorage.setItem(localNotesKey, localNotesArea.value);
+    localNotesSaved.style.opacity = '1';
+    setTimeout(function() { localNotesSaved.style.opacity = '0'; }, 2000);
+  }, 600);
+});
+
+localNotesArea.addEventListener('focus', function() {
+  localNotesArea.style.borderColor = 'rgba(99,102,241,0.5)';
+  localNotesArea.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.08)';
+});
+localNotesArea.addEventListener('blur', function() {
+  localNotesArea.style.borderColor = 'rgba(255,255,255,0.07)';
+  localNotesArea.style.boxShadow = 'none';
+});
+app(localNotesCard, localNotesHdr, localNotesArea, localNotesSaved);
+wrap.appendChild(hdrCard);
+wrap.appendChild(navCard);
+wrap.appendChild(dataCard);
+wrap.appendChild(localNotesCard);
+wrap.appendChild(syncCard);
+return wrap;
 }
     // ═══════════════════════════════════════════════════════════
     // ── SQL SETUP ───────────────────────────────────────────────
@@ -3776,11 +3812,59 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
         whNote.innerHTML = '⏱ <strong style="color:var(--text-1);">Work Hours: ' + fmt(t.workHours) + '</strong> (excl. breaks)';
         dc.appendChild(whNote);
       } else { var de = dv(); de.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:24px 0;'; de.textContent = 'Log time to see breakdown'; dc.appendChild(de); }
-      app(right, taskCard, salesCard, dc);
+     // ── NOTES CARD ─────────────────────────────────────────────
+var notesCard = dv('card');
+var notesHdr = dv('sec-hdr');
+app(notesHdr, app(dv('sec-title'), '📝 Notes for Today'));
+notesCard.appendChild(notesHdr);
+
+var notesArea = mk('textarea', 'input');
+notesArea.placeholder = 'Jot down anything for today…';
+notesArea.style.cssText = 'min-height:110px;resize:vertical;font-size:13px;line-height:1.6;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);color:var(--text-1);border-radius:9px;padding:11px 13px;width:100%;font-family:var(--font);transition:border .2s;';
+notesArea.value = (APP.profile && APP.profile.notes_today) || '';
+
+var notesSaved = sp('saved-pill');
+notesSaved.textContent = '✓ Saved';
+notesSaved.style.cssText = 'font-size:11px;margin-top:7px;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2);opacity:0;transition:opacity .3s;';
+
+var notesErr = dv();
+notesErr.style.cssText = 'font-size:11px;color:#fb7185;margin-top:5px;min-height:16px;';
+
+var _noteTimer = null;
+notesArea.addEventListener('input', function() {
+  clearTimeout(_noteTimer);
+  notesSaved.style.opacity = '0';
+  notesErr.textContent = '';
+  _noteTimer = setTimeout(async function() {
+    if (!sb || !APP.profile) return;
+    var val = notesArea.value;
+    var r = await sb.from('profiles').update({ notes_today: val }).eq('id', APP.profile.id);
+    if (r.error) {
+      notesErr.textContent = '⚠ Could not save: ' + r.error.message;
+    } else {
+      APP.profile.notes_today = val;
+      notesSaved.style.opacity = '1';
+      setTimeout(function() { notesSaved.style.opacity = '0'; }, 2000);
+    }
+  }, 800);
+});
+
+notesArea.addEventListener('focus', function() {
+  notesArea.style.borderColor = 'rgba(99,102,241,0.5)';
+  notesArea.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.08)';
+});
+notesArea.addEventListener('blur', function() {
+  notesArea.style.borderColor = 'rgba(255,255,255,0.07)';
+  notesArea.style.boxShadow = 'none';
+});
+
+app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
+      app(right, taskCard, salesCard, dc, notesCard);
       app(mainArea, left, right);
       app(wrap, qCard, sr, qc, mainArea);
       return wrap;
     }
+
 
     // ═══════════════════════════════════════════════════════════
     // ── ANALYTICS ───────────────────────────────────────────────
