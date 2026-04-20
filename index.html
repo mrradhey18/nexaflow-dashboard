@@ -2621,40 +2621,40 @@ ALTER TABLE profiles
       if (!sb || !APP.profile) return;
       var r = await sb.from('user_tasks').select('*').eq('user_id', APP.profile.id).eq('work_date', todayStr()).order('created_at', { ascending: true });
       if (r.error) { console.error('loadTasks', r.error); return; }
-      APP.tasks = r.data || []; lsSaveCurrent();
+      APP.tasks = r.data || [];  //lsSaveCurrent();
     }
     async function dbAddTask(text, priority) {
       if (!sb || !APP.profile) return null;
       var r = await sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single();
       if (r.error) { console.error('addTask', r.error); return null; }
-      lsSaveCurrent(); return r.data;
+       /*lsSaveCurrent();*/ return r.data;
     }
     async function dbToggleTask(id, done) {
       if (!sb) return;
       await sb.from('user_tasks').update({ done: done }).eq('id', id).eq('user_id', APP.profile.id);
-      lsSaveCurrent();
+       //lsSaveCurrent();
     }
     async function dbDeleteTask(id) {
       if (!sb) return;
       await sb.from('user_tasks').delete().eq('id', id).eq('user_id', APP.profile.id);
-      lsSaveCurrent();
+       // //lsSaveCurrent();
     }
     async function dbLoadCalls() {
       if (!sb || !APP.profile) return;
       var r = await sb.from('user_calls').select('*').eq('user_id', APP.profile.id).eq('work_date', todayStr()).order('created_at', { ascending: false });
       if (r.error) { console.error('loadCalls', r.error); return; }
-      APP.calls = r.data || []; lsSaveCurrent();
+      APP.calls = r.data || [];  // //lsSaveCurrent();
     }
     async function dbAddCall(name, duration, type, time) {
       if (!sb || !APP.profile) return null;
       var r = await sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single();
       if (r.error) { console.error('addCall', r.error); return null; }
-      lsSaveCurrent(); return r.data;
+       /*lsSaveCurrent();*/ return r.data;
     }
     async function dbDeleteCall(id) {
       if (!sb) return;
       await sb.from('user_calls').delete().eq('id', id).eq('user_id', APP.profile.id);
-      lsSaveCurrent();
+       //lsSaveCurrent();
     }
     async function dbLoadSales() {
       if (!sb || !APP.profile) return;
@@ -2787,13 +2787,11 @@ ALTER TABLE profiles
       renderAutoLogoutBanner(false);
       render();
     }
-    async function loadAllUserData() {
-      APP.dataLoaded = false;
-      await Promise.all([loadToday(), dbLoadTasks(), dbLoadCalls(), dbLoadSales()]);
-      APP.dataLoaded = true;
-      // Immediately snapshot today so Local History page always has current data
-      lsSaveCurrent();
-    }
+async function loadAllUserData() {
+  APP.dataLoaded = false;
+  await Promise.all([loadToday(), dbLoadTasks(), dbLoadCalls(), dbLoadSales()]);
+  APP.dataLoaded = true;
+}
 
     function totals(sessions) {
       var w = 0, b = 0, m = 0, c = 0, f = 0;
@@ -2858,8 +2856,6 @@ ALTER TABLE profiles
     // ── LOCAL HISTORY VIEW ──────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
    function LocalHistory() {
-  if (APP.profile && APP.dataLoaded) lsSaveCurrent();
-
   var wrap = dv('fade-up');
   var allDates = lsGetAllDates();
   var todayD = todayStr();
@@ -3054,15 +3050,15 @@ ALTER TABLE profiles
   taskInp.style.cssText = 'flex:1;min-width:160px;padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
   var priSel = mk('select'); priSel.style.cssText = 'padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:13px;font-family:var(--font);';
   ['medium', 'high', 'low'].forEach(function (p) { var o = mk('option'); o.value = p; o.textContent = p; priSel.appendChild(o); });
-  var addTaskBtn = btn('btn-primary btn-sm', 'Add', function () {
-    var txt = taskInp.value.trim(); if (!txt) return;
-    var snap = lsGetDay(APP.localHistoryDate) || { tasks: [], calls: [], todaySales: 0, savedAt: Date.now() };
-    snap.tasks = snap.tasks || [];
-    snap.tasks.push({ id: 't' + Date.now(), text: txt, done: false, priority: priSel.value, createdAt: Date.now() });
-    snap.savedAt = Date.now();
-    localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
-    showToast('Task added', '#6366f1'); render();
-  });
+var addTaskBtn = btn('btn-primary btn-sm', 'Add', function () {
+  var txt = taskInp.value.trim(); if (!txt) return;
+  var snap = lsGetDay(APP.localHistoryDate) || { tasks: [], calls: [], todaySales: 0, savedAt: Date.now() };
+  snap.tasks = snap.tasks || [];
+  snap.tasks.push({ id: 't' + Date.now(), text: txt, done: false, priority: priSel.value, createdAt: Date.now() });
+  snap.savedAt = Date.now();
+  localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
+  showToast('Task added', '#6366f1'); render();
+});
   taskInp.addEventListener('keydown', function (e) { if (e.key === 'Enter') addTaskBtn.click(); });
   app(taskRow, taskInp, priSel, addTaskBtn); addTaskSection.appendChild(taskRow);
   dataCard.appendChild(addTaskSection);
@@ -3078,16 +3074,16 @@ ALTER TABLE profiles
   ['GBP Follow-up', 'Prospecting', 'Payment', 'Pitching'].forEach(function (p) {
     var o = mk('option'); o.value = p; o.textContent = p; callTypeSel.appendChild(o);
   });
-  var addCallBtn = btn('btn-primary btn-sm', 'Add', function () {
-    var nm = callNameInp.value.trim(); if (!nm) return;
-    var snap = lsGetDay(APP.localHistoryDate) || { tasks: [], calls: [], todaySales: 0, savedAt: Date.now() };
-    snap.calls = snap.calls || [];
-    var now = new Date();
-    snap.calls.push({ id: 'c' + Date.now(), name: nm, type: callTypeSel.value, time: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'), duration: 0, createdAt: Date.now() });
-    snap.savedAt = Date.now();
-    localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
-    showToast('Call added', '#10b981'); render();
-  });
+var addCallBtn = btn('btn-primary btn-sm', 'Add', function () {
+  var nm = callNameInp.value.trim(); if (!nm) return;
+  var snap = lsGetDay(APP.localHistoryDate) || { tasks: [], calls: [], todaySales: 0, savedAt: Date.now() };
+  snap.calls = snap.calls || [];
+  var now = new Date();
+  snap.calls.push({ id: 'c' + Date.now(), name: nm, type: callTypeSel.value, time: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'), duration: 0, createdAt: Date.now() });
+  snap.savedAt = Date.now();
+  localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
+  showToast('Call added', '#10b981'); render();
+});
   callNameInp.addEventListener('keydown', function (e) { if (e.key === 'Enter') addCallBtn.click(); });
   app(callRow, callNameInp, callTypeSel, addCallBtn); addCallSection.appendChild(callRow);
   dataCard.appendChild(addCallSection);
@@ -3112,12 +3108,13 @@ ALTER TABLE profiles
       meta.innerHTML = '<span style="padding:1px 7px;border-radius:100px;font-size:10px;background:' + pri.bg + ';color:' + pri.color + ';">' + t.priority + '</span>';
       app(info, name, meta); app(leftSide, badge, info);
       var delBtn = btn('btn-danger btn-sm', '✕', function () {
-        if (!confirm('Delete this task?')) return;
-        var snap = lsGetDay(APP.localHistoryDate); if (!snap) return;
-        snap.tasks.splice(tIdx, 1); snap.savedAt = Date.now();
-        localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
-        showToast('Task deleted', '#ef4444'); render();
-      });
+  if (!confirm('Delete this task?')) return;
+  var snap = lsGetDay(APP.localHistoryDate); if (!snap) return;
+  snap.tasks = snap.tasks.filter(function(x){ return x.id !== t.id; });
+  snap.savedAt = Date.now();
+  localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
+  showToast('Task deleted', '#ef4444'); render();
+});
       delBtn.style.cssText = 'padding:3px 8px;font-size:11px;flex-shrink:0;';
       app(item, leftSide, delBtn); dataCard.appendChild(item);
     });
@@ -3140,13 +3137,33 @@ ALTER TABLE profiles
       var info = dv('lh-info'), name = dv('lh-name'); name.textContent = c.name;
       var meta = dv('lh-meta'); meta.textContent = (c.time || '') + ' · ' + c.type + (c.duration ? ' · ' + fmt(c.duration) : '');
       app(info, name, meta); app(leftSide, badge, info);
-      var delBtn2 = btn('btn-danger btn-sm', '✕', function () {
-        if (!confirm('Delete this call?')) return;
-        var snap = lsGetDay(APP.localHistoryDate); if (!snap) return;
-        snap.calls.splice(cIdx, 1); snap.savedAt = Date.now();
-        localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
-        showToast('Call deleted', '#ef4444'); render();
-      });
+var doneBtn = btn('btn-success btn-sm', '✓', function () {
+  var snap = lsGetDay(APP.localHistoryDate); if (!snap) return;
+  snap.calls = snap.calls.map(function(x){ 
+    if (x.id === c.id) x.done = !x.done; 
+    return x; 
+  });
+  snap.savedAt = Date.now();
+  localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
+  showToast(c.done ? 'Marked incomplete' : 'Call completed!', '#10b981'); render();
+});
+doneBtn.style.cssText = 'padding:3px 8px;font-size:11px;flex-shrink:0;margin-right:4px;' + (c.done ? 'opacity:1;background:rgba(16,185,129,.3);' : 'opacity:0.5;');
+doneBtn.title = c.done ? 'Mark incomplete' : 'Mark complete';
+
+var delBtn2 = btn('btn-danger btn-sm', '✕', function () {
+  if (!confirm('Delete this call?')) return;
+  var snap = lsGetDay(APP.localHistoryDate); if (!snap) return;
+  snap.calls = snap.calls.filter(function(x){ return x.id !== c.id; });
+  snap.savedAt = Date.now();
+  localStorage.setItem(lsKey(APP.localHistoryDate), JSON.stringify(snap));
+  showToast('Call deleted', '#ef4444'); render();
+});
+delBtn2.style.cssText = 'padding:3px 8px;font-size:11px;flex-shrink:0;';
+
+var btnGroup = dv(); btnGroup.style.cssText = 'display:flex;gap:4px;flex-shrink:0;';
+app(btnGroup, doneBtn, delBtn2);
+if (c.done) { leftSide.style.opacity = '0.5'; }
+app(item, leftSide, btnGroup); dataCard.appendChild(item);
       delBtn2.style.cssText = 'padding:3px 8px;font-size:11px;flex-shrink:0;';
       app(item, leftSide, delBtn2); dataCard.appendChild(item);
     });
@@ -3402,13 +3419,27 @@ insert into holidays (holiday_date, name, type) values
       var ls = dv('logo-sub'); ls.textContent = 'Command Centre';
       app(lt, ln, ls); app(logo, lm, lt);
       var nav = dv('sb-nav');
-      NAV.forEach(function (n) {
-        var item = mk('button', 'nav-item' + (APP.page === n.id ? ' active' : ''));
-        item.addEventListener('click', function () { APP.page = n.id; render(); });
-        var iconWrap = sp('nav-icon'); iconWrap.innerHTML = '<i class="' + n.fa + '"></i>';
-        var lbl = sp('nav-lbl'); lbl.textContent = n.label;
-        app(item, iconWrap, lbl); nav.appendChild(item);
-      });
+NAV.forEach(function (n) {
+  var item = mk('button', 'nav-item' + (APP.page === n.id ? ' active' : ''));
+  item.addEventListener('click', function () { APP.page = n.id; render(); });
+  var iconWrap = sp('nav-icon'); iconWrap.innerHTML = '<i class="' + n.fa + '"></i>';
+  var lbl = sp('nav-lbl'); lbl.textContent = n.label;
+  if (n.id === 'local-history') {
+    var todaySnap = lsGetDay(todayStr());
+    var hasUndoneTasks = todaySnap && todaySnap.tasks && todaySnap.tasks.some(function(t){ return !t.done; });
+    var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.length > 0;
+    if (hasUndoneTasks || hasCalls) {
+      var dot = sp();
+      dot.style.cssText = 'width:7px;height:7px;border-radius:50%;background:#ef4444;flex-shrink:0;box-shadow:0 0 6px rgba(239,68,68,0.7);margin-left:auto;';
+      app(item, iconWrap, lbl, dot);
+    } else {
+      app(item, iconWrap, lbl);
+    }
+  } else {
+    app(item, iconWrap, lbl);
+  }
+  nav.appendChild(item);
+});
       var bottom = dv('sb-bottom');
       var soBtn = mk('button', 'nav-item'); soBtn.addEventListener('click', doSignOut);
       var soIcon = sp('nav-icon'); soIcon.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i>';
@@ -3538,9 +3569,6 @@ insert into holidays (holiday_date, name, type) values
       app(shdr, sttl, SBadge(APP.status)); sc.appendChild(shdr);
       var saRow = dv('sa-row');
 
-      // FIX: Status buttons — removed the restriction that blocked check-in unless checked-out.
-      // Now you can switch directly from any status to any other.
-      // Only "Work Off" still blocks non-break/checkout actions.
       [
         { key: 'checked-in', label: 'Check In', cls: 'btn-success', dis: APP.status === 'checked-in' || APP.workOff },
         { key: 'checked-out', label: 'Check Out', cls: 'btn-danger', dis: APP.status === 'checked-out' },
@@ -3554,48 +3582,98 @@ insert into holidays (holiday_date, name, type) values
       sc.appendChild(saRow);
       var sn = dv(); sn.style.cssText = 'font-size:11px;color:var(--text-2);margin-top:10px;'; sn.textContent = '✓ All data synced to database'; sc.appendChild(sn);
 
+      // ── CALL CARD ─────────────────────────────────────────────
       var callCard = dv('card'), callHdr = dv('sec-hdr');
       var callCount = sp('tag'); callCount.textContent = callSessions.length + ' sessions'; callCount.style.cssText = 'background:rgba(139,92,246,.12);color:#a78bfa;';
       var loggedCount = sp('tag'); loggedCount.textContent = APP.calls.length + ' logged'; loggedCount.style.cssText = 'background:rgba(14,165,233,.12);color:#38bdf8;margin-left:4px;';
-      app(callHdr, app(dv('sec-title'), '📞 Call Scheduled'), app(dv(), callCount, loggedCount)); callCard.appendChild(callHdr);
-      var addCallRow = dv(); addCallRow.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;';
-      var callNameIn = inp('input', 'text', 'Contact name…'); callNameIn.style.flex = '1'; callNameIn.style.minWidth = '100px';
-      var callDurIn = inp('input', 'number', 'Min'); callDurIn.style.width = '70px'; callDurIn.min = '1';
-      var callTypeSelect = mk('select', 'input'); callTypeSelect.style.width = '90px';
-      ['inbound', 'outbound', 'unreachable'].forEach(function (o) { var op = mk('option'); op.value = o.toLowerCase(); op.textContent = o; callTypeSelect.appendChild(op); });
+      app(callHdr, app(dv('sec-title'), '📞 Call Scheduler'), app(dv(), callCount, loggedCount)); callCard.appendChild(callHdr);
+
+      // FIX 2: Normalised to lowercase 'u' — matches DB values
+      var CALL_CATS = [
+        { key: 'GBP Follow-up',  color: '#818cf8', bg: 'rgba(99,102,241,.12)',  icon: 'G' },
+        { key: 'Prospecting',    color: '#34d399', bg: 'rgba(16,185,129,.12)',  icon: 'P' },
+        { key: 'Pitching',       color: '#fb7185', bg: 'rgba(244,63,94,.12)',   icon: '↗' },
+        { key: 'Payment',        color: '#fbbf24', bg: 'rgba(245,158,11,.12)',  icon: '£' }
+      ];
+      // FIX 2: default also uses lowercase 'u'
+      if (!APP._callCat) APP._callCat = 'GBP Follow-up';
+      var activeCat = CALL_CATS.find(function(c){ return c.key === APP._callCat; }) || CALL_CATS[0];
+
+      var catRow = dv(); catRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;';
+      CALL_CATS.forEach(function(cat){
+        var isAct = APP._callCat === cat.key;
+        var tb = dv(); tb.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid '+(isAct ? cat.color : 'var(--border)')+';background:'+(isAct ? cat.bg : 'transparent')+';color:'+(isAct ? cat.color : 'var(--text-2)')+';transition:all .15s;';
+        var catIcon = dv(); catIcon.style.cssText = 'width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:'+(isAct?cat.color:'var(--border)')+';color:'+(isAct?'#fff':'var(--text-3)')+';flex-shrink:0;';
+        catIcon.textContent = cat.icon;
+        var catCallCount = APP.calls.filter(function(c){ return c.type === cat.key; }).length;
+        var catLbl = sp(); catLbl.textContent = cat.key;
+        var catBadge = sp(); catBadge.style.cssText = 'background:'+(isAct?'rgba(255,255,255,.2)':'var(--bg-card2)')+';color:'+(isAct?cat.color:'var(--text-3)')+';padding:1px 6px;border-radius:100px;font-size:10px;';
+        catBadge.textContent = catCallCount;
+        app(tb, catIcon, catLbl, catBadge);
+        tb.addEventListener('click', function(){ APP._callCat = cat.key; render(); });
+        catRow.appendChild(tb);
+      });
+      callCard.appendChild(catRow);
+
+      var addCallRow = dv(); addCallRow.style.cssText = 'display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;';
+      var callNameIn = inp('input', 'text', 'Contact name…'); callNameIn.style.cssText = 'flex:1;min-width:120px;';
+      var callDurIn = inp('input', 'number', 'Min'); callDurIn.style.width = '65px'; callDurIn.min = '1';
+
+      var catPill = dv(); catPill.style.cssText = 'display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;background:'+activeCat.bg+';color:'+activeCat.color+';font-size:12px;font-weight:600;flex-shrink:0;border:1px solid '+activeCat.color+';';
+      catPill.innerHTML = '<span style="font-size:10px;">'+activeCat.icon+'</span> '+activeCat.key;
+
       var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
         var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0; if (!n) return;
         addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
-        var result = await dbAddCall(n, d, callTypeSelect.value, now5());
+        var result = await dbAddCall(n, d, APP._callCat, now5());
         if (result) { APP.calls.unshift(result); }
-        callNameIn.value = ''; callDurIn.value = ''; addCallBtn.disabled = false; addCallBtn.textContent = '+ Log'; render();
+        // FIX 2: Reload full calls list so dashboard is always in sync with DB
+        await dbLoadCalls();
+        callNameIn.value = ''; callDurIn.value = '';
+        addCallBtn.disabled = false; addCallBtn.textContent = '+ Log'; render();
       });
-      app(addCallRow, callNameIn, callDurIn, callTypeSelect, addCallBtn); callCard.appendChild(addCallRow);
+      callNameIn.addEventListener('keydown', function(e){ if(e.key==='Enter') addCallBtn.click(); });
+      app(addCallRow, callNameIn, callDurIn, catPill, addCallBtn); callCard.appendChild(addCallRow);
+
+      var filteredCalls = APP.calls.filter(function(c){ return c.type === APP._callCat; });
+
       if (!APP.calls.length && !callSessions.length) {
-        var noCall = dv(); noCall.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:16px 0;'; noCall.textContent = 'No calls logged yet today.'; callCard.appendChild(noCall);
+        var noCall = dv(); noCall.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:16px 0;';
+        noCall.textContent = 'No calls logged yet today.'; callCard.appendChild(noCall);
       } else {
         var callWrap = dv();
+
         callSessions.forEach(function (s) {
-          var item = dv('call-item'), icon3 = dv('call-icon'); icon3.style.cssText = 'background:rgba(139,92,246,.12);color:#a78bfa;'; icon3.textContent = '◉';
+          var item = dv('call-item'), icon3 = dv('call-icon');
+          icon3.style.cssText = 'background:rgba(139,92,246,.12);color:#a78bfa;'; icon3.textContent = '◉';
           var info = dv('call-info'), nm = dv('call-name'); nm.textContent = 'Status: On a Call';
           var meta = dv('call-meta'); meta.textContent = fmtT(s.started_at) + (s.ended_at ? ' → ' + fmtT(s.ended_at) : ' → now');
           var dur = dv('call-dur'); dur.textContent = s.duration_minutes ? fmt(s.duration_minutes) : 'live';
           app(info, nm, meta); app(item, icon3, info, dur); callWrap.appendChild(item);
         });
-        APP.calls.forEach(function (c) {
-          var item = dv('call-item');
-          var clrs = { inbound: ['rgba(16,185,129,.12)', '#34d399'], outbound: ['rgba(99,102,241,.12)', '#818cf8'], unreachable: ['rgba(244,63,94,.12)', '#fb7185'] };
-          var clr = clrs[c.type] || clrs.inbound;
-          var icon3 = dv('call-icon'); icon3.style.cssText = 'background:' + clr[0] + ';color:' + clr[1] + ';';
-          icon3.textContent = c.type === 'inbound' ? '↙' : c.type === 'outbound' ? '↗' : '✕';
-          var info = dv('call-info'), nm = dv('call-name'); nm.textContent = c.name;
-          var meta = dv('call-meta'); meta.textContent = c.time + ' · ' + c.type;
-          var dur = dv('call-dur'); dur.textContent = c.duration ? fmt(c.duration) : '—';
-          app(info, nm, meta); app(item, icon3, info, dur);
-          var del = sp(); del.style.cssText = 'cursor:pointer;color:var(--text-3);font-size:12px;padding:2px 6px;'; del.textContent = '✕';
-          del.addEventListener('click', async function () { del.textContent = '…'; await dbDeleteCall(c.id); APP.calls = APP.calls.filter(function (x) { return x.id !== c.id; }); render(); });
-          item.appendChild(del); callWrap.appendChild(item);
-        });
+
+        if (!filteredCalls.length) {
+          var noCatCall = dv(); noCatCall.style.cssText = 'color:var(--text-2);font-size:12.5px;text-align:center;padding:14px 0;';
+          noCatCall.textContent = 'No ' + (APP._callCat || 'calls') + ' logged yet.'; callWrap.appendChild(noCatCall);
+        } else {
+          filteredCalls.forEach(function (c) {
+            var item = dv('call-item');
+            var icon3 = dv('call-icon'); icon3.style.cssText = 'background:'+activeCat.bg+';color:'+activeCat.color+';';
+            icon3.textContent = activeCat.icon;
+            var info = dv('call-info'), nm = dv('call-name'); nm.textContent = c.name;
+            var meta = dv('call-meta'); meta.textContent = (c.time||'') + ' · ' + c.type;
+            var dur = dv('call-dur'); dur.textContent = c.duration ? fmt(c.duration) : '—';
+            app(info, nm, meta); app(item, icon3, info, dur);
+            var del = sp(); del.style.cssText = 'cursor:pointer;color:var(--text-3);font-size:12px;padding:2px 6px;'; del.textContent = '✕';
+            del.addEventListener('click', async function () {
+              del.textContent = '…';
+              await dbDeleteCall(c.id);
+              APP.calls = APP.calls.filter(function (x) { return x.id !== c.id; });
+              render();
+            });
+            item.appendChild(del); callWrap.appendChild(item);
+          });
+        }
         callCard.appendChild(callWrap);
       }
 
@@ -4120,10 +4198,16 @@ insert into holidays (holiday_date, name, type) values
     // ═══════════════════════════════════════════════════════════
     // ── RENDER ──────────────────────────────────────────────────
     // ═══════════════════════════════════════════════════════════
-    function render() {
-      document.body.setAttribute('data-theme', APP.theme);
-      localStorage.setItem('nf_page', APP.page);
-      var root = document.getElementById('app'); root.innerHTML = '';
+    function render(){
+      document.body.setAttribute('data-theme',APP.theme);
+      localStorage.setItem('nf_page',APP.page);
+      var root=document.getElementById('app');
+      var contentEl = document.querySelector('.content');
+      var scrollPos = contentEl ? contentEl.scrollTop : 0;
+      root.innerHTML='';
+    document.body.setAttribute('data-theme',APP.theme);
+      localStorage.setItem('nf_page',APP.page);
+      var root=document.getElementById('app');root.innerHTML='';
       if (APP.showSetup) { root.appendChild(SetupModal(!!APP.authUser)); return; }
       if (!APP.ready) {
         var ls = dv('loading-screen'); app(ls, dv('spinner'), app(dv('', 'color:var(--text-2);font-size:13px;'), 'Connecting…'));
@@ -4142,10 +4226,11 @@ insert into holidays (holiday_date, name, type) values
 
       var views = { dashboard: Dashboard, analytics: Analytics, history: History, 'local-history': LocalHistory, team: Team, settings: Settings };
       var View = views[APP.page] || Dashboard;
-      var appEl = dv('app'); appEl.appendChild(Sidebar());
+     var appEl = dv('app'); appEl.appendChild(Sidebar());
       var mainEl = dv('main'); mainEl.appendChild(Topbar());
       var content = dv('content'); content.appendChild(View());
       mainEl.appendChild(content); appEl.appendChild(mainEl); root.appendChild(appEl);
+      if (scrollPos) { var newContent = document.querySelector('.content'); if (newContent) newContent.scrollTop = scrollPos; }
       setTimeout(renderWorkModeBanners, 50);
     }
 
@@ -4167,7 +4252,7 @@ insert into holidays (holiday_date, name, type) values
       }
     }, 60000);
 
-    setInterval(function () { if (APP.authUser && APP.profile && APP.dataLoaded) { lsSaveCurrent(); } }, 5 * 60 * 1000);
+  // setInterval(function () { if (APP.authUser && APP.profile && APP.dataLoaded) { lsSaveCurrent(); } }, 5 * 60 * 1000); local history auto-save removed — localStorage is managed manually
 
     setInterval(function () {
       if (APP.halfDay && !APP.halfDayReminderDismissed && APP.authUser) {
