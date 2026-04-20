@@ -4205,9 +4205,6 @@ NAV.forEach(function (n) {
       var contentEl = document.querySelector('.content');
       var scrollPos = contentEl ? contentEl.scrollTop : 0;
       root.innerHTML='';
-    document.body.setAttribute('data-theme',APP.theme);
-      localStorage.setItem('nf_page',APP.page);
-      var root=document.getElementById('app');root.innerHTML='';
       if (APP.showSetup) { root.appendChild(SetupModal(!!APP.authUser)); return; }
       if (!APP.ready) {
         var ls = dv('loading-screen'); app(ls, dv('spinner'), app(dv('', 'color:var(--text-2);font-size:13px;'), 'Connecting…'));
