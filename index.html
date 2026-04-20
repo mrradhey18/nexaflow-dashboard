@@ -3426,8 +3426,8 @@ NAV.forEach(function (n) {
   var lbl = sp('nav-lbl'); lbl.textContent = n.label;
   if (n.id === 'local-history') {
     var todaySnap = lsGetDay(todayStr());
-    var hasUndoneTasks = todaySnap && todaySnap.tasks && todaySnap.tasks.some(function(t){ return !t.done; });
-    var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.length > 0;
+var hasUndoneTasks = todaySnap && todaySnap.tasks && todaySnap.tasks.some(function(t){ return !t.done; });
+var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){ return !c.done; });
     if (hasUndoneTasks || hasCalls) {
       var dot = sp();
       dot.style.cssText = 'width:7px;height:7px;border-radius:50%;background:#ef4444;flex-shrink:0;box-shadow:0 0 6px rgba(239,68,68,0.7);margin-left:auto;';
