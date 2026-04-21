@@ -2425,7 +2425,6 @@ function lsGetAllDates() {
     async function forceAutoLogout() {
       if (_autoLogoutFired) return;   // prevent double-fire
       _autoLogoutFired = true;
-      localStorage.setItem('nf_force_logout', '1');
       _showingWarn = false;
       renderAutoLogoutBanner(false);
       try { await changeStatus('checked-out'); } catch (e) { console.error(e); }
@@ -2457,25 +2456,23 @@ function lsGetAllDates() {
     }, 15000);  // check every 15s instead of 30s
 
     // ── Activity listeners ──
-    ['click', 'keydown', 'touchstart', 'touchend', 'scroll', 'pointerdown'].forEach(function (evt) {
+    ['click', 'keydown', 'touchstart', 'touchend', 'touchmove', 'scroll', 'pointerdown', 'pointermove'].forEach(function (evt) {
       document.addEventListener(evt, resetActivity, { passive: true });
     });
 
     // ── Tab visibility check — catches returning to an idle tab ──
-document.addEventListener('visibilitychange', function () {
-  if (document.visibilityState !== 'visible') return;
-  if (!APP.authUser || !APP.profile) return;
-  if (APP.status === 'checked-out' || APP.status === 'break') return;
-  var elapsed = Date.now() - _getLastActivity();
-  if (elapsed >= AUTO_LOGOUT_MS) {
-    forceAutoLogout(); // force immediately, no warn step
-    return;
-  }
-  if (elapsed >= AUTO_WARN_MS && !_showingWarn) {
-    _showingWarn = true;
-    renderAutoLogoutBanner(true);
-  }
-});
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible') return;
+      if (!APP.authUser || !APP.profile) return;
+      if (APP.status === 'checked-out' || APP.status === 'break') return;
+      var elapsed = Date.now() - _getLastActivity();
+      if (elapsed >= AUTO_LOGOUT_MS) {
+        forceAutoLogout();
+      } else if (elapsed >= AUTO_WARN_MS && !_showingWarn) {
+        _showingWarn = true;
+        renderAutoLogoutBanner(true);
+      }
+    });
 
     function renderAutoLogoutBanner(show) {
       var existing = document.getElementById('auto-logout-banner');
@@ -2791,8 +2788,7 @@ document.addEventListener('visibilitychange', function () {
     }
     async function doSignOut() {
       if (!sb) return;
-    localStorage.removeItem('nf_force_logout'); // clean flag on manual signout
-    if (APP.currentSession) await endSess(APP.currentSession);
+      if (APP.currentSession) await endSess(APP.currentSession);
       await sb.auth.signOut();
       APP.authUser = null; APP.profile = null; APP.status = 'checked-out';
       APP.timeline = []; APP.currentSession = null; APP.page = 'dashboard';
@@ -3732,6 +3728,7 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
       var tcount = sp(); tcount.style.cssText = 'font-size:11px;color:var(--text-2);font-family:var(--mono);'; tcount.textContent = tl.length + ' sessions';
       app(thdr, tttl, tcount); tlCard.appendChild(thdr);
       var tlWrap = dv('tl');
+      tlWrap.style.cssText = 'max-height: 420px; overflow-y: auto; padding-right: 4px;';
       if (!tl.length) { var em = dv(); em.style.cssText = 'color:var(--text-2);font-size:13px;text-align:center;padding:20px 0;'; em.textContent = 'No activity yet.'; tlWrap.appendChild(em); }
       else {
         tl.slice().reverse().forEach(function (s) {
@@ -4366,16 +4363,7 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
       } catch (e) { APP.ready = true; APP.showSetup = true; render(); return; }
       if (msgEl) msgEl.textContent = 'Checking session…';
       try {
-// If a forced logout was in progress when page reloaded, finish it
-      if (localStorage.getItem('nf_force_logout') === '1') {
-        localStorage.removeItem('nf_force_logout');
-        try { await sb.auth.signOut(); } catch(e) {}
-        APP.ready = true;
-        render();
-        return;
-      }
-
-      var gs = await sb.auth.getSession();
+        var gs = await sb.auth.getSession();
         var session = gs && gs.data && gs.data.session;
         if (session && session.user) {
           APP.authUser = session.user;
@@ -4403,11 +4391,7 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
             APP.quoteIndex = Math.floor(Math.random() * QUOTES.length);
             await loadAllUserData();
             if (APP.status === 'checked-out') { APP.showCheckoutModal = true; }
-            // only set activity on first real login, not token refreshes
-            if (event === 'SIGNED_IN' && !APP._initialLoginDone) {
-              APP._initialLoginDone = true;
-              _setLastActivity(Date.now());
-            }
+            _setLastActivity(Date.now());
           }
           render();
         } else if (event === 'SIGNED_OUT') {
@@ -4432,3 +4416,4 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
 </body>
 
 </html>
+/*old file*/
