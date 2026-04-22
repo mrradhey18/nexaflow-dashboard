@@ -2635,11 +2635,16 @@ function lsGetAllDates() {
       if (r.error) { console.error('loadTasks', r.error); return; }
       APP.tasks = r.data || [];  //lsSaveCurrent();
     }
-    async function dbAddTask(text, priority) {
+async function dbAddTask(text, priority) {
       if (!sb || !APP.profile) return null;
-      var r = await sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single();
-      if (r.error) { console.error('addTask', r.error); return null; }
-       /*lsSaveCurrent();*/ return r.data;
+      try {
+        var r = await sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single();
+        if (r.error) { console.error('addTask', r.error); return null; }
+        return r.data;
+      } catch(e) {
+        console.error('dbAddTask exception:', e);
+        return null;
+      }
     }
     async function dbToggleTask(id, done) {
       if (!sb) return;
@@ -2657,11 +2662,16 @@ function lsGetAllDates() {
       if (r.error) { console.error('loadCalls', r.error); return; }
       APP.calls = r.data || [];  // //lsSaveCurrent();
     }
-    async function dbAddCall(name, duration, type, time) {
+async function dbAddCall(name, duration, type, time) {
       if (!sb || !APP.profile) return null;
-      var r = await sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single();
-      if (r.error) { console.error('addCall', r.error); return null; }
-       /*lsSaveCurrent();*/ return r.data;
+      try {
+        var r = await sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single();
+        if (r.error) { console.error('addCall', r.error); return null; }
+        return r.data;
+      } catch(e) {
+        console.error('dbAddCall exception:', e);
+        return null;
+      }
     }
     async function dbDeleteCall(id) {
       if (!sb) return;
@@ -2756,32 +2766,43 @@ function lsGetAllDates() {
     // Previously required checked-out first. Now it cleanly ends
     // any open session and starts the new one — no restriction.
     // ═══════════════════════════════════════════════════════════
-    async function changeStatus(ns) {
+async function changeStatus(ns) {
       if (APP.saving) return;
       _setLastActivity(Date.now());
-      // Block check-in (and other work statuses) only when Work Off
       if (ns !== 'checked-out' && ns !== 'break' && APP.workOff) {
         showToast('🚫 Work Off is enabled. Disable it in Settings → Work Mode first.', '#ef4444');
         return;
       }
       APP.saving = true; render();
 
-      // End ANY currently open session (no need to be checked-out first)
-      if (APP.currentSession) {
-        await endSess(APP.currentSession);
-        APP.currentSession = null;
-      }
+      // Safety timeout — if save hangs >10s, reset and let user retry
+      var saveTimeout = setTimeout(function() {
+        if (APP.saving) {
+          APP.saving = false;
+          showToast('⚠️ Connection slow — please try again.', '#f59e0b');
+          render();
+        }
+      }, 10000);
 
-      // Start new session unless checking out
-      if (ns !== 'checked-out') {
-        await startSess(ns);
+      try {
+        if (APP.currentSession) {
+          await endSess(APP.currentSession);
+          APP.currentSession = null;
+        }
+        if (ns !== 'checked-out') {
+          await startSess(ns);
+        }
+        await loadToday();
+      } catch(e) {
+        console.error('changeStatus error:', e);
+        showToast('⚠️ Error saving status. Please retry.', '#ef4444');
+      } finally {
+        clearTimeout(saveTimeout);
+        APP.saving = false;
+        _setLastActivity(Date.now());
+        renderWorkModeBanners();
+        render();
       }
-
-      await loadToday();
-      APP.saving = false;
-      _setLastActivity(Date.now());
-      renderWorkModeBanners();
-      render();
     }
 
     async function doSignIn(email, pass) {
@@ -3672,16 +3693,20 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
       var catPill = dv(); catPill.style.cssText = 'display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;background:'+activeCat.bg+';color:'+activeCat.color+';font-size:12px;font-weight:600;flex-shrink:0;border:1px solid '+activeCat.color+';';
       catPill.innerHTML = '<span style="font-size:10px;">'+activeCat.icon+'</span> '+activeCat.key;
 
-      var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
+var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
         var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0; if (!n) return;
-        addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
         _setLastActivity(Date.now());
-        var result = await dbAddCall(n, d, APP._callCat, now5());
-        if (result) { APP.calls.unshift(result); }
-        // FIX 2: Reload full calls list so dashboard is always in sync with DB
-        await dbLoadCalls();
-        callNameIn.value = ''; callDurIn.value = '';
-        addCallBtn.disabled = false; addCallBtn.textContent = '+ Log'; render();
+        addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
+        try {
+          var result = await dbAddCall(n, d, APP._callCat, now5());
+          if (result) { APP.calls.unshift(result); }
+          await dbLoadCalls();
+          callNameIn.value = ''; callDurIn.value = '';
+        } catch(e) {
+          showToast('⚠️ Call save failed. Retry.', '#ef4444');
+        } finally {
+          addCallBtn.disabled = false; addCallBtn.textContent = '+ Log'; render();
+        }
       });
       callNameIn.addEventListener('keydown', function(e){ if(e.key==='Enter') addCallBtn.click(); });
       app(addCallRow, callNameIn, callDurIn, catPill, addCallBtn); callCard.appendChild(addCallRow);
@@ -3788,8 +3813,14 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
         var txt3 = taskIn.value.trim(); if (!txt3) return;
         addTaskBtn.disabled = true; addTaskBtn.textContent = 'Saving…';
         _setLastActivity(Date.now());
-        var result = await dbAddTask(txt3, priSelect.value); if (result) { APP.tasks.push(result); }
-        taskIn.value = ''; addTaskBtn.disabled = false; addTaskBtn.textContent = '+ Add'; render();
+try {
+          var result = await dbAddTask(txt3, priSelect.value); if (result) { APP.tasks.push(result); }
+          taskIn.value = '';
+        } catch(e) {
+          showToast('⚠️ Task save failed. Retry.', '#ef4444');
+        } finally {
+          addTaskBtn.disabled = false; addTaskBtn.textContent = '+ Add'; render();
+        }
       });
       taskIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') addTaskBtn.click(); });
       app(taskAddRow, taskIn, priSelect, addTaskBtn); taskCard.appendChild(taskAddRow);
@@ -4420,4 +4451,5 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
     });
   </script>
 </body>
+
 </html>
