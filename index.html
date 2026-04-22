@@ -3769,7 +3769,7 @@ var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
           time.textContent = ts;
           var extraRow = dv(); extraRow.style.cssText = 'display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;';
           if (s.ended_at && s.type === 'checked-in') { var ciTag = sp('tag'); ciTag.textContent = '✔ ' + fmt(s.duration_minutes) + ' worked'; ciTag.style.cssText = 'background:rgba(16,185,129,.1);color:#34d399;font-size:10px;'; extraRow.appendChild(ciTag); }
-          else if (s.ended_at && s.type === 'checked-out') { var coTag = sp('tag'); coTag.textContent = '○ Checked Out'; coTag.style.cssText = 'background:rgba(100,116,139,.1);color:#94a3b8;font-size:10px;'; extraRow.appendChild(coTag); }
+          else if (s.ended_at && s.type === 'checked-out') { var coTag = sp('tag'); coTag.textContent = '○ Checked Out'; coTag.style.cssText = 'background:rgba(100,116,139,.1);color:#F22700;font-size:10px;'; extraRow.appendChild(coTag); }
           else if (s.ended_at && s.type === 'break') { var bkTag = sp('tag'); bkTag.textContent = '☕ ' + fmt(s.duration_minutes); bkTag.style.cssText = 'background:rgba(245,158,11,.1);color:#fbbf24;font-size:10px;'; extraRow.appendChild(bkTag); }
           else if (s.ended_at && s.type === 'focus') { var fkTag = sp('tag'); fkTag.textContent = '◎ Payment ' + fmt(s.duration_minutes); fkTag.style.cssText = 'background:rgba(217,70,239,.1);color:#e879f9;font-size:10px;'; extraRow.appendChild(fkTag); }
           else if (s.ended_at && s.type === 'meeting') { var mtTag = sp('tag'); mtTag.textContent = '◈ ' + fmt(s.duration_minutes) + ' meeting'; mtTag.style.cssText = 'background:rgba(14,165,233,.1);color:#38bdf8;font-size:10px;'; extraRow.appendChild(mtTag); }
