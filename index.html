@@ -2442,6 +2442,7 @@ function lsGetAllDates() {
     // ── Main polling interval (every 15s for reliability) ──
     setInterval(function () {
       if (!APP.authUser || !APP.profile) return;
+      if (APP.saving || APP.workModeSaving) return;
       if (APP.status === 'checked-out' || APP.status === 'break') return;
       var elapsed = Date.now() - _getLastActivity();
       if (elapsed >= AUTO_LOGOUT_MS) {
@@ -2464,6 +2465,7 @@ function lsGetAllDates() {
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState !== 'visible') return;
       if (!APP.authUser || !APP.profile) return;
+      if (APP.saving || APP.workModeSaving) return;
       if (APP.status === 'checked-out' || APP.status === 'break') return;
       var elapsed = Date.now() - _getLastActivity();
       if (elapsed >= AUTO_LOGOUT_MS) {
@@ -2593,7 +2595,7 @@ function lsGetAllDates() {
       { icon: '💬', label: 'WhatsApp Web', sub: 'Messaging', href: 'https://wa.me/919369699864', bg: 'rgba(37,211,102,.12)' },
       { icon: '🧩', label: 'Zoho CRM', sub: 'Customer portal', href: 'https://crm.zoho.in/crm/org60068050730/tab/Home/begin', bg: 'rgba(99,102,241,.12)' },
       { icon: '📅', label: 'Calendar', sub: 'View schedule', href: 'https://calendar.google.com', bg: 'rgba(234,67,53,.12)' },
-      { icon: '📊', label: 'Google Sheet', sub: 'Google Sheet', href: 'https://docs.google.com/spreadsheets/d/1qVHYVc1WofeuEnxqYFc5WOXGfR2VegwEjNwM6Vb8K4k/edit?gi', bg: 'rgba(14,165,233,.12)' },
+      { icon: '📊', label: 'Fetch Data', sub: 'Fetch Data', href: '/fetch-profile/', bg: 'rgba(14,165,233,.12)' },
       { icon: '🗂️', label: 'Audit Tool', sub: 'Audit & Score', href: 'https://nexaflow.bar/Audit-your-google-business-profile/', bg: 'rgba(255,255,255,.08)' },
       { icon: '📧', label: 'Gmail', sub: 'Check inbox', href: 'https://mail.google.com', bg: 'rgba(234,67,53,.08)' }
     ];
@@ -2756,6 +2758,7 @@ function lsGetAllDates() {
     // ═══════════════════════════════════════════════════════════
     async function changeStatus(ns) {
       if (APP.saving) return;
+      _setLastActivity(Date.now());
       // Block check-in (and other work statuses) only when Work Off
       if (ns !== 'checked-out' && ns !== 'break' && APP.workOff) {
         showToast('🚫 Work Off is enabled. Disable it in Settings → Work Mode first.', '#ef4444');
@@ -3672,6 +3675,7 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
       var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
         var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0; if (!n) return;
         addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
+        _setLastActivity(Date.now());
         var result = await dbAddCall(n, d, APP._callCat, now5());
         if (result) { APP.calls.unshift(result); }
         // FIX 2: Reload full calls list so dashboard is always in sync with DB
@@ -3782,6 +3786,7 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
       var addTaskBtn = btn('btn-primary btn-sm', '+ Add', async function () {
         var txt3 = taskIn.value.trim(); if (!txt3) return;
         addTaskBtn.disabled = true; addTaskBtn.textContent = 'Saving…';
+        _setLastActivity(Date.now());
         var result = await dbAddTask(txt3, priSelect.value); if (result) { APP.tasks.push(result); }
         taskIn.value = ''; addTaskBtn.disabled = false; addTaskBtn.textContent = '+ Add'; render();
       });
