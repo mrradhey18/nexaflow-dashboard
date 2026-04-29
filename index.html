@@ -4416,11 +4416,14 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
           }
         }
       } catch (e) { console.error(e); }
-      setInterval(async function() {
-      if (!APP.authUser || !APP.profile) return;
-      await loadAllUserData();
-      render();
-        }, 30000);
+setInterval(async function() {
+  if (!APP.authUser || !APP.profile) return;
+  // Skip refresh if user is actively typing in any input/textarea
+  var active = document.activeElement;
+  if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) return;
+  await loadAllUserData();
+  render();
+}, 30000);
 
       APP.ready = true; render();
 
