@@ -2635,16 +2635,34 @@ function lsGetAllDates() {
       APP.tasks = r.data || [];  //lsSaveCurrent();
     }
 async function dbAddTask(text, priority) {
-      if (!sb || !APP.profile) return null;
-      try {
-        var r = await sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single();
-        if (r.error) { console.error('addTask', r.error); return null; }
-        return r.data;
-      } catch(e) {
-        console.error('dbAddTask exception:', e);
-        return null;
-      }
-    }
+  if (!sb || !APP.profile) return null;
+  try {
+    var r = await Promise.race([
+      sb.from('user_tasks').insert({ user_id: APP.profile.id, text: text, done: false, priority: priority, work_date: todayStr() }).select().single(),
+      new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 8000); })
+    ]);
+    if (r.error) { console.error('addTask', r.error); return null; }
+    return r.data;
+  } catch(e) {
+    console.error('dbAddTask exception:', e);
+    return null;
+  }
+}
+
+async function dbAddCall(name, duration, type, time) {
+  if (!sb || !APP.profile) return null;
+  try {
+    var r = await Promise.race([
+      sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single(),
+      new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 8000); })
+    ]);
+    if (r.error) { console.error('addCall', r.error); return null; }
+    return r.data;
+  } catch(e) {
+    console.error('dbAddCall exception:', e);
+    return null;
+  }
+}
     async function dbToggleTask(id, done) {
       if (!sb) return;
       await sb.from('user_tasks').update({ done: done }).eq('id', id).eq('user_id', APP.profile.id);
@@ -2662,16 +2680,19 @@ async function dbAddTask(text, priority) {
       APP.calls = r.data || [];  // //lsSaveCurrent();
     }
 async function dbAddCall(name, duration, type, time) {
-      if (!sb || !APP.profile) return null;
-      try {
-        var r = await sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single();
-        if (r.error) { console.error('addCall', r.error); return null; }
-        return r.data;
-      } catch(e) {
-        console.error('dbAddCall exception:', e);
-        return null;
-      }
-    }
+  if (!sb || !APP.profile) return null;
+  try {
+    var r = await Promise.race([
+      sb.from('user_calls').insert({ user_id: APP.profile.id, name: name, duration: duration, type: type, time: time, work_date: todayStr() }).select().single(),
+      new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 8000); })
+    ]);
+    if (r.error) { console.error('addCall', r.error); return null; }
+    return r.data;
+  } catch(e) {
+    console.error('dbAddCall exception:', e);
+    return null;
+  }
+}
     async function dbDeleteCall(id) {
       if (!sb) return;
       await sb.from('user_calls').delete().eq('id', id).eq('user_id', APP.profile.id);
@@ -2766,41 +2787,39 @@ async function dbAddCall(name, duration, type, time) {
     // any open session and starts the new one — no restriction.
     // ═══════════════════════════════════════════════════════════
 async function changeStatus(ns) {
-      if (APP.saving) return;
-      _setLastActivity(Date.now());
-      if (ns !== 'checked-out' && ns !== 'break' && APP.workOff) {
-        showToast('🚫 Work Off is enabled. Disable it in Settings → Work Mode first.', '#ef4444');
-        return;
-      }
-      APP.saving = true; render();
-
-      // Safety timeout — if save hangs >10s, reset and let user retry
-      var saveTimeout = setTimeout(function() {
-        if (APP.saving) {
-          APP.saving = false;
-          showToast('⚠️ Connection slow — please try again.', '#f59e0b');
-          render();
-        }
-      }, 10000);
-
-      try {
-if (APP.currentSession) {
-  await endSess(APP.currentSession);
-  APP.currentSession = null;
-}
-await startSess(ns);
-        await loadToday();
-      } catch(e) {
-        console.error('changeStatus error:', e);
-        showToast('⚠️ Error saving status. Please retry.', '#ef4444');
-      } finally {
-        clearTimeout(saveTimeout);
-        APP.saving = false;
-        _setLastActivity(Date.now());
-        renderWorkModeBanners();
-        render();
-      }
+  if (APP.saving) return;
+  _setLastActivity(Date.now());
+  if (ns !== 'checked-out' && ns !== 'break' && APP.workOff) {
+    showToast('🚫 Work Off is enabled. Disable it in Settings → Work Mode first.', '#ef4444');
+    return;
+  }
+  APP.saving = true; render();
+  try {
+    if (APP.currentSession) {
+      await Promise.race([
+        endSess(APP.currentSession),
+        new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 8000); })
+      ]);
+      APP.currentSession = null;
     }
+    await Promise.race([
+      startSess(ns),
+      new Promise(function(_, reject) { setTimeout(function() { reject(new Error('timeout')); }, 8000); })
+    ]);
+    await loadToday();
+  } catch(e) {
+    console.error('changeStatus error:', e);
+    // Reset saving flag immediately so user can retry
+    APP.saving = false;
+    render();
+    showToast('⚠️ Failed — tap to retry', '#ef4444');
+    return;
+  }
+  APP.saving = false;
+  _setLastActivity(Date.now());
+  renderWorkModeBanners();
+  render();
+}
 
     async function doSignIn(email, pass) {
       if (!sb) return { error: { message: 'Database not connected' } };
@@ -3691,20 +3710,21 @@ var hasCalls = todaySnap && todaySnap.calls && todaySnap.calls.some(function(c){
       catPill.innerHTML = '<span style="font-size:10px;">'+activeCat.icon+'</span> '+activeCat.key;
 
 var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
-        var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0; if (!n) return;
-        _setLastActivity(Date.now());
-        addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
-        try {
-          var result = await dbAddCall(n, d, APP._callCat, now5());
-          if (result) { APP.calls.unshift(result); }
-          await dbLoadCalls();
-          callNameIn.value = ''; callDurIn.value = '';
-        } catch(e) {
-          showToast('⚠️ Call save failed. Retry.', '#ef4444');
-        } finally {
-          addCallBtn.disabled = false; addCallBtn.textContent = '+ Log'; render();
-        }
-      });
+  var n = callNameIn.value.trim(), d = parseInt(callDurIn.value) || 0; if (!n) return;
+  _setLastActivity(Date.now());
+  addCallBtn.disabled = true; addCallBtn.textContent = 'Saving…';
+  var result = await dbAddCall(n, d, APP._callCat, now5());
+  if (result) {
+    APP.calls.unshift(result);
+    callNameIn.value = ''; callDurIn.value = '';
+    showToast('✓ Call logged!', '#10b981');
+  } else {
+    showToast('⚠️ Call save failed — tap + Log again', '#ef4444');
+  }
+  addCallBtn.disabled = false;
+  addCallBtn.textContent = '+ Log';
+  render();
+});
       callNameIn.addEventListener('keydown', function(e){ if(e.key==='Enter') addCallBtn.click(); });
       app(addCallRow, callNameIn, callDurIn, catPill, addCallBtn); callCard.appendChild(addCallRow);
 
@@ -3809,19 +3829,22 @@ var addCallBtn = btn('btn-outline btn-sm', '+ Log', async function () {
       var taskAddRow = dv('task-add'), taskIn = inp('input', 'text', 'Add task…'); taskIn.style.flex = '1';
       var priSelect = mk('select', 'input'); priSelect.style.width = '80px';
       ['high', 'medium', 'low'].forEach(function (p) { var op = mk('option'); op.value = p; op.textContent = p; priSelect.appendChild(op); }); priSelect.value = 'medium';
-      var addTaskBtn = btn('btn-primary btn-sm', '+ Add', async function () {
-        var txt3 = taskIn.value.trim(); if (!txt3) return;
-        addTaskBtn.disabled = true; addTaskBtn.textContent = 'Saving…';
-        _setLastActivity(Date.now());
-try {
-          var result = await dbAddTask(txt3, priSelect.value); if (result) { APP.tasks.push(result); }
-          taskIn.value = '';
-        } catch(e) {
-          showToast('⚠️ Task save failed. Retry.', '#ef4444');
-        } finally {
-          addTaskBtn.disabled = false; addTaskBtn.textContent = '+ Add'; render();
-        }
-      });
+   var addTaskBtn = btn('btn-primary btn-sm', '+ Add', async function () {
+  var txt3 = taskIn.value.trim(); if (!txt3) return;
+  addTaskBtn.disabled = true; addTaskBtn.textContent = 'Saving…';
+  _setLastActivity(Date.now());
+  var result = await dbAddTask(txt3, priSelect.value);
+  if (result) {
+    APP.tasks.push(result);
+    taskIn.value = '';
+    showToast('✓ Task saved!', '#10b981');
+  } else {
+    showToast('⚠️ Task save failed — tap + Add again', '#ef4444');
+  }
+  addTaskBtn.disabled = false;
+  addTaskBtn.textContent = '+ Add';
+  render();
+});
       taskIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') addTaskBtn.click(); });
       app(taskAddRow, taskIn, priSelect, addTaskBtn); taskCard.appendChild(taskAddRow);
 
@@ -4360,7 +4383,10 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
       var mainEl = dv('main'); mainEl.appendChild(Topbar());
       var content = dv('content'); content.appendChild(View());
       mainEl.appendChild(content); appEl.appendChild(mainEl); root.appendChild(appEl);
-      if (scrollPos) { var newContent = document.querySelector('.content'); if (newContent) newContent.scrollTop = scrollPos; }
+      requestAnimationFrame(function() {
+        var newContent = document.querySelector('.content');
+        if (newContent && scrollPos) newContent.scrollTop = scrollPos;
+      });
       setTimeout(renderWorkModeBanners, 50);
     }
 
@@ -4416,13 +4442,21 @@ app(notesCard, notesHdr, notesArea, notesSaved, notesErr);
           }
         }
       } catch (e) { console.error(e); }
-      setInterval(async function() {
-      if (!APP.authUser || !APP.profile) return;
-      await loadAllUserData();
-      render();
-        }, 30000);
+     setInterval(async function() {
+  if (!APP.authUser || !APP.profile) return;
+  // Only refresh data silently — never re-render while user is typing
+  var activeEl = document.activeElement;
+  var isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT');
+  if (isTyping) return;
+  await loadAllUserData();
+  render();
+}, 30000);
 
-      APP.ready = true; render();
+      APP.ready = true;
+      if (!APP.dataLoaded && APP.authUser && APP.profile) {
+        await loadAllUserData();
+      }
+      render();
 
       sb.auth.onAuthStateChange(async function (event, session) {
         if (event === 'SIGNED_IN' && session && session.user) {
