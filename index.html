@@ -2421,14 +2421,22 @@ function lsGetAllDates() {
       if (_showingWarn) { _showingWarn = false; renderAutoLogoutBanner(false); }
     }
 
-    async function forceAutoLogout() {
-      if (_autoLogoutFired) return;   // prevent double-fire
+  async function forceAutoLogout() {
+      if (_autoLogoutFired) return;
       _autoLogoutFired = true;
       _showingWarn = false;
       renderAutoLogoutBanner(false);
-      try { await changeStatus('checked-out'); } catch (e) { console.error(e); }
-      try { await sb.auth.signOut(); } catch (e) { console.error(e); }
-      // Clear all app state
+      APP.saving = false;
+      APP.workModeSaving = false;
+      try {
+        await Promise.race([
+          changeStatus('checked-out'),
+          new Promise(function(_, reject) {
+            setTimeout(function() { reject(new Error('timeout')); }, 5000);
+          })
+        ]);
+      } catch(e) { console.error('Auto logout checkout failed:', e); }
+      try { await sb.auth.signOut(); } catch(e) { console.error(e); }
       APP.authUser = null; APP.profile = null;
       APP.status = 'checked-out'; APP.timeline = [];
       APP.currentSession = null; APP.tasks = []; APP.calls = [];
@@ -2442,7 +2450,7 @@ function lsGetAllDates() {
     setInterval(function () {
       if (!APP.authUser || !APP.profile) return;
       if (APP.saving || APP.workModeSaving) return;
-      if (APP.status === 'checked-out' || APP.status === 'break') return;
+      if (APP.status === 'checked-out') return;
       var elapsed = Date.now() - _getLastActivity();
       if (elapsed >= AUTO_LOGOUT_MS) {
         forceAutoLogout();
@@ -2453,7 +2461,7 @@ function lsGetAllDates() {
         _showingWarn = false;
         renderAutoLogoutBanner(false);
       }
-    }, 15000);  // check every 15s instead of 30s
+    }, 5000);  // check every 15s instead of 30s
 
     // ── Activity listeners ──
     ['click', 'keydown', 'touchstart', 'touchend', 'touchmove', 'scroll', 'pointerdown', 'pointermove'].forEach(function (evt) {
@@ -2461,11 +2469,13 @@ function lsGetAllDates() {
     });
 
     // ── Tab visibility check — catches returning to an idle tab ──
-    document.addEventListener('visibilitychange', function () {
+ document.addEventListener('visibilitychange', function () {
       if (document.visibilityState !== 'visible') return;
       if (!APP.authUser || !APP.profile) return;
       if (APP.saving || APP.workModeSaving) return;
-      if (APP.status === 'checked-out' || APP.status === 'break') return;
+      if (APP.status === 'checked-out') return;
+      // Reset fired flag so logout can trigger after coming back to tab
+      if (_autoLogoutFired) { _autoLogoutFired = false; }
       var elapsed = Date.now() - _getLastActivity();
       if (elapsed >= AUTO_LOGOUT_MS) {
         forceAutoLogout();
